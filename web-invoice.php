@@ -4,7 +4,7 @@
  Plugin URI: http://mohanjith.com/wordpress/web-invoice.html
  Description: Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href="admin.php?page=web_invoice_settings">Web Invoice Settings Page</a> to setup.
  Author: S H Mohanjith
- Version: 2.0.3
+ Version: 2.0.4
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
  Stable tag: 2.0.3
@@ -58,6 +58,7 @@ class Web_Invoice {
 	var $web_invoice_user_level = array('administrator');
 	var $uri;
 	var $the_path;
+	var $message;
 
 	function the_path() {
 		$path =	WP_PLUGIN_URL."/".basename(dirname(__FILE__));
@@ -104,6 +105,8 @@ class Web_Invoice {
 
 		add_filter('the_content', 'web_invoice_the_content');
 		add_filter('web_invoice_email_variables', 'web_invoice_email_variables');
+		add_filter('web_invoice_pdf_variables', 'web_invoice_pdf_variables');
+		add_filter('web_invoice_web_variables', 'web_invoice_web_variables');
 		add_filter('wp_redirect', array($this, 'redirect'));
 
 		$this->SetUserAccess(get_option('web_invoice_user_level'));
@@ -124,7 +127,7 @@ class Web_Invoice {
 		return $location;
 	}
 
-	function tablename ($table) {
+	static function tablename ($table) {
 		global $table_prefix;
 		return $table_prefix.'web_invoice_'.$table;
 	}
@@ -599,6 +602,21 @@ Thank you very much for your patronage.
 
 Best regards,
 %business_name ( %business_email )");
+		
+		add_option('web_invoice_pdf_content',
+"<html>
+	<head>
+		<title>Invoice</title>
+		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+	</head>
+	<body>
+		<div id='invoice_page' class='clearfix'>
+			<img style='float: right;' src='".$this->the_path."/images/web-invoice.png' style='width:101px; height: 128px;' />
+			<h1>Invoice</h1>
+			%content
+		</div>
+	</body>
+</html>");
 	}
 
 }
