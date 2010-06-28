@@ -41,8 +41,8 @@ function web_invoice_default($message='')
 		$warning_message = __("The plugin database tables are gone, deactivate and reactivate plugin to re-create them.", WEB_INVOICE_TRANS_DOMAIN);
 	}
 
-	if($warning_message) echo "<div id=\"message\" class='error' ><p>$warning_message</p></div>";
-	if($message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
+	if(isset($warning_message) && $warning_message) echo "<div id=\"message\" class='error' ><p>$warning_message</p></div>";
+	if(isset($message) && $message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
 
 	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != ''");
 
@@ -96,10 +96,13 @@ function web_invoice_default($message='')
 	<?php
 
 	$x_counter = 0;
+	
 	foreach ($all_invoices as $invoice) {
+		$class_settings = "";
+		
 		// Stop if this is a recurring bill
 		if(!web_invoice_meta($invoice->invoice_num,'web_invoice_recurring_billing')) {
-			if ($_REQUEST['archived'] != 'true' && web_invoice_meta($invoice->invoice_num,'archive_status') == 'archived') continue;
+			if (isset($_REQUEST['archived']) && $_REQUEST['archived'] != 'true' && web_invoice_meta($invoice->invoice_num,'archive_status') == 'archived') continue;
 			
 			$x_counter++;
 			unset($class_settings);
@@ -122,11 +125,13 @@ function web_invoice_default($message='')
 
 			// Determine What to Call Recipient
 			$profileuser = get_userdata($user_id);
-			$first_name = $profileuser->first_name;
-			$last_name = $profileuser->last_name;
+			$first_name = (isset($profileuser->first_name))?$profileuser->first_name:'';
+			$last_name = (isset($profileuser->last_name))?$profileuser->last_name:'';
 			$user_nicename = $profileuser->user_nicename;
 			if(empty($first_name) || empty($last_name)) $call_me_this = $user_nicename; else $call_me_this = $first_name . " " . $last_name;
 
+			$class_settings = "";
+			
 			// Color coding
 			if(web_invoice_paid_status($invoice_id)) $class_settings .= " alternate ";
 			if(web_invoice_meta($invoice_id,'archive_status') == 'archived')  $class_settings .= " web_invoice_archived ";
@@ -1025,6 +1030,16 @@ function web_invoice_show_email_templates()
 			rows="15"><?php echo get_option('web_invoice_email_send_invoice_content'); ?></textarea></td>
 	</tr>
 
+	<tr>
+		<th><?php _e("Invoice PDF", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td></td>
+	</tr>
+	<tr>
+		<th><?php _e("Content", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
+		<td><textarea name="web_invoice_pdf_content" cols="60"
+			rows="15"><?php echo stripslashes(get_option('web_invoice_pdf_content')); ?></textarea></td>
+	</tr>
+	
 	<tr>
 		<th><?php _e("Reminder e-mail", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td></td>
@@ -3490,4 +3505,64 @@ function web_invoice_print_help($invoice_id) {
 "neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt ".
 "payment!"), '<a href="'.$invoice->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'); ?></p></div>
 <?php } 
+}
+
+function web_invoice_generate_pdf_content($invoice_id) {
+	global $post, $web_invoice_print;
+	$web_invoice_print = true;
+	
+	ob_start();
+	?>
+	<style type="text/css">
+		.noprint { display: none; }
+		#invoice_page { width: 500px; margin: 0 auto; font-size: 11px; font-family: 'Trebuchet MS','Lucida Grande',Verdana,Tahoma,Arial; }
+		th { text-align: left; font-size: 13px; padding: 5px; }
+		td { font-size: 12px; vertical-align: top; padding: 5px; }
+		tr td { background-color: #fefefe; }
+		tr.alt_row  td { background-color: #eee; }
+		span.description_text { color: #333; font-size: 0.8em; }
+		tr.web_invoice_bottom_line { font-size: 1.1em; font-weight: bold; }
+		table { width: 100%; }
+		h2 { font-size: 1.1em; }
+		h1 { text-align: center; }
+		p { margin: 5px 0px; }
+		div.clear { clear: both; }
+		
+		#invoice_client_info { width: 100%; text-align: right; padding-top: -145; }
+		##invoice_business_info { width: 100%; text-align: left; height: 100; }
+	</style>
+	<?php
+	
+		do_action('web_invoice_front_top', $invoice_id);
+	
+		print '<div class="clear"></div>';
+		
+		//If this is not recurring invoice, show regular message
+		if(!($recurring = web_invoice_recurring($invoice_id)))  web_invoice_show_invoice_overview($invoice_id);
+	
+		// Show this if recurring
+		if($recurring)  web_invoice_show_recurring_info($invoice_id);
+	
+		if(web_invoice_paid_status($invoice_id)) {
+			web_invoice_show_already_paid($invoice_id);
+			do_action('web_invoice_front_paid', $invoice_id);
+		} else {
+			//Show Billing Information
+			web_invoice_show_billing_information($invoice_id);
+			do_action('web_invoice_front_unpaid', $invoice_id);
+		}
+		do_action('web_invoice_front_bottom', $invoice_id);
+		?>
+	<script type="text/php">
+		if ( isset($pdf) ) {
+    		$font = Font_Metrics::get_font("verdana", "bold");
+			$font_light = Font_Metrics::get_font("verdana");
+			$pdf->page_text(52, 810, "Powered by Web Invoice ".WEB_INVOICE_VERSION_NUM, $font_light, 10, array(0,0,0));
+    		$pdf->page_text(510, 810, "Page {PAGE_NUM} of {PAGE_COUNT}", $font, 10, array(0,0,0));
+  		}
+	</script>
+	<?php
+	$content = ob_get_contents();
+	ob_clean();
+	return $content;
 }

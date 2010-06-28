@@ -512,6 +512,37 @@ function web_invoice_email_variables($invoice_id) {
 	}
 }
 
+function web_invoice_pdf_variables($invoice_id) {
+	global $web_invoices_pdf_variables;
+
+	$invoice_info = new Web_Invoice_GetInfo($invoice_id);
+	$recipient = new Web_Invoice_GetInfo($invoice_id);
+
+	$web_invoices_pdf_variables = array(
+		'call_sign' => $recipient->recipient('callsign'),
+		'streetaddress' => $recipient->recipient('streetaddress'), 
+		'city' => $recipient->recipient('city'), 
+		'zip' => $recipient->recipient('zip'), 
+		'state' => $recipient->recipient('state'), 
+		'country' => $recipient->recipient('country'), 
+		'business_name' => stripslashes(get_option("web_invoice_business_name")),
+		'recurring' => (web_invoice_recurring($invoice_id) ? " recurring " : ""),
+		'amount' => $invoice_info->display('display_amount'),
+		'link' => $invoice_info->display('link'),
+		'business_email' => get_option("web_invoice_email_address"),
+		'subject' => $invoice_info->display('subject'),
+		'invoice_id' => $invoice_info->display('display_id'),
+		'invoice_hash' => $invoice_info->display('invoice_hash'),
+		'content' => web_invoice_generate_pdf_content($invoice_id),
+	);
+
+	if($invoice_info->display('description')) {
+		$web_invoices_pdf_variables['description'] = $invoice_info->display('description').".";
+	} else {
+		$web_invoices_pdf_variables['description'] = "";
+	}
+}
+
 function web_invoice_web_variables($invoice_id) {
 	global $web_invoices_web_variables;
 
@@ -560,6 +591,15 @@ function web_invoice_web_apply_variables($matches) {
 	return $matches[2];
 }
 
+function web_invoice_pdf_apply_variables($matches) {
+	global $web_invoices_pdf_variables;
+
+	if (isset($web_invoices_pdf_variables[$matches[2]])) {
+		return $web_invoices_pdf_variables[$matches[2]];
+	}
+	return $matches[2];
+}
+
 function web_invoice_show_email($invoice_id) {
 	apply_filters('web_invoice_email_variables', $invoice_id);
 
@@ -580,6 +620,13 @@ function web_invoice_show_receipt_email($invoice_id) {
 	return preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_receipt_content'));
 }
 
+function web_invoice_generate_pdf($invoice_id) {
+
+	apply_filters('web_invoice_pdf_variables', $invoice_id);
+
+	return preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_pdf_apply_variables', stripslashes(get_option('web_invoice_pdf_content')));
+}
+
 function web_invoice_send_email_receipt($invoice_id) {
 	global $wpdb;
 
@@ -587,8 +634,8 @@ function web_invoice_send_email_receipt($invoice_id) {
 
 	$message = web_invoice_show_receipt_email($invoice_id);
 
-	$from = get_option("web_invoice_email_address");
-	$from_name = get_option("web_invoice_business_name");
+	$from = stripslashes(get_option("web_invoice_email_address"));
+	$from_name = stripslashes(get_option("web_invoice_business_name"));
 	$headers = "From: {$from_name} <{$from}>\r\n";
 	if (get_option('web_invoice_cc_thank_you_email') == 'yes') {
 		$headers .= "Bcc: {$from}\r\n";
@@ -618,7 +665,7 @@ function web_invoice_paid_status($invoice_id) {
 	global $wpdb;
 	$invoice_info = new Web_Invoice_GetInfo($invoice_id);
 	if(!empty($invoice_id) && web_invoice_meta($invoice_id,'paid_status')) return web_invoice_meta($invoice_id,'paid_status');
-	if ($invoice_id->status) return $invoice_id->status;
+	if ($invoice_info && $invoice_info->recipient('state')) return $invoice_info->recipient('state');
 }
 
 function web_invoice_paid_date($invoice_id) {
@@ -805,6 +852,9 @@ function web_invoice_complete_removal()
 	// Send receipt
 	delete_option('web_invoice_email_send_receipt_subject');
 	delete_option('web_invoice_email_send_receipt_content');
+	
+	// PDF
+	delete_option('web_invoice_pdf_content');
 
 	return "All settings and databased removed.";
 }
@@ -838,15 +888,18 @@ function web_invoice_send_email($invoice_array, $reminder = false)
 				$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_invoice_subject'));
 			}
 
-			$from = get_option("web_invoice_email_address");
-			$from_name = get_option("web_invoice_business_name");
+			$from = stripslashes(get_option("web_invoice_email_address"));
+			$from_name = stripslashes(get_option("web_invoice_business_name"));
 			$headers = "From: {$from_name} <{$from}>";
 
 			$message = html_entity_decode($message, ENT_QUOTES, 'UTF-8');
+			
+			$attachments = array(web_invoice_pdf_file($invoice_id));
 
-			if(wp_mail($profileuser->user_email, $subject, $message, $headers))
+			if(wp_mail($profileuser->user_email, $subject, $message, $headers, $attachments))
 			{
 				$counter++; // Success in sending quantified.
+				unlink($attachments[0]);
 				web_invoice_update_log($invoice_id,'contact','Invoice eMailed'); //make sent entry
 				web_invoice_update_invoice_meta($invoice_id, "sent_date", date("Y-m-d", time()));
 			}
@@ -868,20 +921,54 @@ function web_invoice_send_email($invoice_array, $reminder = false)
 			$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_invoice_subject'));
 		}
 
-		$from = get_option("web_invoice_email_address");
-		$from_name = get_option("web_invoice_business_name");
+		$from = stripslashes(get_option("web_invoice_email_address"));
+		$from_name = stripslashes(get_option("web_invoice_business_name"));
 		$headers = "From: {$from_name} <{$from}>";
 
 		$message = html_entity_decode($message, ENT_QUOTES, 'UTF-8');
 
-		if(wp_mail($profileuser->user_email, $subject, $message, $headers))
+		$attachments = array(web_invoice_pdf_file($invoice_id));
+		
+		if(wp_mail($profileuser->user_email, $subject, $message, $headers, $attachments))
 		{
+			unlink($attachments[0]);
 			web_invoice_update_invoice_meta($invoice_id, "sent_date", date("Y-m-d", time()));
 			web_invoice_update_log($invoice_id,'contact','Invoice eMailed'); return "Web invoice sent successfully."; 
 		} else { 
 			return "There was a problem sending the invoice.";
 		}
 	}
+}
+
+function web_invoice_pdf_get($invoice_id) {
+	global $web_invoice;
+	
+	$content = preg_replace(array('/  /', '/\n\n/i', '/&euro;/i'), array(" ", "\n", "&#0128;"), web_invoice_generate_pdf($invoice_id));
+	ob_start();
+	
+	ob_clean();
+	
+	require_once "lib/dompdf_config.inc.php";
+	
+	$url_parts = parse_url($web_invoice->the_path);
+	
+	$dompdf = new DOMPDF();
+	$dompdf->load_html($content);
+	$dompdf->set_paper("a4", "portrait");
+	$dompdf->render();
+	ob_clean();
+	
+	return $dompdf;
+}
+
+function web_invoice_pdf_file($invoice_id) {
+	$dompdf = web_invoice_pdf_get($invoice_id);
+	
+	$tmpfname = tempnam(sys_get_temp_dir(), "web_invoice_").".pdf";
+
+	$handle = file_put_contents($tmpfname, $dompdf->output());
+	
+	return $tmpfname;
 }
 
 function web_invoice_array_stripslashes($slash_array = array())
@@ -2233,6 +2320,8 @@ function web_invoice_process_email_templates() {
 	if(isset($_POST['web_invoice_email_send_receipt_subject'])) update_option('web_invoice_email_send_receipt_subject', $_POST['web_invoice_email_send_receipt_subject']);
 	if(isset($_POST['web_invoice_email_send_receipt_content'])) update_option('web_invoice_email_send_receipt_content', $_POST['web_invoice_email_send_receipt_content']);
 
+	// PDF
+	if(isset($_POST['web_invoice_pdf_content'])) update_option('web_invoice_pdf_content', $_POST['web_invoice_pdf_content']);
 }
 
 function web_invoice_is_not_merchant() {
