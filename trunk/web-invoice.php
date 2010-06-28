@@ -684,8 +684,8 @@ class Web_Invoice_GetInfo {
 
 		switch ($what) {
 			case 'callsign':
-				$first_name = get_usermeta($uid,'first_name');
-				$last_name = get_usermeta($uid,'last_name');
+				$first_name = strip_tags(get_usermeta($uid,'first_name'));
+				$last_name = strip_tags(get_usermeta($uid,'last_name'));
 				if(empty($first_name) || empty($last_name)) return $user_email; else return $first_name . " " . $last_name;
 				break;
 
@@ -698,11 +698,11 @@ class Web_Invoice_GetInfo {
 				break;
 
 			case 'first_name':
-				return get_usermeta($uid,'first_name');
+				return strip_tags(get_usermeta($uid,'first_name'));
 				break;
 
 			case 'last_name':
-				return get_usermeta($uid,'last_name');
+				return strip_tags(get_usermeta($uid,'last_name'));
 				break;
 
 			case 'phonenumber':

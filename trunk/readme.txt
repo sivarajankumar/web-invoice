@@ -90,8 +90,9 @@ or submit feature requests.
 **Version 2.0.4**
 
 * Slashing issue in from name in mails
-* Issue 2:	logo implementation for pdf
-* Issue 7:	Attach PDF invoice to e-mail
+* Issue 2: logo implementation for pdf
+* Issue 7: Attach PDF invoice to e-mail
+* Issue 5: Email 'From' Error
 
 **Version 2.0.3**
 

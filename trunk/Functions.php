@@ -634,15 +634,15 @@ function web_invoice_send_email_receipt($invoice_id) {
 
 	$message = web_invoice_show_receipt_email($invoice_id);
 
-	$from = stripslashes(get_option("web_invoice_email_address"));
-	$from_name = stripslashes(get_option("web_invoice_business_name"));
+	$from = strip_tags(stripslashes(get_option("web_invoice_email_address")));
+	$from_name = strip_tags(stripslashes(get_option("web_invoice_business_name")));
 	$headers = "From: {$from_name} <{$from}>\r\n";
 	if (get_option('web_invoice_cc_thank_you_email') == 'yes') {
 		$headers .= "Bcc: {$from}\r\n";
 	}
 
 	$message = web_invoice_show_receipt_email($invoice_id);
-	$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_receipt_subject'));
+	$subject = strip_tags(preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_receipt_subject')));
 
 	if(wp_mail($invoice_info->recipient('email_address'), $subject, $message, $headers))
 	{ web_invoice_update_log($invoice_id,'contact','Receipt eMailed'); }
@@ -882,14 +882,14 @@ function web_invoice_send_email($invoice_array, $reminder = false)
 
 			if ($reminder) {
 				$message = strip_tags(web_invoice_show_reminder_email($invoice_id));
-				$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_reminder_subject'));
+				$subject = strip_tags(preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_reminder_subject')));
 			} else {
 				$message = strip_tags(web_invoice_show_email($invoice_id));
-				$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_invoice_subject'));
+				$subject = strip_tags(preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_invoice_subject')));
 			}
 
-			$from = stripslashes(get_option("web_invoice_email_address"));
-			$from_name = stripslashes(get_option("web_invoice_business_name"));
+			$from = strip_tags(stripslashes(get_option("web_invoice_email_address")));
+			$from_name = strip_tags(stripslashes(get_option("web_invoice_business_name")));
 			$headers = "From: {$from_name} <{$from}>";
 
 			$message = html_entity_decode($message, ENT_QUOTES, 'UTF-8');
@@ -915,14 +915,14 @@ function web_invoice_send_email($invoice_array, $reminder = false)
 
 		if ($reminder) {
 			$message = strip_tags(web_invoice_show_reminder_email($invoice_id));
-			$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_reminder_subject'));
+			$subject = strip_tags(preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_reminder_subject')));
 		} else {
 			$message = strip_tags(web_invoice_show_email($invoice_id));
-			$subject = preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_invoice_subject'));
+			$subject = strip_tags(preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_email_apply_variables', get_option('web_invoice_email_send_invoice_subject')));
 		}
 
-		$from = stripslashes(get_option("web_invoice_email_address"));
-		$from_name = stripslashes(get_option("web_invoice_business_name"));
+		$from = strip_tags(stripslashes(get_option("web_invoice_email_address")));
+		$from_name = strip_tags(stripslashes(get_option("web_invoice_business_name")));
 		$headers = "From: {$from_name} <{$from}>";
 
 		$message = html_entity_decode($message, ENT_QUOTES, 'UTF-8');
