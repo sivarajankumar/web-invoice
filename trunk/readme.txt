@@ -90,9 +90,11 @@ or submit feature requests.
 **Version 2.0.4**
 
 * Slashing issue in from name in mails
-* Issue 2: logo implementation for pdf
-* Issue 7: Attach PDF invoice to e-mail
-* Issue 5: Email 'From' Error
+* Fixed issue 2: logo implementation for pdf
+* Fixed issue 7: Attach PDF invoice to e-mail
+* Fixed issue 5: Email 'From' Error
+* Fixed issue 11: Bug in add user dropdown on add new invoice page
+* Fixed issue 6: Users missing in Drop Down list
 
 **Version 2.0.3**
 
