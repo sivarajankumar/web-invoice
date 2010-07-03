@@ -3162,7 +3162,7 @@ function web_invoice_draw_user_selection_form($user_id) {
 			<option></option>
 			<?php
 			if (is_dir(WP_CONTENT_DIR . '/mu-plugins')) {
-				$prefix = 'wp_';
+				$prefix = $wpdb->base_prefix;
 				$get_all_users = $wpdb->get_results("SELECT * FROM {$prefix}users LEFT JOIN {$prefix}usermeta on {$prefix}users.id={$prefix}usermeta.user_id WHERE {$prefix}usermeta.meta_key='primary_blog' and {$prefix}usermeta.meta_value = {$blog_id} ORDER BY {$prefix}usermeta.meta_value");
 			} else {
 				$prefix = $wpdb->prefix;
