@@ -55,6 +55,7 @@ Web Invoice is already translated to:
 * Portugese (pt_BR) by André Luiz, http://andrewebmaster.com.br
 * Spanish (es_ES) by Danilo Casati, http://www.e-rgonomy.com/
 * Swedish (sv_SE) by Lena Petersson, http://designerstudion.se/
+* French (fr_FR) by Lena Petersson, http://byzance-telecom.net/
 
 If you like this plugin please give it a good rating, and consider saying thanks, sponsoring a feature or making a donation.
 
@@ -95,6 +96,8 @@ or submit feature requests.
 * Fixed issue 5: Email 'From' Error
 * Fixed issue 11: Bug in add user dropdown on add new invoice page
 * Fixed issue 6: Users missing in Drop Down list
+* Fixed issue 10: Date of transaction in admin overview page
+* French localization
 
 **Version 2.0.3**
 

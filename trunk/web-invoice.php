@@ -964,6 +964,7 @@ class Web_Invoice_GetInfo {
 				$web_invoice_due_date_day = web_invoice_meta($this->id,'web_invoice_due_date_day');
 				if(!empty($web_invoice_due_date_month) && !empty($web_invoice_due_date_year) && !empty($web_invoice_due_date_day))
 				return date(__('Y-m-d'), strtotime("$web_invoice_due_date_year-$web_invoice_due_date_month-$web_invoice_due_date_day"));
+				return date(__('Y-m-d'));
 				break;
 
 			case 'amount':
