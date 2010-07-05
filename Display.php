@@ -86,6 +86,7 @@ function web_invoice_default($message='')
 			<th class="check-column"><input type="checkbox" id="CheckAll" /></th>
 			<th class="invoice_id_col"><?php _e('Invoice Id', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Subject', WEB_INVOICE_TRANS_DOMAIN); ?></th>
+			<th><?php _e('Due date', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Amount', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Status', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('User', WEB_INVOICE_TRANS_DOMAIN); ?></th>
@@ -109,6 +110,8 @@ function web_invoice_default($message='')
 
 			//Basic Settings
 			$invoice_id = $invoice->invoice_num;
+			$invoice_info = new Web_Invoice_GetInfo($invoice_id);
+			$due_date = $invoice_info->display('due_date');
 			
 			$subject = $invoice->subject;
 			$invoice_link = web_invoice_build_invoice_link($invoice_id);
@@ -136,31 +139,27 @@ function web_invoice_default($message='')
 			if(web_invoice_paid_status($invoice_id)) $class_settings .= " alternate ";
 			if(web_invoice_meta($invoice_id,'archive_status') == 'archived')  $class_settings .= " web_invoice_archived ";
 
-			//Days since sent
-
 			// Days Since Sent
 			if(web_invoice_paid_status($invoice_id)) {
 				$days_since = "<span style='display:none;'>-1</span>".__(' Paid', WEB_INVOICE_TRANS_DOMAIN);  
 			} else {
-					if(web_invoice_meta($invoice_id,'sent_date')) {
-
-						$date1 = web_invoice_meta($invoice_id,'sent_date');
-						$date2 = date("Y-m-d", time());
-						$difference = abs(strtotime($date2) - strtotime($date1));
-						$days = round(((($difference/60)/60)/24), 0);
-						if($days == 0) { $days_since = "<span style='display:none;'>$days</span>".__('Sent Today. ', WEB_INVOICE_TRANS_DOMAIN); }
-						elseif($days == 1) { $days_since = "<span style='display:none;'>$days</span>".__('Sent Yesterday. ', WEB_INVOICE_TRANS_DOMAIN); }
-						elseif($days > 1) { $days_since = "<span style='display:none;'>$days</span>".sprintf(__('Sent %s days ago. ', WEB_INVOICE_TRANS_DOMAIN),$days); }
-					}
-					else {
-						$days_since ="<span style='display:none;'>999</span>".__('Not Sent', WEB_INVOICE_TRANS_DOMAIN);	}
+				if(web_invoice_meta($invoice_id,'sent_date')) {
+					$date1 = web_invoice_meta($invoice_id,'sent_date');
+					$date2 = date("Y-m-d", time());
+					$difference = abs(strtotime($date2) - strtotime($date1));
+					$days = round(((($difference/60)/60)/24), 0);
+					if($days == 0) { $days_since = "<span style='display:none;'>$days</span>".__('Sent Today. ', WEB_INVOICE_TRANS_DOMAIN); }
+					elseif($days == 1) { $days_since = "<span style='display:none;'>$days</span>".__('Sent Yesterday. ', WEB_INVOICE_TRANS_DOMAIN); }
+					elseif($days > 1) { $days_since = "<span style='display:none;'>$days</span>".sprintf(__('Sent %s days ago. ', WEB_INVOICE_TRANS_DOMAIN),$days); }
+				} else {
+					$days_since ="<span style='display:none;'>999</span>".__('Not Sent', WEB_INVOICE_TRANS_DOMAIN);	}
 				}
-
 
 				$output_row  = "<tr class='$class_settings'>\n";
 				$output_row .= "	<th class='check-column'><input type='checkbox' name='multiple_invoices[]' value='$invoice_id'/></th>\n";
 				$output_row .= "	<td><a href='admin.php?page=new_web_invoice&web_invoice_action=doInvoice&invoice_id=$invoice_id'>$display_id</a></td>\n";
 				$output_row .= "	<td><a href='admin.php?page=new_web_invoice&web_invoice_action=doInvoice&invoice_id=$invoice_id'>$subject</a></td>\n";
+				$output_row .= "	<td>$due_date</td>\n";
 				$output_row .= "	<td>$show_money</td>\n";
 				$output_row .= "	<td>$days_since</td>\n";
 				$output_row .= "	<td> <a href='user-edit.php?user_id=$user_id'>$call_me_this</a></td>\n";
@@ -242,6 +241,7 @@ function web_invoice_user_default($message='')
 			<th></th>
 			<th class="invoice_id_col"><?php _e('Invoice Id', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Subject', WEB_INVOICE_TRANS_DOMAIN); ?></th>
+			<th><?php _e('Due date', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Amount', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Status', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th></th>
@@ -261,6 +261,8 @@ function web_invoice_user_default($message='')
 
 			//Basic Settings
 			$invoice_id = $invoice->invoice_num;
+			$invoice_info = new Web_Invoice_GetInfo($invoice_id);
+			$due_date = $invoice_info->display('due_date');
 			
 			$subject = $invoice->subject;
 			$invoice_link = web_invoice_build_invoice_link($invoice_id);
@@ -314,6 +316,7 @@ function web_invoice_user_default($message='')
 				$output_row .= "	<th class='check-column'><input type='checkbox' class='hidden-check' name='multiple_invoices[]' value='$invoice_id'/></th>\n";
 				$output_row .= "	<td>$display_id</td>\n";
 				$output_row .= "	<td>$subject</td>\n";
+				$output_row .= "	<td>$due_date</td>\n";
 				$output_row .= "	<td>$show_money</td>\n";
 				$output_row .= "	<td>$days_since</td>\n";
 				$output_row .= "	<td><a href='$invoice_link'>".__('View Web Invoice', WEB_INVOICE_TRANS_DOMAIN)."</a></td>\n";
@@ -409,6 +412,7 @@ function web_invoice_recurring_overview($message='')
 			<th class="check-column"><input type="checkbox" id="CheckAll" /></th>
 			<th class="invoice_id_col"><?php _e('Invoice Id', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Subject', WEB_INVOICE_TRANS_DOMAIN); ?></th>
+			<th><?php _e('Due date', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Amount', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Status', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('User', WEB_INVOICE_TRANS_DOMAIN); ?></th>
@@ -432,6 +436,8 @@ function web_invoice_recurring_overview($message='')
 
 			//Basic Settings
 			$invoice_id = $invoice->invoice_num;
+			$invoice_info = new Web_Invoice_GetInfo($invoice_id);
+			$due_date = $invoice_info->display('due_date');
 
 			if(web_invoice_meta($invoice_id,'web_invoice_custom_invoice_id')) $custom_id = web_invoice_meta($invoice_id,'web_invoice_custom_invoice_id'); else $custom_id = $invoice_id;
 						
@@ -485,6 +491,7 @@ function web_invoice_recurring_overview($message='')
 				$output_row .= "	<th class='check-column'><input type='checkbox' name='multiple_invoices[]' value='$invoice_id'/></th>\n";
 				$output_row .= "	<td><a href='admin.php?page=new_web_invoice&web_invoice_action=doInvoice&invoice_id=$invoice_id'>$custom_id</a></td>\n";
 				$output_row .= "	<td><a href='admin.php?page=new_web_invoice&web_invoice_action=doInvoice&invoice_id=$invoice_id'>$subject</a></td>\n";
+				$output_row .= "	<td>$due_date</td>\n";
 				$output_row .= "	<td>$show_money</td>\n";
 				$output_row .= "	<td>$days_since</td>\n";
 				$output_row .= "	<td> <a href='user-edit.php?user_id=$user_id'>$call_me_this</a></td>\n";
