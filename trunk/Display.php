@@ -48,7 +48,7 @@ function web_invoice_default($message='')
 
 	?>
 <form id="invoices-filter" action="" method="post">
-<h2><?php _e('Invoice Overview', WEB_INVOICE_TRANS_DOMAIN); ?></h2>
+<h2><?php _e('Invoice Overview', WEB_INVOICE_TRANS_DOMAIN); ?> <a class="button add-new-h2" href="admin.php?page=new_web_invoice"><?php _e('Add New', WEB_INVOICE_TRANS_DOMAIN); ?></a></h2>
 <div class="tablenav clearfix">
 
 <div class="alignleft"><select name="web_invoice_action">
