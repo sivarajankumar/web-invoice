@@ -289,7 +289,7 @@ class Web_Invoice {
 			wp_enqueue_script('jquery.calculation',$this->uri."/js/jquery.calculation.min.js", array('jquery'), '1.8.0');
 			wp_enqueue_script('jquery.tablesorter',$this->uri."/js/jquery.tablesorter.min.js", array('jquery'), '1.8.0');
 			wp_enqueue_script('jquery.autogrow-textarea',$this->uri."/js/jquery.autogrow-textarea.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice.js", array('jquery'), '1.12.8');
+			wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice.js", array('jquery'), '2.0.4');
 		} else {
 			if(isset($_POST['web_invoice_id_hash'])) {
 
@@ -487,6 +487,8 @@ class Web_Invoice {
 		add_option('web_invoice_force_https','false');
 		add_option('web_invoice_send_thank_you_email','no');
 		add_option('web_invoice_cc_thank_you_email','no');
+		add_option('web_invoice_tax_count','1');
+		add_option('web_invoice_tax_name',serialize(array()));
 
 		//Authorize.net Gateway Settings
 		add_option('web_invoice_gateway_username','');
@@ -972,11 +974,29 @@ class Web_Invoice_GetInfo {
 				break;
 
 			case 'tax_percent':
-				return web_invoice_meta($this->id,'tax_value');
+				$_tax_values = unserialize(web_invoice_meta($this->id,'tax_value'));
+				if (is_array($_tax_values)) {
+					$_tax_value = 0;
+					foreach ($_tax_values as $_tax_valuex) {
+						$_tax_value += $_tax_valuex;
+					}
+				} else {
+					$_tax_value = $_tax_values;
+				}
+				return $_tax_value;
 				break;
 
 			case 'tax_total':
-				return  web_invoice_meta($this->id,'tax_value') * $invoice_info->amount;
+				$_tax_values = unserialize(web_invoice_meta($this->id,'tax_value'));
+				if (is_array($_tax_values)) {
+					$_tax_value = 0;
+					foreach ($_tax_values as $_tax_valuex) {
+						$_tax_value += $_tax_valuex;
+					}
+				} else {
+					$_tax_value = $_tax_values;
+				}
+				return  $_tax_value * $invoice_info->amount;
 				break;
 
 			case 'subject':

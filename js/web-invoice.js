@@ -175,7 +175,7 @@ jQuery(document)
 						}
 					})
 
-					jQuery("#web_invoice_tax").keyup( function() {
+					jQuery(".web_invoice_tax").keyup( function() {
 						recalc();
 					})
 					jQuery("#invoice_list").delegate("keyup", "input",
@@ -644,7 +644,12 @@ function recalc() {
 			// been complete
 			function($this) {
 				// sum the total of the $("[id^=total_item]") selector
-				var tax = jQuery('#web_invoice_tax').val() / 100;
+				var tax = 0;
+				
+				jQuery('.web_invoice_tax').each(function() {
+					tax += jQuery(this).val() / 100;
+				});
+				
 				var sum = $this.sum() + ($this.sum() * tax);
 				var total_occurances = jQuery(
 						"#web_invoice_subscription_total_occurances").val();

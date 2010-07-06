@@ -761,6 +761,8 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_default_currency_code');
 	delete_option('web_invoice_web_invoice_page');
 	delete_option('web_invoice_redirect_after_user_add');
+	delete_option('web_invoice_tax_count');
+	delete_option('web_invoice_tax_name');
 	delete_option('web_invoice_self_generate_from_template');
 	delete_option('web_invoice_billing_meta');
 	delete_option('web_invoice_show_billing_address');
@@ -2048,7 +2050,8 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	$subject = $_REQUEST['subject'];
 	$amount = $_REQUEST['amount'];
 	$user_id = $_REQUEST['user_id'];
-	$web_invoice_tax = $_REQUEST['web_invoice_tax'];
+	$web_invoice_tax = serialize($_REQUEST['web_invoice_tax']);
+	
 	$itemized_list = $_REQUEST['itemized_list'];
 	$web_invoice_custom_invoice_id = $_REQUEST['web_invoice_custom_invoice_id'];
 	$web_invoice_due_date_month = $_REQUEST['web_invoice_due_date_month'];
@@ -2074,7 +2077,15 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	$web_invoice_subscription_start_day = $_REQUEST['web_invoice_subscription_start_day'];
 	$web_invoice_subscription_start_year = $_REQUEST['web_invoice_subscription_start_year'];
 	$web_invoice_subscription_total_occurances = $_REQUEST['web_invoice_subscription_total_occurances'];
-
+	
+	$web_invoice_tax_names = unserialize(get_option('web_invoice_tax_name'));
+	if (!is_array($web_invoice_tax_names)) {
+		$web_invoice_tax_names = array();
+	}
+	for ($_txc=0; $_txc<get_option('web_invoice_tax_count'); $_txc++) {
+		if (!isset($_REQUEST['web_invoice_tax_name_'.$_txc])) continue;
+		$web_invoice_tax_names[$_txc] = $_REQUEST['web_invoice_tax_name_'.$_txc];
+	}
 
 	//remove items from itemized list that are missing a title, they are most likely deleted
 	if(is_array($itemized_list)) {
@@ -2173,6 +2184,8 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	if(!empty($web_invoice_state)) update_usermeta($user_id, 'state', $web_invoice_state);
 	if(!empty($web_invoice_zip)) update_usermeta($user_id, 'zip', $web_invoice_zip);
 	if(!empty($web_invoice_country)) update_usermeta($user_id, 'country', $web_invoice_country);
+	
+	if(is_array($web_invoice_tax_names)) update_option('web_invoice_tax_name', serialize($web_invoice_tax_names));
 
 	//If there is a message, append it with the web invoice link
 	if($message && $invoice_id) {
@@ -2231,10 +2244,11 @@ function web_invoice_process_settings() {
 		}
 		update_option('web_invoice_user_level', $_POST['web_invoice_user_level']);	
 	}
+	if(isset($_POST['web_invoice_tax_count'])) update_option('web_invoice_tax_count', $_POST['web_invoice_tax_count']);
 	if(isset($_POST['web_invoice_web_invoice_page'])) update_option('web_invoice_web_invoice_page', $_POST['web_invoice_web_invoice_page']);
 	if(isset($_POST['web_invoice_reminder_message'])) update_option('web_invoice_reminder_message', $_POST['web_invoice_reminder_message']);
 
-	if(isset($_POST['web_invoice_business_name']) || $_POST['web_invoice_business_address']|| $_POST['web_invoice_email_address'] || isset($_POST['web_invoice_business_phone']) || isset($_POST['web_invoice_business_tax_id']) || isset($_POST['web_invoice_payment_link'])) $message = "Information saved.";
+	if(isset($_POST['web_invoice_business_name']) || $_POST['web_invoice_business_address']|| $_POST['web_invoice_email_address'] || isset($_POST['web_invoice_business_phone']) || isset($_POST['web_invoice_tax_count']) || isset($_POST['web_invoice_business_tax_id']) || isset($_POST['web_invoice_payment_link'])) $message = "Information saved.";
 
 	// Save Gateway Settings
 	if(isset($_POST['web_invoice_recurring_gateway_url'])) update_option('web_invoice_recurring_gateway_url', $_POST['web_invoice_recurring_gateway_url']);

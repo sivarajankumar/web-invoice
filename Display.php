@@ -578,7 +578,8 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 	if(empty($_POST['copy_from_template'])) {unset($_POST['copy_from_template']);}
 	if($invoice_id == '') {unset($invoice_id);}
 
-
+	$web_invoice_tax_names = unserialize(get_option('web_invoice_tax_name'));
+	
 	// New Invoice From Template
 	if(isset($_POST['copy_from_template']) && $_POST['user_id']) {
 		$template_invoice_id = $_POST['copy_from_template'];
@@ -590,7 +591,7 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 		$itemized = $invoice_info->itemized;
 		$profileuser = get_user_to_edit($_POST['user_id']);
 		$itemized_array = unserialize(urldecode($itemized));
-		$web_invoice_tax = web_invoice_meta($template_invoice_id,'tax_value');
+		$web_invoice_tax = unserialize(web_invoice_meta($template_invoice_id,'tax_value'));
 		$web_invoice_currency_code = web_invoice_meta($template_invoice_id,'web_invoice_currency_code');
 		$web_invoice_due_date_day = web_invoice_meta($template_invoice_id,'web_invoice_due_date_day');
 		$web_invoice_due_date_month = web_invoice_meta($template_invoice_id,'web_invoice_due_date_month');
@@ -617,7 +618,7 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 		$itemized = $invoice_info->itemized;
 		$profileuser = get_userdata($invoice_info->user_id);
 		$itemized_array = unserialize(urldecode($itemized));
-		$web_invoice_tax = web_invoice_meta($invoice_id,'tax_value');
+		$web_invoice_tax = unserialize(web_invoice_meta($invoice_id,'tax_value'));
 		$web_invoice_custom_invoice_id = web_invoice_meta($invoice_id,'web_invoice_custom_invoice_id');
 		$web_invoice_due_date_day = web_invoice_meta($invoice_id,'web_invoice_due_date_day');
 		$web_invoice_due_date_month = web_invoice_meta($invoice_id,'web_invoice_due_date_month');
@@ -943,13 +944,26 @@ if(get_option('web_invoice_business_name') == '') 		echo "<tr><th colspan=\"2\">
 
 		</td>
 	</tr>
-
+	
+	<?php if (is_array($web_invoice_tax) || empty($web_invoice_tax)) { ?>
+		<?php for ($_txc=0; $_txc<get_option('web_invoice_tax_count'); $_txc++) { ?>
 	<tr class="invoice_main">
-		<th><?php _e("Tax", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<th><span
+			class="web_invoice_make_editable<?php if(!isset($web_invoice_tax_names[$_txc])) echo " web_invoice_unset"; ?>"
+			id="web_invoice_tax_name_<?php print $_txc; ?>"><?php print isset($web_invoice_tax_names[$_txc])?$web_invoice_tax_names[$_txc]:sprintf(__("Set Tax %s Name", WEB_INVOICE_TRANS_DOMAIN), $_txc+1); ?></span></th>
+		<td style="font-size: 1.1em; padding-top: 7px;"><input
+			style="width: 35px;" name="web_invoice_tax[]" id="web_invoice_tax_<?php print $_txc; ?>"
+			value="<?php echo $web_invoice_tax[$_txc]; ?>" class="noautocomplete web_invoice_tax" />%</td>
+	</tr>
+		<?php } ?>
+	<?php } else { ?>
+	<tr class="invoice_main">
+		<th><?php _e("Tax", WEB_INVOICE_TRANS_DOMAIN); ?></th>
 		<td style="font-size: 1.1em; padding-top: 7px;"><input
 			style="width: 35px;" name="web_invoice_tax" id="web_invoice_tax"
-			value="<?php echo $web_invoice_tax ?>" class="noautocomplete" />%</td>
+			value="<?php echo $web_invoice_tax; ?>" class="noautocomplete web_invoice_tax" />%</td>
 	</tr>
+	<?php } ?>
 
 	<tr class="">
 		<th><?php _e("Currency", WEB_INVOICE_TRANS_DOMAIN) ?></th>
@@ -1264,6 +1278,14 @@ function web_invoice_show_settings()
 				<option style="padding-right: 10px;" value="no"
 				<?php if(get_option('web_invoice_self_generate_from_template') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
 			</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<th width="200"><?php _e("Number of taxes", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input name="web_invoice_tax_count" type="text"
+			class="input_field"
+			value="<?php echo stripslashes(get_option('web_invoice_tax_count')); ?>" size="3" />
 		</td>
 	</tr>
 
@@ -1929,7 +1951,21 @@ function web_invoice_draw_itemized_table($invoice_id) {
 	$invoice_info = $_invoice->_row_cache;
 	$itemized = $invoice_info->itemized;
 	$amount = $invoice_info->amount;
-	$tax_percent = web_invoice_meta($invoice_id,'tax_value');
+	$_tax_percents = unserialize(web_invoice_meta($invoice_id,'tax_value'));
+	$_tax_names = unserialize(get_option('web_invoice_tax_name'));
+	
+	if (is_array($_tax_percents)) {
+		$tax_percent = 0;
+
+		foreach ($_tax_percents as $_x=>$_tax_percentx) {
+			$tax_percent += $_tax_percentx;
+			if (!isset($_tax_names[$_x])) {
+				$_tax_names[$_x] = sprintf(__("Tax %s", WEB_INVOICE_TRANS_DOMAIN), $_x+1);
+			}
+		}
+	} else {
+		$tax_percent = $_tax_percents;
+	}
 
 	// Determine currency. First we check invoice-specific, then default code, and then we settle on USD
 	$currency_code = web_invoice_determine_currency($invoice_id);
@@ -1938,7 +1974,6 @@ function web_invoice_draw_itemized_table($invoice_id) {
 		$tax_free_amount = $amount*(100/(100+(100*($tax_percent/100))));
 		$tax_value = $amount - $tax_free_amount;
 	}
-
 
 	if(!strpos($amount,'.')) $amount = $amount . ".00";
 	$itemized_array = unserialize(urldecode($itemized));
@@ -1984,19 +2019,39 @@ function web_invoice_draw_itemized_table($invoice_id) {
 
 		}
 		if($tax_percent) {
-			if($i % 2) { $response .= "<tr class='alt_row'>"; }
-				else { $response .= "<tr >"; }
-			
-			if(get_option('web_invoice_show_quantities') == "Show") {
-				$response .= "<td></td><td></td>";
-			}
-			$response .= "<td>".__('Tax', WEB_INVOICE_TRANS_DOMAIN)." (". round($tax_percent,2). "%) </td>";
-			if(get_option('web_invoice_show_quantities') == "Show") {
-				$response .= "<td style='text-align:right;' colspan='2'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
+			if (is_array($_tax_percents)) {
+				foreach ($_tax_percents as $_x => $_tax_percentx) {
+					if($i % 2) { $response .= "<tr class='alt_row'>"; }
+					else { $response .= "<tr >"; }
+					if(get_option('web_invoice_show_quantities') == "Show") {
+						$response .= "<td></td><td></td>";
+					}
+					
+					$_tax_value = $tax_free_amount*($_tax_percentx/100);
+		
+					$response .= "<td>".$_tax_names[$_x]." (". round($_tax_percentx,2). "%) </td>";
+					if(get_option('web_invoice_show_quantities') == "Show") {
+						$response .= "<td style='text-align:right;' colspan='2'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($_tax_value))."</td></tr>";
+					} else {
+						$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($_tax_value))."</td></tr>";
+					}
+					$i++;
+				}
 			} else {
-				$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
+				if($i % 2) { $response .= "<tr class='alt_row'>"; }
+					else { $response .= "<tr >"; }
+				
+				if(get_option('web_invoice_show_quantities') == "Show") {
+					$response .= "<td></td><td></td>";
+				}
+				$response .= "<td>".__('Tax', WEB_INVOICE_TRANS_DOMAIN)." (". round($tax_percent,2). "%) </td>";
+				if(get_option('web_invoice_show_quantities') == "Show") {
+					$response .= "<td style='text-align:right;' colspan='2'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
+				} else {
+					$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
+				}
+				$i++;
 			}
-			$i++;
 		}
 		
 		if($i % 2) { $response .= "<tr class=\"web_invoice_bottom_line alt_row\">"; }
