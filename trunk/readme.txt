@@ -37,6 +37,7 @@ Some features:
 * All user interfaces are internationalized
 * E-mail templates and hooks to allow you to customize the e-mails sent to your clients
 * Integrate with other plugins, actions available: web_invoice_mark_as_paid, web_invoice_content_append, web_invoice_front_top, web_invoice_front_bottom, web_invoice_front_top, web_invoice_front_paid, web_invoice_front_unpaid, web_invoice_invoice_save, web_invoice_process_settings, web_invoice_display_settings, web_invoice_invoice_restart_recurring, web_invoice_invoice_pause_recurring
+* Works with WordPress 3.x and WPMU 3.x
 
 Sponsored features:
 
@@ -73,6 +74,8 @@ This is a fork of [WP-Invoice](http://wordpress.org/extend/plugins/wp-invoice/),
 Please see the [Web Invoice plugin home page](http://mohanjith.com/wordpress/web-invoice.html) for details.
 
 == Frequently Asked Questions ==
+
+1. Does this plugin support WordPress 3.x and WPMU 3.0? Yes
 
 Please visit the [Web Invoice community forum](http://mohanjith.com/forum/forum.php?id=1) for suggestions and help.
 
