@@ -363,7 +363,7 @@ function web_invoice_recurring_overview($message='')
 	?>
 <form id="invoices-filter" action="" method="post"><input type="hidden"
 	name="web_invoice_recurring_billing" value="true" />
-<h2><?php _e('Recurring Billing Overview', WEB_INVOICE_TRANS_DOMAIN); ?></h2>
+<h2><?php _e('Recurring Billing Overview', WEB_INVOICE_TRANS_DOMAIN); ?> <a class="button add-new-h2" href="admin.php?page=new_web_invoice"><?php _e('Add New', WEB_INVOICE_TRANS_DOMAIN); ?></a></h2>
 
 	<?php if(web_invoice_is_not_merchant() && (get_option('web_invoice_moneybookers_merchant') == 'False')) { ?>
 <div class="web_invoice_rounded_box">
