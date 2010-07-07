@@ -355,8 +355,8 @@ function web_invoice_recurring_overview($message='')
 	// The error takes precedence over others being that nothing can be done w/o tables
 	if(!$wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('main')."';") || !$wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('log')."';")) { $warning_message = ""; }
 
-	if($warning_message) echo "<div id='message' class='error' ><p>$warning_message</p></div>";
-	if($message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
+	if(isset($warning_message) && $warning_message) echo "<div id='message' class='error' ><p>$warning_message</p></div>";
+	if(isset($message) && $message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
 
 	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != ''");
 
@@ -428,7 +428,7 @@ function web_invoice_recurring_overview($message='')
 	$x_counter = 0;
 	foreach ($all_invoices as $invoice) {
 		if(web_invoice_meta($invoice->invoice_num,'web_invoice_recurring_billing')) {
-			if ($_REQUEST['archived'] != 'true' && web_invoice_meta($invoice->invoice_num,'archive_status') == 'archived') continue;
+			if ((!isset($_REQUEST['archived']) || $_REQUEST['archived'] != 'true') && web_invoice_meta($invoice->invoice_num,'archive_status') == 'archived') continue;
 			
 			$x_counter++;
 
@@ -457,6 +457,8 @@ function web_invoice_recurring_overview($message='')
 			$user_nicename = $profileuser->user_nicename;
 			if(empty($first_name) || empty($last_name)) $call_me_this = $user_nicename; else $call_me_this = $first_name . " " . $last_name;
 
+			$class_settings = "";
+			
 			// Color coding
 			if(web_invoice_paid_status($invoice_id)) $class_settings .= " alternate ";
 			if(web_invoice_meta($invoice_id,'archive_status') == 'archived')  $class_settings .= " web_invoice_archived ";
@@ -484,8 +486,6 @@ function web_invoice_recurring_overview($message='')
 				}
 
 				if(web_invoice_recurring_started($invoice_id)) $days_since = "<span style='display:none;'>-1</span>".__('Active Recurring', WEB_INVOICE_TRANS_DOMAIN);
-
-
 
 				$output_row  = "<tr class='$class_settings'>\n";
 				$output_row .= "	<th class='check-column'><input type='checkbox' name='multiple_invoices[]' value='$invoice_id'/></th>\n";
