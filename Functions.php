@@ -665,7 +665,7 @@ function web_invoice_paid_status($invoice_id) {
 	global $wpdb;
 	$invoice_info = new Web_Invoice_GetInfo($invoice_id);
 	if(!empty($invoice_id) && web_invoice_meta($invoice_id,'paid_status')) return web_invoice_meta($invoice_id,'paid_status');
-	if ($invoice_info && $invoice_info->recipient('state')) return $invoice_info->recipient('state');
+	if ($invoice_info && $invoice_info->display('status')) return $invoice_info->display('status');
 }
 
 function web_invoice_paid_date($invoice_id) {
@@ -1691,7 +1691,7 @@ function web_invoice_process_cc_transaction($cc_data) {
 					
 					web_invoice_update_log($invoice_id, 'subscription', ' Subscription initiated, Subcription ID - ' . $arb->getSubscriberID());
 
-                                        web_invoice_paid($invoice_id);
+                    web_invoice_paid($invoice_id);
 					web_invoice_mark_as_paid($invoice_id);
 				}
 	
@@ -1836,7 +1836,7 @@ function web_invoice_process_cc_transaction($cc_data) {
 	
 				//Mark invoice as paid
 				web_invoice_paid($invoice_id);
-                                web_invoice_mark_as_paid($invoice_id);
+                web_invoice_mark_as_paid($invoice_id);
 				// if(get_option('web_invoice_send_thank_you_email') == 'yes') web_invoice_send_email_receipt($invoice_id);
 	
 				if($recurring) {
@@ -2046,6 +2046,7 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	} else {
 		$profileuser = get_userdata($_POST['user_id']);
 	}
+	
 	$description = $_REQUEST['description'];
 	$subject = $_REQUEST['subject'];
 	$amount = $_REQUEST['amount'];
@@ -2133,7 +2134,6 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	}
 	else {
 		// Create New Invoice
-
 		if($wpdb->query("INSERT INTO ".Web_Invoice::tablename('main')." (amount,description,invoice_num,user_id,subject,itemized,status)	VALUES ('$amount','$description','$invoice_id','$user_id','$subject','$itemized','0')")) {
 			$message = "New Invoice saved.";
 			web_invoice_update_log($invoice_id, 'created', ' Created ');;
@@ -2196,9 +2196,6 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 
 	if(!$error) return $message;
 	if($error) return "An error occured: $message.";
-
-
-
 }
 
 function web_invoice_show_message($content,$type="updated fade") {
