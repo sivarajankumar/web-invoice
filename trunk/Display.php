@@ -3561,11 +3561,11 @@ function web_invoice_print_help($invoice_id) {
 	
 	if (!$web_invoice_print) {
 	?>
-<div class="noprint"><p><?php print sprintf(__("You can download a %s or print a copy of this invoice for your records; just ".
-"select the 'Print' item under the 'File' menu in your browser, or use the ".
-"&lt;CTRL&gt; + 'P' key combination to print a hard-copy in a more traditional, ".
-"neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt ".
-"payment!"), '<a href="'.$invoice->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'); ?></p></div>
+<div class="noprint"><p><?php print sprintf(__("You can download a %s or print a copy of this invoice for your records; just 
+select the 'Print' item under the 'File' menu in your browser, or use the 
+&lt;CTRL&gt; + 'P' key combination to print a hard-copy in a more traditional, 
+neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt 
+payment!", WEB_INVOICE_TRANS_DOMAIN), '<a href="'.$invoice->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'); ?></p></div>
 <?php } 
 }
 

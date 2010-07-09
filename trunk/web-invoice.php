@@ -139,14 +139,14 @@ class Web_Invoice {
 	function web_invoice_add_pages() {
 		$file = "web-invoice/" . basename(__FILE__);
 
-		add_menu_page(__('Web Invoice System'), __('Web Invoice'),  $this->web_invoice_user_level, $file, array(&$this,'invoice_overview'),$this->uri."/images/web_invoice.png");
-		add_submenu_page($file, __("Recurring Billing"), __("Recurring Billing"), $this->web_invoice_user_level, 'web_invoice_recurring_billing', array(&$this,'recurring'));
-		add_submenu_page($file, __("Manage Invoice"), __("New Invoice"), $this->web_invoice_user_level, 'new_web_invoice', array(&$this,'new_web_invoice'));
-		add_submenu_page($file, __("E-mail templates"), __("E-mail templates"), $this->web_invoice_user_level, 'web_invoice_email_templates', array(&$this,'email_template_page'));
+		add_menu_page(__('Web Invoice System', WEB_INVOICE_TRANS_DOMAIN), __('Web Invoice', WEB_INVOICE_TRANS_DOMAIN),  $this->web_invoice_user_level, $file, array(&$this,'invoice_overview'),$this->uri."/images/web_invoice.png");
+		add_submenu_page($file, __("Recurring Billing", WEB_INVOICE_TRANS_DOMAIN), __("Recurring Billing", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_recurring_billing', array(&$this,'recurring'));
+		add_submenu_page($file, __("Manage Invoice", WEB_INVOICE_TRANS_DOMAIN), __("New Invoice", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'new_web_invoice', array(&$this,'new_web_invoice'));
+		add_submenu_page($file, __("E-mail templates", WEB_INVOICE_TRANS_DOMAIN), __("E-mail templates", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_email_templates', array(&$this,'email_template_page'));
 		// add_submenu_page($file, __("Items/Inventory"), __("Items"), $this->web_invoice_user_level, 'web_invoice_inventory_items', array(&$this,'inventory_items_page'));
-		add_submenu_page($file, __("Settings"), __("Settings"), $this->web_invoice_user_level, 'web_invoice_settings', array(&$this,'settings_page'));
+		add_submenu_page($file, __("Settings", WEB_INVOICE_TRANS_DOMAIN), __("Settings", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_settings', array(&$this,'settings_page'));
 	
-		add_submenu_page('profile.php', __("Your invoices"), __("Invoices"), 'subscriber', 'user_invoice_overview', array(&$this,'user_invoice_overview'));
+		add_submenu_page('profile.php', __("Your invoices", WEB_INVOICE_TRANS_DOMAIN), __("Invoices", WEB_INVOICE_TRANS_DOMAIN), 'subscriber', 'user_invoice_overview', array(&$this,'user_invoice_overview'));
 	}
 
 	function security() {
@@ -162,7 +162,7 @@ class Web_Invoice {
 
 	function favorites($actions) {
 		$key = 'admin.php?page=new_web_invoice';
-		$actions[$key] = array('New Invoice',$this->web_invoice_user_level);
+		$actions[$key] = array(__('New Invoice', WEB_INVOICE_TRANS_DOMAIN),$this->web_invoice_user_level);
 		return $actions;
 	}
 
