@@ -44,7 +44,7 @@ function web_invoice_default($message='')
 	if(isset($warning_message) && $warning_message) echo "<div id=\"message\" class='error' ><p>$warning_message</p></div>";
 	if(isset($message) && $message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
 
-	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != ''");
+	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != '' ORDER BY id ASC");
 
 	?>
 <form id="invoices-filter" action="" method="post">
@@ -209,7 +209,7 @@ function web_invoice_user_default($message='')
 	if($warning_message) echo "<div id=\"message\" class='error' ><p>$warning_message</p></div>";
 	if($message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
 
-	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != '' AND user_id = {$current_user->ID}");
+	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != '' AND user_id = {$current_user->ID} ORDER BY id ASC");
 
 	?>
 <form id="invoices-filter" action="" method="post">
@@ -358,7 +358,7 @@ function web_invoice_recurring_overview($message='')
 	if(isset($warning_message) && $warning_message) echo "<div id='message' class='error' ><p>$warning_message</p></div>";
 	if(isset($message) && $message) echo "<div id=\"message\" class='updated fade' ><p>$message</p></div>";
 
-	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != ''");
+	$all_invoices = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('main')." WHERE invoice_num != '' ORDER BY id ASC");
 
 	?>
 <form id="invoices-filter" action="" method="post"><input type="hidden"

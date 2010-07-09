@@ -93,8 +93,8 @@ or submit feature requests.
 
 **Version 2.0.6**
 
-* Fixed issue 21:	Call to undefined function sys_get_temp_dir()
-
+* Fixed issue 21: Call to undefined function sys_get_temp_dir()
+* Fixed issue 20: Persistent Invoice Sorting
 
 **Version 2.0.5**
 
