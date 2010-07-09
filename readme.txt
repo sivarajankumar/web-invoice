@@ -91,6 +91,11 @@ or submit feature requests.
 
 == Change Log ==
 
+**Version 2.0.6**
+
+* Fixed issue 21:	Call to undefined function sys_get_temp_dir()
+
+
 **Version 2.0.5**
 
 * Fixed issue 17: Invalid argument supplied for foreach()
