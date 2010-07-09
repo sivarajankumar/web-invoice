@@ -95,6 +95,7 @@ or submit feature requests.
 
 * Fixed issue 21: Call to undefined function sys_get_temp_dir()
 * Fixed issue 20: Persistent Invoice Sorting
+* Fixed issue 19: Check memory available and warn user before running out of memory
 
 **Version 2.0.5**
 

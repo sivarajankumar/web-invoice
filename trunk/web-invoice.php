@@ -45,7 +45,9 @@ require_once "Functions.php";
 require_once "Display.php";
 require_once "Frontend.php";
 
-global $web_invoice, $web_invoice_print;
+global $web_invoice, $web_invoice_print, $web_invoice_memory_head_room;
+
+$web_invoice_memory_head_room = web_invoice_return_bytes(ini_get('memory_limit'))-memory_get_usage();
 
 $web_invoice_print = false;
 
