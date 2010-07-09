@@ -29,8 +29,12 @@ class Web_Invoice_Decider {
 	var $ouput = "";
 
 	function Web_Invoice_Decider($web_invoice_action = null) {
-
-		global $wpdb;
+		global $wpdb, $web_invoice_memory_head_room;
+		
+		if (26214400 > $web_invoice_memory_head_room) {
+			$this->message = sprintf(__("Less than 25MB of memory available for Web Invoice, please set <code>memory_limit = %s</code> in your".
+			"<code>php.ini</code> if Web Invoice crashes unexpectedly", WEB_INVOICE_TRANS_DOMAIN), web_invoice_return_bytes_nice(web_invoice_return_bytes(ini_get('memory_limit'))+27000000));
+		}
 
 		$web_invoice_action = (!empty($_REQUEST['web_invoice_action']) ? $_REQUEST['web_invoice_action'] : $web_invoice_action);
 		$invoice_id = $_REQUEST['invoice_id'];

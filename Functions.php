@@ -2434,6 +2434,33 @@ function web_invoice_xor_decrypt($input_string, $key_phrase) {
     return $input_string;
 }
 
+function web_invoice_return_bytes($val) {
+	$val = trim($val);
+	$last = strtolower($val[strlen($val)-1]);
+	switch($last) {
+		case 'g':
+			$val *= 1024;
+		case 'm':
+			$val *= 1024;
+		case 'k':
+			$val *= 1024;
+	}
+	return $val;
+}
+
+function web_invoice_return_bytes_nice($bytes) {
+	$units = array('B', 'K', 'M', 'G');
+  
+	$bytes = max($bytes, 0);
+	$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+	$pow = min($pow, count($units) - 1);
+  
+	$bytes /= pow(1024, $pow);
+  
+	return round($bytes, 0) . $units[$pow]; 
+}
+
+
 if (!function_exists('sys_get_temp_dir')) {
 	function sys_get_temp_dir() {
 		if (!empty($_ENV['TMP'])) { return realpath($_ENV['TMP']); }
