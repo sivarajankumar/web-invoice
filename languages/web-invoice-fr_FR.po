@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: web-invoice\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/web-invoice\n"
-"POT-Creation-Date: 2010-07-07 08:15+0000\n"
-"PO-Revision-Date: 2010-07-07 13:57+0530\n"
+"POT-Creation-Date: 2010-07-10 16:21+0000\n"
+"PO-Revision-Date: 2010-07-10 21:52+0530\n"
 "Last-Translator: S H Mohanjith <moha@mohanjith.net>\n"
 "Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "Prévisualiser la facture"
 #: Display.php:51
 #: Display.php:366
 msgid "Add New"
-msgstr ""
+msgstr "Ajouter une nouvelle fact."
 
 # @ web-invoice
 #: Display.php:55
@@ -156,9 +156,8 @@ msgstr "Sujet"
 #: Display.php:89
 #: Display.php:244
 #: Display.php:415
-#, fuzzy
 msgid "Due date"
-msgstr "Date de paiement"
+msgstr "Date de règlement "
 
 # @ web-invoice
 #: Display.php:90
@@ -183,28 +182,28 @@ msgstr "Client"
 # @ web-invoice
 #: Display.php:144
 #: Display.php:294
-#: Display.php:470
+#: Display.php:472
 msgid " Paid"
 msgstr "Payé"
 
 # @ web-invoice
 #: Display.php:151
 #: Display.php:302
-#: Display.php:478
+#: Display.php:480
 msgid "Sent Today. "
 msgstr "Envoyé aujourd'hui"
 
 # @ web-invoice
 #: Display.php:152
 #: Display.php:303
-#: Display.php:479
+#: Display.php:481
 msgid "Sent Yesterday. "
 msgstr "Envoyé hier"
 
 # @ web-invoice
 #: Display.php:153
 #: Display.php:304
-#: Display.php:480
+#: Display.php:482
 #, php-format
 msgid "Sent %s days ago. "
 msgstr "Envoyé il y a  %s jours. "
@@ -212,7 +211,7 @@ msgstr "Envoyé il y a  %s jours. "
 # @ web-invoice
 #: Display.php:155
 #: Display.php:307
-#: Display.php:483
+#: Display.php:485
 msgid "Not Sent"
 msgstr "Non envoyé"
 
@@ -255,7 +254,7 @@ msgstr "Montrer  / cacher les archives"
 
 # @ web-invoice
 #: Display.php:216
-#: web-invoice.php:149
+#: web-invoice.php:151
 msgid "Invoices"
 msgstr "Factures"
 
@@ -301,12 +300,12 @@ msgid "Filter: "
 msgstr "Filtre :"
 
 # @ web-invoice
-#: Display.php:468
+#: Display.php:470
 msgid " Cancelled"
 msgstr "Annulé"
 
 # @ web-invoice
-#: Display.php:486
+#: Display.php:488
 msgid "Active Recurring"
 msgstr "Abonnements actifs"
 
@@ -337,7 +336,7 @@ msgstr "Nouvelle facture"
 
 # @ web-invoice
 #: Display.php:688
-#: web-invoice.php:144
+#: web-invoice.php:146
 msgid "Manage Invoice"
 msgstr "GHérer les factures"
 
@@ -457,7 +456,7 @@ msgstr "Régler l'ID fiscal"
 
 # @ web-invoice
 #: Display.php:779
-#: web-invoice.php:143
+#: web-invoice.php:145
 msgid "Recurring Billing"
 msgstr "Facturation récurrente"
 
@@ -645,9 +644,9 @@ msgstr "Custom Invoice ID"
 
 # @ web-invoice
 #: Display.php:953
-#, fuzzy, php-format
+#, php-format
 msgid "Set Tax %s Name"
-msgstr "Nom "
+msgstr "Régler le nom de la taxe %s"
 
 # @ web-invoice
 #: Display.php:961
@@ -682,7 +681,7 @@ msgstr "Effacer les logs"
 
 # @ web-invoice
 #: Display.php:1033
-#: web-invoice.php:145
+#: web-invoice.php:147
 msgid "E-mail templates"
 msgstr "Modèle de courriel"
 
@@ -701,9 +700,8 @@ msgstr "Contenu"
 
 # @ web-invoice
 #: Display.php:1055
-#, fuzzy
 msgid "Invoice PDF"
-msgstr "ID de facture"
+msgstr "Facture PDF"
 
 # @ web-invoice
 #: Display.php:1065
@@ -897,7 +895,7 @@ msgstr "Autoriser les utilisateurs à créer des factures pour eux même"
 
 #: Display.php:1285
 msgid "Number of taxes"
-msgstr ""
+msgstr "Nbr. de taxes"
 
 # @ web-invoice
 #: Display.php:1294
@@ -1500,9 +1498,9 @@ msgstr "Avez vous besoin d'accepter les CB ? "
 
 # @ web-invoice
 #: Display.php:1963
-#, fuzzy, php-format
+#, php-format
 msgid "Tax %s"
-msgstr "ID fiscal"
+msgstr "Taxe %s"
 
 # @ web-invoice
 #: Display.php:1986
@@ -1862,8 +1860,18 @@ msgid "Create a new user account."
 msgstr "Créer un nouveau compte utilisateur"
 
 #: Display.php:3564
+#, fuzzy, php-format
+msgid ""
+"You can download a %s or print a copy of this invoice for your records; just \r\n"
+"select the 'Print' item under the 'File' menu in your browser, or use the \r\n"
+"&lt;CTRL&gt; + 'P' key combination to print a hard-copy in a more traditional, \r\n"
+"neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt \r\n"
+"payment!"
+msgstr "Vous pouvez télécharger un %s ou imprimer une copie de cette facture pour vos archives. Selectionner \"Imprimer\" dans le menu \"Fichier\" de votre navigateur, ou utiliser le raccourci clavier &lt;CTRL&gt; + 'P'  pour imprimer une copie au format traditionnel. <em>Merci</em> de votre règlement rapide !"
+
+#: Flow.php:35
 #, php-format
-msgid "You can download a %s or print a copy of this invoice for your records; just "
+msgid "Less than 25MB of memory available for Web Invoice, please set <code>memory_limit = %s</code> in your"
 msgstr ""
 
 # @ web-invoice
@@ -1882,9 +1890,9 @@ msgid "Y-m-d H:i:s"
 msgstr "Y-m-d H:i:s"
 
 #: Functions.php:469
-#: web-invoice.php:720
-#: web-invoice.php:850
-#: web-invoice.php:855
+#: web-invoice.php:722
+#: web-invoice.php:852
+#: web-invoice.php:857
 msgid "M d Y"
 msgstr "M d Y"
 
@@ -2072,69 +2080,64 @@ msgstr "R$%s"
 msgid "R%s"
 msgstr "R%s"
 
-#: web-invoice.php:142
+#: web-invoice.php:144
 msgid "Web Invoice System"
 msgstr "Web Invoice System"
 
-#. #-#-#-#-#  plugin.pot (Web Invoice 2.0.5)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (Web Invoice 2.0.6)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: web-invoice.php:142
+#: web-invoice.php:144
 msgid "Web Invoice"
 msgstr "Web Invoice"
 
-#: web-invoice.php:144
+#: web-invoice.php:146
+#: web-invoice.php:167
 msgid "New Invoice"
 msgstr "Nouvelle facture"
 
-#: web-invoice.php:147
+#: web-invoice.php:149
 msgid "Settings"
 msgstr "Réglages"
 
-#: web-invoice.php:149
+#: web-invoice.php:151
 msgid "Your invoices"
 msgstr "Vos factures"
 
-#: web-invoice.php:242
+#: web-invoice.php:244
 msgid "cURL is not turned on on your server, credit card processing will not work. If you have access to your php.ini file, activate <b>extension=php_curl.dll</b>."
 msgstr "cURL n'est aps activé sur votre serveur, les transactions CB ne fonctionneront pas. Si vous avez accès à votre fichier php.ini, activez <b>extension=php_curl.dll</b>."
 
-#: web-invoice.php:885
 #: web-invoice.php:887
-#: web-invoice.php:893
-#: web-invoice.php:898
-#: web-invoice.php:968
-#: web-invoice.php:969
+#: web-invoice.php:889
+#: web-invoice.php:895
+#: web-invoice.php:900
+#: web-invoice.php:970
+#: web-invoice.php:971
 msgid "Y-m-d"
 msgstr "Y-m-d"
 
 #. Plugin URI of the plugin/theme
 msgid "http://mohanjith.com/wordpress/web-invoice.html"
-msgstr ""
+msgstr "http://mohanjith.com/wordpress/web-invoice.html"
 
 #. Description of the plugin/theme
 msgid "Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href=\"admin.php?page=web_invoice_settings\">Web Invoice Settings Page</a> to setup."
-msgstr ""
+msgstr "Envoyez des factures détaillées à vos clients. Les cartes de crédit peuvent être accepées via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout ou PayPal. Les factures récurrentes (abonnements) peuvent également l'être via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Rendez vous sur la page de  <a href=\"admin.php?page=web_invoice_settings\">configuration de web invoice</a> pour paramétrer ces passerelles de paiement."
 
 #. Author of the plugin/theme
 msgid "S H Mohanjith"
-msgstr ""
+msgstr "S H Mohanjith"
 
 #. Author URI of the plugin/theme
 msgid "http://mohanjith.com/"
-msgstr ""
+msgstr "http://mohanjith.com/"
 
 #~ msgid ""
 #~ "You can download a %s or print a copy of this invoice for your records; "
-#~ "just select the 'Print' item under the 'File' menu in your browser, or "
-#~ "use the &lt;CTRL&gt; + 'P' key combination to print a hard-copy in a more "
-#~ "traditional, neatly laid-out format. <em>Thank you</em> for your business "
-#~ "<em>and</em> your prompt payment!"
+#~ "just "
 #~ msgstr ""
-#~ "Vous pouvez télécharger un %s ou imprimer une copie de cette facture pour "
-#~ "vos archives. Selectionner \"Imprimer\" dans le menu \"Fichier\" de votre "
-#~ "navigateur, ou utiliser le raccourci clavier &lt;CTRL&gt; + 'P'  pour "
-#~ "imprimer une copie au format traditionnel. <em>Merci</em> de votre "
-#~ "règlement rapide !"
+#~ "Vous pouvez télécharger une %s ou imprimer une copie de cette facture "
+#~ "pour vos archives. "
 #~ msgid "Invoice"
 #~ msgstr "Facture"
 
