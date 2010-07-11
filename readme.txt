@@ -91,6 +91,10 @@ or submit feature requests.
 
 == Change Log ==
 
+**Version 2.0.7**
+
+* Fixed issue 22: PayPal recurring payments
+
 **Version 2.0.6**
 
 * Fixed issue 21: Call to undefined function sys_get_temp_dir()

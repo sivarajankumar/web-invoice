@@ -2618,7 +2618,9 @@ if (get_option('web_invoice_paypal_sandbox') == 'True') {
 	if (web_invoice_recurring($invoice_id)) { ?>
 	<input type="hidden" name="cmd" value="_xclick-subscriptions" />
 	<input type="hidden" name="t3" value="<?php echo web_invoice_paypal_convert_interval($invoice->display('interval_unit'), $invoice->display('interval_length')); ?>" />
-	<input type="hidden" name="p3" value="<?php echo $invoice->display('totalOccurrences'); ?>" />
+	<input type="hidden" name="src" value="1" />
+	<input type="hidden" name="srt" value="<?php echo $invoice->display('totalOccurrences'); ?>" />
+	<input type="hidden" name="p3" value="<?php echo $invoice->display('interval_length'); ?>" />
 	<input type="hidden" name="a3" value="<?php echo $invoice->display('amount'); ?>" />
 	<input type="hidden" name="item_name" value="<?php echo $invoice->display('subscription_name'); ?>">
 	<input type="hidden" name="item_number" value="<?php echo $invoice->display('display_id').date('YMD'); ?>">
