@@ -3593,7 +3593,7 @@ function web_invoice_generate_pdf_content($invoice_id) {
 		div.clear { clear: both; }
 		
 		#invoice_client_info { width: 100%; text-align: right; padding-top: -145; }
-		##invoice_business_info { width: 100%; text-align: left; height: 100; }
+		#invoice_business_info { width: 100%; text-align: left; height: 100; }
 	</style>
 	<?php
 	
@@ -3628,5 +3628,6 @@ function web_invoice_generate_pdf_content($invoice_id) {
 	<?php
 	$content = ob_get_contents();
 	ob_clean();
+	
 	return $content;
 }
