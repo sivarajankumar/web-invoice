@@ -1,3 +1,4 @@
+#labels Featured
 List of donors that have made more than USD 25 towards development of Web Invoice. Any donations you make help make Web Invoice better.
 
 = Introduction =
