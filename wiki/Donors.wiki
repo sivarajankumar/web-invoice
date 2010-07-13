@@ -4,6 +4,8 @@ List of donors that have made more than USD 25 towards development of Web Invoic
 
 List of donors that have made more than USD 25 towards development of Web Invoice. Any donations you make help make Web Invoice better. This list doesn't include anyone who has sponsored features which is listed in the project description itself.
 
+To make a donation go to http://mohanjith.com/2009/03/web-invoice-invoicing-and-billing-for-wordpress.html#donations 
+
 = List =
 
 || *Name* || *Web site* || *Date* ||
