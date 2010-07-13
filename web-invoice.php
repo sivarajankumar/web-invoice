@@ -241,7 +241,7 @@ class Web_Invoice {
 		$Web_Invoice_Decider = new Web_Invoice_Decider('overview');
 
 		if($this->message) echo "<div id=\"message\" class='error' ><p>".$this->message."</p></div>";
-		if(!function_exists('curl_exec')) echo "<div id=\"message\" class='error' ><p>".__('cURL is not turned on on your server, credit card processing will not work. If you have access to your php.ini file, activate <b>extension=php_curl.dll</b>.')."</p></div>";
+		if(!function_exists('curl_exec')) echo "<div id=\"message\" class='error' ><p>".__('cURL is not turned on on your server, credit card processing will not work. If you have access to your php.ini file, activate <b>extension=php_curl.dll</b>.', WEB_INVOICE_TRANS_DOMAIN)."</p></div>";
 		echo $Web_Invoice_Decider->display();
 	}
 	
@@ -719,7 +719,7 @@ class Web_Invoice_GetInfo {
 
 			case 'log_status':
 				if($status_update = $wpdb->get_row("SELECT * FROM ".Web_Invoice::tablename('log')." WHERE invoice_id = ".$this->id ." ORDER BY `".Web_Invoice::tablename('log')."`.`time_stamp` DESC LIMIT 0 , 1"))
-				return $status_update->value . " - " . web_invoice_Date::convert($status_update->time_stamp, 'Y-m-d H', __('M d Y'));
+				return $status_update->value . " - " . web_invoice_Date::convert($status_update->time_stamp, 'Y-m-d H', __('M d Y', WEB_INVOICE_TRANS_DOMAIN));
 				break;
 
 			case 'paid_date':
@@ -849,12 +849,12 @@ class Web_Invoice_GetInfo {
 		switch ($what) {
 			case 'log_status':
 				if($status_update = $wpdb->get_row("SELECT * FROM ".Web_Invoice::tablename('log')." WHERE invoice_id = ".$this->id ." ORDER BY `".Web_Invoice::tablename('log')."`.`time_stamp` DESC LIMIT 0 , 1"))
-				return $status_update->value . " - " . web_invoice_Date::convert($status_update->time_stamp, 'Y-m-d H', __('M d Y'));
+				return $status_update->value . " - " . web_invoice_Date::convert($status_update->time_stamp, 'Y-m-d H', __('M d Y', WEB_INVOICE_TRANS_DOMAIN));
 				break;
 
 			case 'paid_date':
 				$paid_date = $wpdb->get_var("SELECT time_stamp FROM  ".Web_Invoice::tablename('log')." WHERE action_type = 'paid' AND invoice_id = '".$this->id."' ORDER BY time_stamp DESC LIMIT 0, 1");
-				if($paid_date) return web_invoice_Date::convert($paid_date, 'Y-m-d H', __('M d Y'));
+				if($paid_date) return web_invoice_Date::convert($paid_date, 'Y-m-d H', __('M d Y', WEB_INVOICE_TRANS_DOMAIN));
 				break;
 				
 			case 'paid_date_raw':
@@ -884,20 +884,20 @@ class Web_Invoice_GetInfo {
 				$web_invoice_subscription_start_month = web_invoice_meta($this->id,'web_invoice_subscription_start_month');
 
 				if($web_invoice_subscription_start_month && $web_invoice_subscription_start_year && $web_invoice_subscription_start_day) {
-					return date(__('Y-m-d'), strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
+					return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
 				} else {
-					return date(__("Y-m-d"));
+					return date(__("Y-m-d", WEB_INVOICE_TRANS_DOMAIN));
 				}
 				break;
 					
 					
 			case 'endDate':
-				return date(__('Y-m-d'), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))));
+				return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))));
 				break;
 				
 			
 			case 'profileEndDate':
-				return date(__('Y-m-d'), strtotime("+".($this->display('interval_length')*($this->display('totalOccurrences')-1))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))+3600*24));
+				return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("+".($this->display('interval_length')*($this->display('totalOccurrences')-1))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))+3600*24));
 				break;
 				
 
@@ -967,8 +967,8 @@ class Web_Invoice_GetInfo {
 				$web_invoice_due_date_year = web_invoice_meta($this->id,'web_invoice_due_date_year');
 				$web_invoice_due_date_day = web_invoice_meta($this->id,'web_invoice_due_date_day');
 				if(!empty($web_invoice_due_date_month) && !empty($web_invoice_due_date_year) && !empty($web_invoice_due_date_day))
-				return date(__('Y-m-d'), strtotime("$web_invoice_due_date_year-$web_invoice_due_date_month-$web_invoice_due_date_day"));
-				return date(__('Y-m-d'));
+				return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("$web_invoice_due_date_year-$web_invoice_due_date_month-$web_invoice_due_date_day"));
+				return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN));
 				break;
 
 			case 'amount':

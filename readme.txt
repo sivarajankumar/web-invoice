@@ -94,6 +94,7 @@ or submit feature requests.
 **Version 2.0.7**
 
 * Fixed issue 22: PayPal recurring payments
+* Fixed issue 24: Not all date strings are localized
 
 **Version 2.0.6**
 
