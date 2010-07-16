@@ -91,6 +91,10 @@ or submit feature requests.
 
 == Change Log ==
 
+**Version 2.0.8**
+
+* Fixed issue 26: "Same As Billing" does not copy country
+
 **Version 2.0.7**
 
 * Fixed issue 22: PayPal recurring payments
