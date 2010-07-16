@@ -7,7 +7,8 @@ jQuery(document).ready( function() {
 	jQuery(".noautocomplete").attr("autocomplete", "off");
 	jQuery("#payment_methods a").click( function() {
 		jQuery(".payment_form").hide();
-		jQuery(jQuery(this).attr("href")).show();
+		_web_invoice_anchor = jQuery(this).attr("href").split("#");
+		jQuery('#'+_web_invoice_anchor[_web_invoice_anchor.length-1]).show();
 	});
 	
 	jQuery(".country").change(function () {
