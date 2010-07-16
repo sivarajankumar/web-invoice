@@ -953,7 +953,7 @@ if(get_option('web_invoice_business_name') == '') 		echo "<tr><th colspan=\"2\">
 			id="web_invoice_tax_name_<?php print $_txc; ?>"><?php print isset($web_invoice_tax_names[$_txc])?$web_invoice_tax_names[$_txc]:sprintf(__("Set Tax %s Name", WEB_INVOICE_TRANS_DOMAIN), $_txc+1); ?></span></th>
 		<td style="font-size: 1.1em; padding-top: 7px;"><input
 			style="width: 35px;" name="web_invoice_tax[]" id="web_invoice_tax_<?php print $_txc; ?>"
-			value="<?php echo $web_invoice_tax[$_txc]; ?>" class="noautocomplete web_invoice_tax" />%</td>
+			value="<?php echo doubleval($web_invoice_tax[$_txc]); ?>" class="noautocomplete web_invoice_tax" />%</td>
 	</tr>
 		<?php } ?>
 	<?php } else { ?>
@@ -961,7 +961,7 @@ if(get_option('web_invoice_business_name') == '') 		echo "<tr><th colspan=\"2\">
 		<th><?php _e("Tax", WEB_INVOICE_TRANS_DOMAIN); ?></th>
 		<td style="font-size: 1.1em; padding-top: 7px;"><input
 			style="width: 35px;" name="web_invoice_tax" id="web_invoice_tax"
-			value="<?php echo $web_invoice_tax; ?>" class="noautocomplete web_invoice_tax" />%</td>
+			value="<?php echo doubleval($web_invoice_tax); ?>" class="noautocomplete web_invoice_tax" />%</td>
 	</tr>
 	<?php } ?>
 
