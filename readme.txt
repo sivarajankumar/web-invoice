@@ -94,6 +94,7 @@ or submit feature requests.
 **Version 2.0.8**
 
 * Fixed issue 26: "Same As Billing" does not copy country
+* Fixed issue 27: "Tax" field seems to have control characters in it. e.g. "s:4:" or "s:0:"
 
 **Version 2.0.7**
 
