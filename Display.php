@@ -2218,8 +2218,8 @@ function web_invoice_user_profile_fields()
 	</tr>
 
 	<tr>
-		<th><label for="country"><?php _e('Country', WEB_INVOICE_TRANS_DOMAIN); ?></label></th>
-		<td><?php echo web_invoice_draw_select('country',web_invoice_country_array(),get_usermeta($user_id,'country')); ?></td>
+		<th><label for="shipto_country"><?php _e('Country', WEB_INVOICE_TRANS_DOMAIN); ?></label></th>
+		<td><?php echo web_invoice_draw_select('shipto_country',web_invoice_country_array(),get_usermeta($user_id,'shipto_country')); ?></td>
 	</tr>
 </table>
 	<?php
