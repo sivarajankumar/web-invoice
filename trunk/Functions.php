@@ -2499,6 +2499,20 @@ function web_invoice_clear_cache() {
 	$_web_invoice_clear_cache = true;
 }
 
+function web_invoice_get_all_payment_options() {
+	return array(
+		'alertpay' => array('text' => 'AlertPay', 'secure' => false),
+		'cc' => array('text' => 'Credit Card', 'secure' => true),
+		'moneybookers' => array('text' => 'Moneybookers', 'secure' => false),
+		'google_checkout' => array('text' => 'Google Checkout', 'secure' => false),
+		'paypal' => array('text' => 'PayPal', 'secure' => false),
+		'payflow' => array('text' => 'PayPal Payflow', 'secure' => false),
+		'pfp' => array('text' => 'PayPal Payflow Pro', 'secure' => true),
+		'other' => array('text' => 'Other/Bank details', 'secure' => false),
+		'sagepay' => array('text' => 'Sage Pay', 'secure' => false),
+	);
+}
+
 function web_invoice_xor_encryption($input_string, $key_phrase) {
  
     $key_phrase_length = strlen($key_phrase);
