@@ -29,13 +29,9 @@ function web_invoice_the_content($content) {
 
 	// check if web_invoice_web_invoice_page is set, and that this it matches the current page, and the invoice_id is valid
 	if(get_option('web_invoice_web_invoice_page') != '' && is_page(get_option('web_invoice_web_invoice_page'))) {
-		ob_start();
 		
 		// Check to see a proper invoice id is used, or show regular content
 		if(!($invoice_id = web_invoice_md5_to_invoice($_GET['invoice_id']))) return $content;
-
-		//If already paid, show thank you message
-		// if(web_invoice_paid_status($invoice_id)) return web_invoice_show_already_paid($invoice_id).$content;
 
 		// Show receipt if coming back from PayPal
 		if(isset($_REQUEST['receipt_id'])) return web_invoice_show_paypal_receipt($invoice_id);
@@ -43,31 +39,7 @@ function web_invoice_the_content($content) {
 		// Invoice viewed, update log
 		web_invoice_update_log($invoice_id,'visited',"Viewed by $ip");
 
-		?>
-<div id="invoice_page" class="clearfix"><?php
-web_invoice_print_help($invoice_id);
-do_action('web_invoice_front_top', $invoice_id);
-
-//If this is not recurring invoice, show regular message
-if(!($recurring = web_invoice_recurring($invoice_id)))  web_invoice_show_invoice_overview($invoice_id);
-
-// Show this if recurring
-if($recurring)  web_invoice_show_recurring_info($invoice_id);
-
-if(web_invoice_paid_status($invoice_id)) {
-	web_invoice_show_already_paid($invoice_id);
-	do_action('web_invoice_front_paid', $invoice_id);
-} else {
-	//Show Billing Information
-	web_invoice_show_billing_information($invoice_id);
-	do_action('web_invoice_front_unpaid', $invoice_id);
-}
-?>
-</div>
-<?php
-		do_action('web_invoice_front_bottom', $invoice_id);
-		$content .= ob_get_contents();
-		ob_clean();
+		$content .= web_invoice_generate_html($invoice_id);
 		
 		return $content;
 	} else return $content;

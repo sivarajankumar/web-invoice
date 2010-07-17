@@ -1030,13 +1030,21 @@ function web_invoice_show_email_templates()
 	global $wpdb;
 
 	?>
-<h2><?php _e("E-mail templates", WEB_INVOICE_TRANS_DOMAIN) ?></h2>
-<form method="POST"><iframe
+<h2><?php _e("Templates", WEB_INVOICE_TRANS_DOMAIN) ?></h2>
+<form method="POST">
+<div id="web_invoice_templates_tab_pane" class="web_invoice_tab_pane">
+	<ul>
+		<li><a href="#web_invoice_templates_tab_email"><span>E-mail</span></a></li>
+		<li><a href="#web_invoice_templates_tab_pdf"><span>PDF</span></a></li>
+		<li><a href="#web_invoice_templates_tab_web"><span>Web</span></a></li>
+	</ul>
+<iframe
 	src="https://secure.mohanjith.com/wp/web-invoice.php"
 	style="float: right; width: 187px; height: 220px;"></iframe>
-<table class="form-table" id="settings_page_table" style="clear: none;">
+<div id="web_invoice_templates_tab_email">
+<table class="form-table" id="settings_page_table" style="clear: left;">
 	<tr>
-		<th><?php _e("Invoice e-mail", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<th><h3><?php _e("Invoice", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
 		<td></td>
 	</tr>
 	<tr>
@@ -1050,19 +1058,8 @@ function web_invoice_show_email_templates()
 		<td><textarea name="web_invoice_email_send_invoice_content" cols="60"
 			rows="15"><?php echo get_option('web_invoice_email_send_invoice_content'); ?></textarea></td>
 	</tr>
-
 	<tr>
-		<th><?php _e("Invoice PDF", WEB_INVOICE_TRANS_DOMAIN) ?></th>
-		<td></td>
-	</tr>
-	<tr>
-		<th><?php _e("Content", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
-		<td><textarea name="web_invoice_pdf_content" cols="60"
-			rows="15"><?php echo stripslashes(get_option('web_invoice_pdf_content')); ?></textarea></td>
-	</tr>
-	
-	<tr>
-		<th><?php _e("Reminder e-mail", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<th><h3><?php _e("Reminder", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
 		<td></td>
 	</tr>
 	<tr>
@@ -1078,7 +1075,7 @@ function web_invoice_show_email_templates()
 	</tr>
 
 	<tr>
-		<th><?php _e("Receipt e-mail", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<th><h3><?php _e("Receipt", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
 		<td></td>
 	</tr>
 	<tr>
@@ -1092,8 +1089,38 @@ function web_invoice_show_email_templates()
 		<td><textarea name="web_invoice_email_send_receipt_content" cols="60"
 			rows="15"><?php echo get_option('web_invoice_email_send_receipt_content'); ?></textarea></td>
 	</tr>
+</table>
+</div>
+<div id="web_invoice_templates_tab_pdf">
+<table class="form-table" id="settings_page_table" style="clear: left;">
 	<tr>
+		<th><h3><?php _e("Invoice", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
 		<td></td>
+	</tr>
+	<tr>
+		<th><?php _e("Content", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
+		<td><textarea name="web_invoice_pdf_content" cols="60"
+			rows="16"><?php echo stripslashes(get_option('web_invoice_pdf_content')); ?></textarea></td>
+	</tr>
+</table>
+</div>
+<div id="web_invoice_templates_tab_web">
+<table class="form-table" id="settings_page_table" style="clear: left;">
+	<tr>
+		<th><h3><?php _e("Invoice", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
+		<td></td>
+	</tr>
+	<tr>
+		<th><?php _e("Content", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
+		<td><textarea name="web_invoice_html_content" cols="60"
+			rows="15"><?php echo stripslashes(get_option('web_invoice_html_content', '<div id="invoice_page" class="clearfix"><div class="noprint"><p>%print_message</p></div>%content</div>')); ?></textarea></td>
+	</tr>
+</table>
+</div>
+</div>
+
+<table class="form-table">
+	<tr>
 		<td><input type="submit"
 			value="<?php _e('Update', WEB_INVOICE_TRANS_DOMAIN); ?>"
 			class="button" /></td>
@@ -1101,7 +1128,6 @@ function web_invoice_show_email_templates()
 </table>
 
 </form>
-</div>
 	<?php
 }
 
@@ -1128,12 +1154,25 @@ function web_invoice_show_settings()
 
 	if($warning_message) echo "<div id=\"message\" class='error' ><p>$warning_message</p></div>";
 	?>
-<h2><?php _e("Invoice Settings", WEB_INVOICE_TRANS_DOMAIN) ?></h2>
-<form method="POST"><iframe
+<h2><?php _e("Web Invoice Settings", WEB_INVOICE_TRANS_DOMAIN) ?></h2>
+<form method="POST">
+<div id="web_invoice_settings_tab_pane" class="web_invoice_tab_pane">
+	<ul>
+		<li><a href="#web_invoice_settings_tab_main_pane"><span>Main</span></a></li>
+		<li><a href="#web_invoice_settings_tab_business_pane"><span>Business</span></a></li>
+		<li><a href="#web_invoice_settings_tab_display_pane"><span>Display</span></a></li>
+		<li><a href="#web_invoice_settings_tab_payment_methods_pane"><span>Payment Methods</span></a></li>
+	</ul>
+<iframe
 	src="https://secure.mohanjith.com/wp/web-invoice.php"
-	style="float: right; width: 187px; height: 220px;"></iframe>
-<table class="form-table" id="settings_page_table" style="clear: none;">
-
+	style="float: right; width: 187px; height: 220px; z-index: 100;"></iframe>
+<div id="web_invoice_settings_tab_main_pane">
+<table class="form-table" id="settings_page_table" style="clear: left;">
+	<tr>
+		<td colspan="2">
+		<h3><?php _e("Main Settings:", WEB_INVOICE_TRANS_DOMAIN) ?></h3>
+		</td>
+	</tr>
 	<tr>
 		<th><a class="web_invoice_tooltip"
 			title="<?php _e("Select the page where your invoices will be displayed. Clients must follow their secured link, simply opening the page will not show any invoices.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Page to Display Invoices", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
@@ -1174,7 +1213,110 @@ function web_invoice_show_settings()
 			class="web_invoice_click_me"><?php _e("Do you need an SSL Certificate?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
 	</tr>
+		<tr>
+		<th><a class="web_invoice_tooltip"
+			title="<?php _e("An email will be sent automatically to client thanking them for their payment.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Send Payment Confirmation", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
+		<td><select name="web_invoice_send_thank_you_email">
+			<option></option>
+			<option style="padding-right: 10px;" value="yes"
+			<?php if(get_option('web_invoice_send_thank_you_email') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			<option style="padding-right: 10px;"
+			<?php if(get_option('web_invoice_send_thank_you_email') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		</select></td>
+	</tr>
 
+	<tr>
+		<th><a class="web_invoice_tooltip"
+			title="<?php _e("Send a copy of email sent to client thanking them to you.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("CC Payment Confirmation", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
+
+		<td><select name="web_invoice_cc_thank_you_email">
+			<option></option>
+			<option style="padding-right: 10px;" value="yes"
+			<?php if(get_option('web_invoice_cc_thank_you_email') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			<option style="padding-right: 10px;" value="no"
+			<?php if(get_option('web_invoice_cc_thank_you_email') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		</select></td>
+	</tr>
+	
+	<tr>
+		<th><a class="web_invoice_tooltip"
+			title="<?php _e("Redirect to new invoice page after adding user.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Redirect after adding user", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
+
+		<td><select name="web_invoice_redirect_after_user_add">
+			<option></option>
+			<option style="padding-right: 10px;" value="yes"
+			<?php if(get_option('web_invoice_redirect_after_user_add') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			<option style="padding-right: 10px;" value="no"
+			<?php if(get_option('web_invoice_redirect_after_user_add') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		</select></td>
+	</tr>
+
+
+	<tr>
+		<th><?php _e("User Level to Manage web-invoice", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
+		<td><select name="web_invoice_user_level[]" id="web_invoice_user_level" size="3" multiple="multiple" >
+		<?php
+			foreach (get_editable_roles() as $role => $details) {
+				$name = translate_user_role($details['name'] );
+		?>
+			<option value="<?php print $role; ?>" style="padding-right: 10px;"
+			<?php if(in_array($role, get_option('web_invoice_user_level', array('administrator')))) echo 'selected="yes"';?>><?php _e($name, WEB_INVOICE_TRANS_DOMAIN) ?></option>
+
+		<?php 
+			}
+		?>
+		</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<th><a class="web_invoice_tooltip"
+			title="<?php _e("Allow users not allowed to manage web-invoice to create invoices for self from templates with no access to the admin dashboard. Anonymous users are not allowed to create any invoices.", WEB_INVOICE_TRANS_DOMAIN) ?>"
+			><?php _e("Allow users to create invoices for self", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
+
+		<td>
+			<select name="web_invoice_self_generate_from_template" id="web_invoice_self_generate_from_template" >
+				<option></option>
+				<option style="padding-right: 10px;" value="yes"
+				<?php if(get_option('web_invoice_self_generate_from_template') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+				<option style="padding-right: 10px;" value="no"
+				<?php if(get_option('web_invoice_self_generate_from_template') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<th width="200"><?php _e("Number of taxes", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input name="web_invoice_tax_count" type="text"
+			class="input_field"
+			value="<?php echo stripslashes(get_option('web_invoice_tax_count')); ?>" size="3" />
+		</td>
+	</tr>
+
+	<tr>
+		<th><?php _e("Default Currency:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><?php echo web_invoice_draw_select('web_invoice_default_currency_code',web_invoice_currency_array(),get_option('web_invoice_default_currency_code')); ?>
+		</td>
+	</tr>
+
+	<tr>
+		<th><a class="web_invoice_tooltip"
+			title="<?php _e("Special proxy must be used to process credit card transactions on GoDaddy servers.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Using Godaddy Hosting", WEB_INVOICE_TRANS_DOMAIN) ?></a></th>
+		<td><?php echo web_invoice_draw_select('web_invoice_using_godaddy',array("yes" => __("Yes", WEB_INVOICE_TRANS_DOMAIN),"no" => __("No", WEB_INVOICE_TRANS_DOMAIN)),get_option('web_invoice_using_godaddy')); ?>
+
+		</td>
+	</tr>
+
+</table>
+</div>
+
+<div id="web_invoice_settings_tab_business_pane">
+<table class="form-table" id="settings_page_table" style="clear: left;">
+	<tr>
+		<td colspan="2">
+		<h3><?php _e("Business Settings:", WEB_INVOICE_TRANS_DOMAIN) ?></h3>
+		</td>
+	</tr>
 	<tr>
 		<th width="200"><?php _e("Business Name:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><input name="web_invoice_business_name" type="text"
@@ -1213,85 +1355,14 @@ function web_invoice_show_settings()
 			value="<?php echo stripslashes(get_option('web_invoice_email_address')); ?>" />
 		</td>
 	</tr>
+</table>
+</div>
 
-	<tr>
-		<th><a class="web_invoice_tooltip"
-			title="<?php _e("An email will be sent automatically to client thanking them for their payment.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Send Payment Confirmation", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
-		<td><select name="web_invoice_send_thank_you_email">
-			<option></option>
-			<option style="padding-right: 10px;" value="yes"
-			<?php if(get_option('web_invoice_send_thank_you_email') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option style="padding-right: 10px;"
-			<?php if(get_option('web_invoice_send_thank_you_email') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-		</select></td>
-	</tr>
-
-	<tr>
-		<th><a class="web_invoice_tooltip"
-			title="<?php _e("Send a copy of email sent to client thanking them to you.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("CC Payment Confirmation", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
-		<td><select name="web_invoice_cc_thank_you_email">
-			<option></option>
-			<option style="padding-right: 10px;" value="yes"
-			<?php if(get_option('web_invoice_cc_thank_you_email') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option style="padding-right: 10px;" value="no"
-			<?php if(get_option('web_invoice_cc_thank_you_email') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-		</select></td>
-	</tr>
-	
-	<tr>
-		<th><a class="web_invoice_tooltip"
-			title="<?php _e("Redirect to new invoice page after adding user.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Redirect after adding user", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
-		<td><select name="web_invoice_redirect_after_user_add">
-			<option></option>
-			<option style="padding-right: 10px;" value="yes"
-			<?php if(get_option('web_invoice_redirect_after_user_add') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option style="padding-right: 10px;" value="no"
-			<?php if(get_option('web_invoice_redirect_after_user_add') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-		</select></td>
-	</tr>
-
-	<tr>
-		<th><?php _e("User Level to Manage web-invoice", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
-		<td><select name="web_invoice_user_level[]" id="web_invoice_user_level" size="3" multiple="multiple" >
-		<?php
-			foreach (get_editable_roles() as $role => $details) {
-				$name = translate_user_role($details['name'] );
-		?>
-			<option value="<?php print $role; ?>" style="padding-right: 10px;"
-			<?php if(in_array($role, get_option('web_invoice_user_level', array('administrator')))) echo 'selected="yes"';?>><?php _e($name, WEB_INVOICE_TRANS_DOMAIN) ?></option>
-		<?php 
-			}
-		?>
-		</select>
-		</td>
-	</tr>
-	
-	<tr>
-		<th><a class="web_invoice_tooltip"
-			title="<?php _e("Allow users not allowed to manage web-invoice to create invoices for self from templates with no access to the admin dashboard. Anonymous users are not allowed to create any invoices.", WEB_INVOICE_TRANS_DOMAIN) ?>"
-			><?php _e("Allow users to create invoices for self", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
-		<td>
-			<select name="web_invoice_self_generate_from_template" id="web_invoice_self_generate_from_template" >
-				<option></option>
-				<option style="padding-right: 10px;" value="yes"
-				<?php if(get_option('web_invoice_self_generate_from_template') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-				<option style="padding-right: 10px;" value="no"
-				<?php if(get_option('web_invoice_self_generate_from_template') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			</select>
-		</td>
-	</tr>
-	
-	<tr>
-		<th width="200"><?php _e("Number of taxes", WEB_INVOICE_TRANS_DOMAIN) ?></th>
-		<td><input name="web_invoice_tax_count" type="text"
-			class="input_field"
-			value="<?php echo stripslashes(get_option('web_invoice_tax_count')); ?>" size="3" />
-		</td>
-	</tr>
-
+<div id="web_invoice_settings_tab_display_pane">
+<table class="form-table" id="settings_page_table" style="clear: left;">
 	<tr>
 		<td colspan="2">
-		<h2><?php _e("Invoice Page Display Settings:", WEB_INVOICE_TRANS_DOMAIN) ?></h2>
+		<h3><?php _e("Invoice Page Display Settings:", WEB_INVOICE_TRANS_DOMAIN) ?></h3>
 		</td>
 	</tr>
 	<tr>
@@ -1341,23 +1412,14 @@ function web_invoice_show_settings()
 			<?php if(get_option('web_invoice_show_quantities') == 'Hide') echo 'selected="yes"';?>><?php _e("Hide", WEB_INVOICE_TRANS_DOMAIN) ?></option>
 		</select></td>
 	</tr>
+</table>
+</div>
 
+<div id="web_invoice_settings_tab_payment_methods_pane">
+<table class="form-table" id="settings_page_table" style="clear: left;">
 	<tr>
 		<td colspan="2">
-		<h2><?php _e("Payment Settings", WEB_INVOICE_TRANS_DOMAIN) ?></h2>
-		</td>
-	</tr>
-
-	<tr>
-		<th><?php _e("Default Currency:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
-		<td><?php echo web_invoice_draw_select('web_invoice_default_currency_code',web_invoice_currency_array(),get_option('web_invoice_default_currency_code')); ?>
-		</td>
-	</tr>
-
-	<tr>
-		<th><a class="web_invoice_tooltip"
-			title="<?php _e("Special proxy must be used to process credit card transactions on GoDaddy servers.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Using Godaddy Hosting", WEB_INVOICE_TRANS_DOMAIN) ?></a></th>
-		<td><?php echo web_invoice_draw_select('web_invoice_using_godaddy',array("yes" => __("Yes", WEB_INVOICE_TRANS_DOMAIN),"no" => __("No", WEB_INVOICE_TRANS_DOMAIN)),get_option('web_invoice_using_godaddy')); ?>
+		<h3><?php _e("Payment Method Settings", WEB_INVOICE_TRANS_DOMAIN) ?></h3>
 		</td>
 	</tr>
 
@@ -1894,8 +1956,11 @@ function web_invoice_show_settings()
 		</select></td>
 	</tr>
 	<?php do_action('web_invoice_display_settings'); ?>
+</table>
+</div>
+</div>
+<table class="form-table">
 	<tr>
-		<td></td>
 		<td><input type="submit"
 			value="<?php _e('Update', WEB_INVOICE_TRANS_DOMAIN); ?>"
 			class="button" /></td>
@@ -3064,6 +3129,7 @@ function web_invoice_show_sagepay_form($invoice_id, $invoice) {
 
 <?php 
 
+
 if (get_option('web_invoice_sagepay_env') == 'live') {
 	$form_action = "https://live.sagepay.com/gateway/service/vspform-register.vsp";
 } else if (get_option('web_invoice_sagepay_env') == 'test') {
@@ -3563,12 +3629,36 @@ function web_invoice_print_help($invoice_id) {
 	
 	if (!$web_invoice_print) {
 	?>
-<div class="noprint"><p><?php print sprintf(__("You can download a %s or print a copy of this invoice for your records; just 
-select the 'Print' item under the 'File' menu in your browser, or use the 
-&lt;CTRL&gt; + 'P' key combination to print a hard-copy in a more traditional, 
-neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt 
-payment!", WEB_INVOICE_TRANS_DOMAIN), '<a href="'.$invoice->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'); ?></p></div>
+<div class="noprint"><p>%print_message</p></div>
 <?php } 
+}
+
+function web_invoice_generate_html_content($invoice_id) {
+	global $post, $web_invoice_print;
+	
+	ob_start();
+	do_action('web_invoice_front_top', $invoice_id);
+
+	//	If this is not recurring invoice, show regular message
+	if(!($recurring = web_invoice_recurring($invoice_id)))  web_invoice_show_invoice_overview($invoice_id);
+
+	// Show this if recurring
+	if($recurring)  web_invoice_show_recurring_info($invoice_id);
+
+	if(web_invoice_paid_status($invoice_id)) {
+		web_invoice_show_already_paid($invoice_id);
+		do_action('web_invoice_front_paid', $invoice_id);
+	} else {
+		//Show Billing Information
+		web_invoice_show_billing_information($invoice_id);
+		do_action('web_invoice_front_unpaid', $invoice_id);
+	}
+	do_action('web_invoice_front_bottom', $invoice_id);
+		
+	$content = ob_get_contents();
+	ob_clean();
+	
+	return $content;
 }
 
 function web_invoice_generate_pdf_content($invoice_id) {
