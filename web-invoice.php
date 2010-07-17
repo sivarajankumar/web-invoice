@@ -95,7 +95,7 @@ class Web_Invoice {
 		register_deactivation_hook($_file, array(&$this, 'uninstall'));
 
 		add_action('admin_head', array($this, 'admin_head'));
-		add_action('contextual_help', 'web_invoice_contextual_help_list');
+		add_action('contextual_help', 'web_invoice_contextual_help_list', 10, 3);
 		add_action('wp_head', 'web_invoice_frontend_css');
 
 		add_filter('favorite_actions', array(&$this, 'favorites'));
@@ -108,6 +108,7 @@ class Web_Invoice {
 		add_filter('the_content', 'web_invoice_the_content');
 		add_filter('web_invoice_email_variables', 'web_invoice_email_variables');
 		add_filter('web_invoice_pdf_variables', 'web_invoice_pdf_variables');
+		add_filter('web_invoice_html_variables', 'web_invoice_html_variables');
 		add_filter('web_invoice_web_variables', 'web_invoice_web_variables');
 		add_filter('wp_redirect', array($this, 'redirect'));
 
@@ -144,7 +145,7 @@ class Web_Invoice {
 		add_menu_page(__('Web Invoice System', WEB_INVOICE_TRANS_DOMAIN), __('Web Invoice', WEB_INVOICE_TRANS_DOMAIN),  $this->web_invoice_user_level, $file, array(&$this,'invoice_overview'),$this->uri."/images/web_invoice.png");
 		add_submenu_page($file, __("Recurring Billing", WEB_INVOICE_TRANS_DOMAIN), __("Recurring Billing", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_recurring_billing', array(&$this,'recurring'));
 		add_submenu_page($file, __("Manage Invoice", WEB_INVOICE_TRANS_DOMAIN), __("New Invoice", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'new_web_invoice', array(&$this,'new_web_invoice'));
-		add_submenu_page($file, __("E-mail templates", WEB_INVOICE_TRANS_DOMAIN), __("E-mail templates", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_email_templates', array(&$this,'email_template_page'));
+		add_submenu_page($file, __("Templates", WEB_INVOICE_TRANS_DOMAIN), __("Templates", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_templates', array(&$this,'template_page'));
 		// add_submenu_page($file, __("Items/Inventory"), __("Items"), $this->web_invoice_user_level, 'web_invoice_inventory_items', array(&$this,'inventory_items_page'));
 		add_submenu_page($file, __("Settings", WEB_INVOICE_TRANS_DOMAIN), __("Settings", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_settings', array(&$this,'settings_page'));
 	
@@ -260,7 +261,7 @@ class Web_Invoice {
 		echo $Web_Invoice_Decider->display();
 	}
 
-	function email_template_page() {
+	function template_page() {
 		$Web_Invoice_Decider = new Web_Invoice_Decider('web_invoice_email_templates');
 		if($this->message) echo "<div id=\"message\" class='error' ><p>".$this->message."</p></div>";
 		echo $Web_Invoice_Decider->display();
@@ -282,16 +283,19 @@ class Web_Invoice {
 
 		if(is_admin()) {
 			wp_enqueue_script('jquery');
-		
-			wp_enqueue_script('jquery.maskedinput',$this->uri."/js/jquery.maskedinput.js", array('jquery'));
-			wp_enqueue_script('jquery.form',$this->uri."/js/jquery.form.js", array('jquery') );
-			wp_enqueue_script('jquery.impromptu',$this->uri."/js/jquery-impromptu.1.7.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('jquery.field',$this->uri."/js/jquery.field.min.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('jquery.delegate',$this->uri."/js/jquery.delegate.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('jquery.calculation',$this->uri."/js/jquery.calculation.min.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('jquery.tablesorter',$this->uri."/js/jquery.tablesorter.min.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('jquery.autogrow-textarea',$this->uri."/js/jquery.autogrow-textarea.js", array('jquery'), '1.8.0');
-			wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice.js", array('jquery'), '2.0.4');
+			wp_enqueue_script('jquery-ui-core');
+			wp_enqueue_script('jquery-ui-tabs');
+			
+			wp_enqueue_script('jquery-maskedinput',$this->uri."/js/jquery.maskedinput.js", array('jquery'));
+			wp_enqueue_script('jquery-cookie',$this->uri."/js/jquery.cookie.js", array('jquery'));
+			wp_enqueue_script('jquery-form',$this->uri."/js/jquery.form.js", array('jquery') );
+			wp_enqueue_script('jquery-impromptu',$this->uri."/js/jquery-impromptu.1.7.js", array('jquery'), '1.8.0');
+			wp_enqueue_script('jquery-field',$this->uri."/js/jquery.field.min.js", array('jquery'), '1.8.0');
+			wp_enqueue_script('jquery-delegate',$this->uri."/js/jquery.delegate.js", array('jquery'), '1.8.0');
+			wp_enqueue_script('jquery-calculation',$this->uri."/js/jquery.calculation.min.js", array('jquery'), '1.8.0');
+			wp_enqueue_script('jquery-tablesorter',$this->uri."/js/jquery.tablesorter.min.js", array('jquery'), '1.8.0');
+			wp_enqueue_script('jquery-autogrow-textarea',$this->uri."/js/jquery.autogrow-textarea.js", array('jquery'), '1.8.0');
+			wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice.js", array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '2.0.8', true);
 		} else {
 			if(isset($_POST['web_invoice_id_hash'])) {
 
@@ -621,6 +625,12 @@ Best regards,
 		</div>
 	</body>
 </html>");
+		
+		add_option('web_invoice_html_content',
+'<div id="invoice_page" class="clearfix">
+<div class="noprint"><p>%print_message</p></div>
+%content
+</div>');
 	}
 
 }

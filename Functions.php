@@ -543,6 +543,43 @@ function web_invoice_pdf_variables($invoice_id) {
 	}
 }
 
+function web_invoice_html_variables($invoice_id) {
+	global $web_invoices_html_variables;
+
+	$invoice_info = new Web_Invoice_GetInfo($invoice_id);
+	$recipient = new Web_Invoice_GetInfo($invoice_id);
+
+	$web_invoices_html_variables = array(
+		'call_sign' => $recipient->recipient('callsign'),
+		'streetaddress' => $recipient->recipient('streetaddress'), 
+		'city' => $recipient->recipient('city'), 
+		'zip' => $recipient->recipient('zip'), 
+		'state' => $recipient->recipient('state'), 
+		'country' => $recipient->recipient('country'), 
+		'business_name' => stripslashes(get_option("web_invoice_business_name")),
+		'recurring' => (web_invoice_recurring($invoice_id) ? " recurring " : ""),
+		'amount' => $invoice_info->display('display_amount'),
+		'link' => $invoice_info->display('link'),
+		'business_email' => get_option("web_invoice_email_address"),
+		'subject' => $invoice_info->display('subject'),
+		'invoice_id' => $invoice_info->display('display_id'),
+		'invoice_hash' => $invoice_info->display('invoice_hash'),
+		'content' => web_invoice_generate_html_content($invoice_id),
+		'print_message' => sprintf(__("You can download a %s or print a copy of this invoice for your records; just 
+select the 'Print' item under the 'File' menu in your browser, or use the 
+&lt;CTRL&gt; + 'P' key combination to print a hard-copy in a more traditional, 
+neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt 
+payment!", WEB_INVOICE_TRANS_DOMAIN), '<a href="'.$invoice_info->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'),
+		'pdf_link' =>  $invoice_info->display('print_link'),
+	);
+
+	if($invoice_info->display('description')) {
+		$web_invoices_html_variables['description'] = $invoice_info->display('description').".";
+	} else {
+		$web_invoices_html_variables['description'] = "";
+	}
+}
+
 function web_invoice_web_variables($invoice_id) {
 	global $web_invoices_web_variables;
 
@@ -600,6 +637,15 @@ function web_invoice_pdf_apply_variables($matches) {
 	return $matches[2];
 }
 
+function web_invoice_html_apply_variables($matches) {
+	global $web_invoices_html_variables;
+
+	if (isset($web_invoices_html_variables[$matches[2]])) {
+		return $web_invoices_html_variables[$matches[2]];
+	}
+	return $matches[2];
+}
+
 function web_invoice_show_email($invoice_id) {
 	apply_filters('web_invoice_email_variables', $invoice_id);
 
@@ -625,6 +671,14 @@ function web_invoice_generate_pdf($invoice_id) {
 	apply_filters('web_invoice_pdf_variables', $invoice_id);
 
 	return preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_pdf_apply_variables', stripslashes(get_option('web_invoice_pdf_content')));
+}
+
+function web_invoice_generate_html($invoice_id) {
+
+	apply_filters('web_invoice_html_variables', $invoice_id);
+
+	return preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_html_apply_variables', 
+		stripslashes(get_option('web_invoice_html_content', '<div id="invoice_page" class="clearfix"><div class="noprint"><p>%print_message</p></div>%content</div>')));
 }
 
 function web_invoice_send_email_receipt($invoice_id) {
@@ -857,6 +911,9 @@ function web_invoice_complete_removal()
 	
 	// PDF
 	delete_option('web_invoice_pdf_content');
+	
+	// HTML
+	delete_option('web_invoice_html_content');
 
 	return "All settings and databased removed.";
 }
@@ -1996,7 +2053,37 @@ function web_invoice_currency_symbol_format($currency = "USD" )
 	if(!$success) return __("{$currency}%s");
 }
 
-function web_invoice_contextual_help_list($content) {
+function web_invoice_contextual_help_list($content, $screen_id, $screen) {
+	if (strstr($screen_id, 'web-invoice')) {
+		$content = '<h2>WordPress</h2>'.$content;
+		$content .= '<h2>Web Invoice</h2>'.
+		'<a href="http://mohanjith.com/forum/" target="_blank">Support Forums</a><br/>'.
+		'<a href="http://code.google.com/p/web-invoice/issues/list" target"_blank">Issue tracker</a><br/>'.
+		'<a href="http://code.google.com/p/web-invoice/w/list" target"_blank">Wiki</a>';
+		
+	}
+	if ($screen_id == 'web-invoice_page_web_invoice_templates') {
+		$content .= '<h3>Template variables</h3>'.
+		'<ul>'.
+		'<li><code>call_sign</code> - Customer name</li>'.
+		'<li><code>streetaddress</code> - Customer street address</li>'.
+		'<li><code>city</code> - Customer city</li>'.
+		'<li><code>zip</code> - Customer zip/postal code</li>'.
+		'<li><code>state</code> - Customer state</li>'.
+		'<li><code>country</code> - Customer country code</li>'.
+		'<li><code>business_name</code> - Business name</li>'.
+		'<li><code>recurring</code> - Will be either recurring or blank ("")</li>'.
+		'<li><code>amount</code> - Amount</li>'.
+		'<li><code>link</code> - Invoice link</li>'.
+		'<li><code>business_email</code> - Business e-mail address</li>'.
+		'<li><code>subject</code> - Invoice subject</li>'.
+		'<li><code>invoice_id</code> - Invoice ID</li>'.
+		'<li><code>invoice_hash</code> - MD5 hash of Invoice ID (Used in the invoice link)</li>'.
+		'<li><code>content</code> - Invoice table, only in PDF and web template</li>'.
+		'<li><code>print_message</code> - Instructions on how to print, only in web template</li>'.
+		'<li><code>pdf_link</code> - Link to the invoice PDF, only in web template</li>'.
+		'</ul>';
+	}
 	// Will add help and FAQ here eventually
 	return $content;
 }
@@ -2333,6 +2420,9 @@ function web_invoice_process_email_templates() {
 
 	// PDF
 	if(isset($_POST['web_invoice_pdf_content'])) update_option('web_invoice_pdf_content', $_POST['web_invoice_pdf_content']);
+	
+	// HTML
+	if(isset($_POST['web_invoice_html_content'])) update_option('web_invoice_html_content', $_POST['web_invoice_html_content']);
 }
 
 function web_invoice_is_not_merchant() {
