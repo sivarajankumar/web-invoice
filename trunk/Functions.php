@@ -667,10 +667,24 @@ function web_invoice_show_receipt_email($invoice_id) {
 }
 
 function web_invoice_generate_pdf($invoice_id) {
-
+	global $web_invoice;
+	
 	apply_filters('web_invoice_pdf_variables', $invoice_id);
 
-	return preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_pdf_apply_variables', stripslashes(get_option('web_invoice_pdf_content')));
+	return preg_replace_callback('/(%([a-z_]+))/', 'web_invoice_pdf_apply_variables', 
+		stripslashes(get_option('web_invoice_pdf_content', "<html>
+	<head>
+		<title>Invoice</title>
+		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+	</head>
+	<body>
+		<div id='invoice_page' class='clearfix'>
+			<img style='float: right;' src='".$web_invoice->the_path."/images/web-invoice.png' style='width:101px; height: 128px;' />
+			<h1>Invoice</h1>
+			%content
+		</div>
+	</body>
+</html>")));
 }
 
 function web_invoice_generate_html($invoice_id) {
@@ -2102,7 +2116,9 @@ function web_invoice_self_generate_from_template($template_invoice_id, $user_id)
 	$itemized = $invoice_info->itemized;
 	$_REQUEST['itemized_list'] = unserialize(urldecode($itemized));
 	
-	$_REQUEST['web_invoice_tax'] = web_invoice_meta($template_invoice_id,'tax_value');
+	$_REQUEST['web_invoice_tax'] = unserialize(web_invoice_meta($template_invoice_id,'tax_value'));
+	$_REQUEST['web_invoice_payment_methods'] = web_invoice_meta($template_invoice_id,'web_invoice_payment_methods');
+	
 	$_REQUEST['web_invoice_currency_code'] = web_invoice_meta($template_invoice_id,'web_invoice_currency_code');
 	$_REQUEST['web_invoice_due_date_day'] = web_invoice_meta($template_invoice_id,'web_invoice_due_date_day');
 	$_REQUEST['web_invoice_due_date_month'] = web_invoice_meta($template_invoice_id,'web_invoice_due_date_month');
@@ -2165,6 +2181,8 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	$web_invoice_subscription_start_day = $_REQUEST['web_invoice_subscription_start_day'];
 	$web_invoice_subscription_start_year = $_REQUEST['web_invoice_subscription_start_year'];
 	$web_invoice_subscription_total_occurances = $_REQUEST['web_invoice_subscription_total_occurances'];
+	
+	$web_invoice_payment_methods = join(',', $_REQUEST['web_invoice_payment_methods']);
 	
 	$web_invoice_tax_names = unserialize(get_option('web_invoice_tax_name'));
 	if (!is_array($web_invoice_tax_names)) {
@@ -2251,7 +2269,8 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	web_invoice_update_invoice_meta($invoice_id, "web_invoice_due_date_day", $web_invoice_due_date_day);
 	web_invoice_update_invoice_meta($invoice_id, "web_invoice_due_date_month", $web_invoice_due_date_month);
 	web_invoice_update_invoice_meta($invoice_id, "web_invoice_due_date_year", $web_invoice_due_date_year);
-
+	web_invoice_update_invoice_meta($invoice_id, "web_invoice_payment_methods", $web_invoice_payment_methods);
+	
 	// Update Invoice Recurring Meta
 	web_invoice_update_invoice_meta($invoice_id, "web_invoice_subscription_name", $web_invoice_subscription_name);
 	web_invoice_update_invoice_meta($invoice_id, "web_invoice_subscription_unit", $web_invoice_subscription_unit);
@@ -2288,8 +2307,6 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 function web_invoice_show_message($content,$type="updated fade") {
 	if($content) echo "<div id=\"message\" class='$type' ><p>".$content."</p></div>";
 }
-
-
 
 function web_invoice_process_settings() {
 	global $wpdb;
