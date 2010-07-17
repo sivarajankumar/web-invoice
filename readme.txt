@@ -97,6 +97,7 @@ or submit feature requests.
 * Fixed issue 27: "Tax" field seems to have control characters in it. e.g. "s:4:" or "s:0:"
 * Fixed issue 28: Web/HTML Invoice Template
 * Fixed issue 29: Tabbed settings and templates page
+* Fixed issue 31: Per invoice payment options
 
 **Version 2.0.7**
 

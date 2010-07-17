@@ -606,6 +606,8 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 		$web_invoice_subscription_total_occurances = web_invoice_meta($template_invoice_id,'web_invoice_subscription_total_occurances');
 
 		$web_invoice_recurring_billing = web_invoice_meta($template_invoice_id,'web_invoice_recurring_billing');
+		
+		$web_invoice_payment_methods = web_invoice_meta($template_invoice_id,'web_invoice_payment_methods');
 	}
 
 	// Invoice Exists, we are modifying it
@@ -633,6 +635,12 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 		$web_invoice_subscription_start_day = web_invoice_meta($invoice_id,'web_invoice_subscription_start_day');
 		$web_invoice_subscription_start_year = web_invoice_meta($invoice_id,'web_invoice_subscription_start_year');
 		$web_invoice_subscription_total_occurances = web_invoice_meta($invoice_id,'web_invoice_subscription_total_occurances');
+		
+		$web_invoice_payment_methods = web_invoice_meta($invoice_id,'web_invoice_payment_methods');
+	}
+	
+	if (empty($web_invoice_payment_methods)) {
+		$web_invoice_payment_methods = get_option('web_invoice_payment_method');
 	}
 
 	//Whether recurring bill will start when client pays, or a date is specified
@@ -965,6 +973,23 @@ if(get_option('web_invoice_business_name') == '') 		echo "<tr><th colspan=\"2\">
 	</tr>
 	<?php } ?>
 
+	<tr class="">
+		<th><?php _e("Payment methods", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><select id="web_invoice_payment_method"
+			name="web_invoice_payment_methods[]" multiple="multiple" size="2">
+		<?php
+			foreach (web_invoice_get_all_payment_options() as $option_key => $option) {
+				if (stristr(get_option('web_invoice_payment_method'), $option_key)) {
+		?>
+			<option value="<?php print $option_key; ?>" style="padding-right: 10px;"
+			<?php if(stristr($web_invoice_payment_methods, $option_key)) echo 'selected="yes"';?>><?php _e($option['text'], WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		<?php
+				}
+			}
+		?>
+		</select></td>
+	</tr>
+	
 	<tr class="">
 		<th><?php _e("Currency", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><select name="web_invoice_currency_code">
@@ -1428,24 +1453,14 @@ function web_invoice_show_settings()
 			title="<?php _e("Some payment processors may not be available unless protocol is https and enforce https is selected.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Payment Method:", WEB_INVOICE_TRANS_DOMAIN) ?></a></th>
 		<td><select id="web_invoice_payment_method"
 			name="web_invoice_payment_method[]" multiple="multiple" size="4">
-			<option value="alertpay" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'alertpay')) echo 'selected="yes"';?>><?php _e("AlertPay", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="cc" <?php print (!stristr(get_option('web_invoice_protocol'), 'https') || !stristr(get_option('web_invoice_force_https'), 'true'))?'disabled="disabled"':''; ?> style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'cc')) echo 'selected="yes"';?>><?php _e("Credit Card", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="moneybookers" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'moneybookers')) echo 'selected="yes"';?>><?php _e("Moneybookers", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="google_checkout" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'google_checkout')) echo 'selected="yes"';?>><?php _e("Google Checkout", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="paypal" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'paypal')) echo 'selected="yes"';?>><?php _e("PayPal", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="payflow" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'payflow')) echo 'selected="yes"';?>><?php _e("PayPal Payflow", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="pfp" <?php print (!stristr(get_option('web_invoice_protocol'), 'https') || !stristr(get_option('web_invoice_force_https'), 'true'))?'disabled="disabled"':''; ?> style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'pfp')) echo 'selected="yes"';?>><?php _e("PayPal Payflow Pro", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="other" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'other')) echo 'selected="yes"';?>><?php _e("Other/Bank details", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="sagepay" style="padding-right: 10px;"
-			<?php if(stristr(get_option('web_invoice_payment_method'), 'sagepay')) echo 'selected="yes"';?>><?php _e("Sage Pay", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		<?php
+			foreach (web_invoice_get_all_payment_options() as $option_key => $option) {
+		?>
+			<option value="<?php print $option_key; ?>" <?php print ($option['secure'] && (!stristr(get_option('web_invoice_protocol'), 'https') || !stristr(get_option('web_invoice_force_https'), 'true')))?'disabled="disabled"':''; ?> style="padding-right: 10px;"
+			<?php if(stristr(get_option('web_invoice_payment_method'), $option_key)) echo 'selected="yes"';?>><?php _e($option['text'], WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		<?php
+			}
+		?>
 		</select></td>
 	</tr>
 	
@@ -2396,15 +2411,24 @@ function web_invoice_show_billing_information($invoice_id) {
 	
 	$method_count = 0;
 	
-	if(stristr(get_option('web_invoice_payment_method'), 'paypal')) { $pp = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'payflow')) { $pf = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'pfp')) { $pfp = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'sagepay') && !web_invoice_recurring($invoice_id)) { $sp = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'moneybookers')) { $mb = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'alertpay')) { $alertpay = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'cc')) { $cc = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'google_checkout')) { $gc = true; $method_count++; }
-	if(stristr(get_option('web_invoice_payment_method'), 'other')) { $other = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'paypal') &&
+		stristr(get_option('web_invoice_payment_method'), 'paypal')) { $pp = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'payflow') &&
+		stristr(get_option('web_invoice_payment_method'), 'payflow')) { $pf = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'pfp') &&
+		stristr(get_option('web_invoice_payment_method'), 'pfp')) { $pfp = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'sagepay') &&
+		stristr(get_option('web_invoice_payment_method'), 'sagepay') && !web_invoice_recurring($invoice_id)) { $sp = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'moneybookers') &&
+		stristr(get_option('web_invoice_payment_method'), 'moneybookers')) { $mb = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'alertpay') &&
+		stristr(get_option('web_invoice_payment_method'), 'alertpay')) { $alertpay = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'cc') &&
+		stristr(get_option('web_invoice_payment_method'), 'cc')) { $cc = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'google_checkout') &&
+		stristr(get_option('web_invoice_payment_method'), 'google_checkout')) { $gc = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'other') &&
+		stristr(get_option('web_invoice_payment_method'), 'other')) { $other = true; $method_count++; }
 
 	if (!$web_invoice_print) {
 	?>
