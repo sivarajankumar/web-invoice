@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: web-invoice\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/web-invoice\n"
 "POT-Creation-Date: 2010-07-10 16:21+0000\n"
-"PO-Revision-Date: 2010-07-10 21:52+0530\n"
+"PO-Revision-Date: 2010-07-19 03:23+0530\n"
 "Last-Translator: S H Mohanjith <moha@mohanjith.net>\n"
 "Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -338,7 +338,7 @@ msgstr "Nouvelle facture"
 #: Display.php:688
 #: web-invoice.php:146
 msgid "Manage Invoice"
-msgstr "GHérer les factures"
+msgstr "Gérer les factures"
 
 # @ web-invoice
 #: Display.php:693
@@ -1872,7 +1872,7 @@ msgstr "Vous pouvez télécharger un %s ou imprimer une copie de cette facture p
 #: Flow.php:35
 #, php-format
 msgid "Less than 25MB of memory available for Web Invoice, please set <code>memory_limit = %s</code> in your"
-msgstr ""
+msgstr "Il reste moins de 25 Mo de mémoire disponible pour Webinvoice. Merci de modifier <code>memory_limit = %s</code> dans votre"
 
 # @ web-invoice
 #: Frontend.php:135
