@@ -1465,7 +1465,7 @@ function web_invoice_show_settings()
 	</tr>
 	
 	<tr class="alertpay_info">
-		<th><?php _e("Your AlertPay username:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<th><?php _e("AlertPay username:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><input id='web_invoice_alertpay_address'
 			name="web_invoice_alertpay_address" class="search-input input_field"
 			type="text"
@@ -1473,6 +1473,33 @@ function web_invoice_show_settings()
 		<a id="web_invoice_alertpay_register_link" href="http://keti.ws/36283"
 			class="web_invoice_click_me"><?php _e("Do you need an AlertPay account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
+	</tr>
+	<tr class="2co_info">
+		<th><?php _e("2Checkout seller id:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_2co_sid'
+			name="web_invoice_2co_sid" class="search-input input_field"
+			type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_2co_sid')); ?>" />
+		<a id="web_invoice_2co_register_link" href="http://keti.ws/256281"
+			class="web_invoice_click_me"><?php _e("Do you need a 2CO account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
+		</td>
+	</tr>
+	<tr class="2co_info">
+		<th><?php _e("2Checkout secret word:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_2co_secret_word'
+			name="web_invoice_2co_secret_word" class="search-input input_field"
+			type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_2co_secret_word',uniqid())); ?>" />
+		</td>
+	</tr>
+	<tr class="2co_info">
+		<th><?php _e("Demo / Live Mode:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><select name="web_invoice_2co_demo_mode">
+			<option value="TRUE" style="padding-right: 10px;"
+			<?php if(get_option('web_invoice_2co_demo_mode') == 'TRUE') echo 'selected="yes"';?>><?php _e("Demo - Do Not Process Transactions", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			<option value="FALSE" style="padding-right: 10px;"
+			<?php if(get_option('web_invoice_2co_demo_mode') == 'FALSE') echo 'selected="yes"';?>><?php _e("Live - Process Transactions", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		</select></td>
 	</tr>
 	<tr class="alertpay_info">
 		<th><?php _e("Enable AlertPay IPN:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
@@ -2407,7 +2434,7 @@ function web_invoice_show_billing_information($invoice_id) {
 	
 	$invoice = new Web_Invoice_GetInfo($invoice_id);
 	$Web_Invoice = new Web_Invoice();
-	$pp = false; $pf = false; $pfp = false; $cc = false; $sp = false; $mb = false; $alertpay = false; $gc = false;
+	$pp = false; $pf = false; $pfp = false; $cc = false; $sp = false; $mb = false; $alertpay = false; $gc = false; $tco = false;
 	
 	$method_count = 0;
 	
@@ -2425,6 +2452,8 @@ function web_invoice_show_billing_information($invoice_id) {
 		stristr(get_option('web_invoice_payment_method'), 'alertpay')) { $alertpay = true; $method_count++; }
 	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'cc') &&
 		stristr(get_option('web_invoice_payment_method'), 'cc')) { $cc = true; $method_count++; }
+	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), '2co') &&
+		stristr(get_option('web_invoice_payment_method'), '2co')) { $tco = true; $method_count++; }
 	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'google_checkout') &&
 		stristr(get_option('web_invoice_payment_method'), 'google_checkout')) { $gc = true; $method_count++; }
 	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'other') &&
@@ -2442,6 +2471,10 @@ function web_invoice_show_billing_information($invoice_id) {
 	title="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select cc"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/cc_logo.png"
 	alt="Visa Master American Express" width="265" height="45" /></a> <?php } ?>
+	<?php if ($tco) { ?> <a href="#2co_payment_form"
+	title="<?php _e('2Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select 2co"><img
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/2co_logo.png"
+	alt="2Checkout" width="96" height="54" /></a> <?php } ?>
 	<?php if ($alertpay) { ?> <a href="#alertpay_payment_form"
 	title="<?php _e('AlertPay', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select moneybookers"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/alertpay_logo.png"
@@ -2478,6 +2511,7 @@ function web_invoice_show_billing_information($invoice_id) {
 </div>
 	<?php
 
+	if ($tco) web_invoice_show_2co_form($invoice_id, $invoice);
 	if ($alertpay) web_invoice_show_alertpay_form($invoice_id, $invoice);
 	if ($cc) web_invoice_show_cc_form($invoice_id, $invoice);
 	if ($sp) web_invoice_show_sagepay_form($invoice_id, $invoice);
@@ -2531,6 +2565,40 @@ function web_invoice_show_alertpay_form($invoice_id, $invoice) {
 		name="submit" alt="Pay now with AlertPay" class="pay_button alertpay" /></li>
 </ol>
 </fieldset>
+</form>
+</div>
+	<?php
+}
+
+function web_invoice_show_2co_form($invoice_id, $invoice) {
+	?>
+<div id="2co_payment_form" class="payment_form">
+<form action="https://www.2checkout.com/checkout/purchase" method="post"
+	class="clearfix"><input
+	type="hidden" name="sid"
+	value="<?php echo get_option('web_invoice_2co_sid'); ?>" /> <input
+	type="hidden" name="total"
+	value="<?php echo $invoice->display('amount'); ?>" /> <input
+	type="hidden" name="cart_order_id" id="invoice_num"
+	value="<?php echo  $invoice->display('display_id'); ?>" /> <input
+	type="hidden" name="x_Receipt_Link_URL"
+	value="<?php echo web_invoice_build_invoice_link($invoice_id); ?>" /> 
+	<?php if (get_option('web_invoice_2co_demo_mode') == 'TRUE') { ?>
+	<input type="hidden" name="demo" value="Y" />
+	<?php } ?>
+	<?php
+	// Convert Itemized List into AlertPay Item List (Not supported, we just show an aggregated fields)
+	if(is_array($invoice->display('itemized'))) {
+		echo web_invoice_create_2co_itemized_list($invoice->display('itemized'),$invoice_id);
+	}?>
+	<fieldset id="credit_card_information">
+	<ol>
+		<li><label for="submit">&nbsp;</label> <input type="image"
+			src="<?php echo Web_Invoice::frontend_path(); ?>/images/2co.png"
+			style="border: 0; width: 218px; height: 54px; padding: 0;"
+			name="submit" alt="Pay now with 2Checkout" class="pay_button checkout" /></li>
+	</ol>
+	</fieldset>
 </form>
 </div>
 	<?php
@@ -3645,6 +3713,39 @@ function web_invoice_create_alertpay_itemized_list($itemized_array,$invoice_id) 
 	return $output;
 }
 
+function web_invoice_create_2co_itemized_list($itemized_array,$invoice_id) {
+	$invoice = new Web_Invoice_GetInfo($invoice_id);
+	$tax = $invoice->display('tax_percent');
+	$amount = $invoice->display('amount');
+	$display_id = $invoice->display('display_id');
+
+	$tax_free_sum = 0;
+	$counter = 1;
+	$output = "";
+	foreach($itemized_array as $itemized_item) {
+		$tax_free_sum = $tax_free_sum + $itemized_item[price] * $itemized_item[quantity];
+		$output .= "
+			<input type='hidden' name='id_type' value='1' /> \n
+			<input type='hidden' name='c_prod_{$counter}' value='{$display_id}_{$counter},{$itemized_item[quantity]}' /> \n
+			<input type='hidden' name='c_name_{$counter}' value='{$itemized_item[name]}' /> \n
+			<input type='hidden' name='c_description_{$counter}' value='{$itemized_item[description]}' /> \n
+			<input type='hidden' name='c_price_{$counter}' value='{$itemized_item[price]}' />\n\n";
+		$counter++;
+	}
+
+	// Add tax only by using tax_free_sum (which is the sums of all the individual items * quantities.
+	if(!empty($tax)) {
+		$tax_cart = round($tax_free_sum * ($tax / 100),2);
+		$output .= "
+			<input type='hidden' name='id_type' value='1' /> \n
+			<input type='hidden' name='c_prod_{$counter}' value='{$display_id}_tax' /> \n
+			<input type='hidden' name='c_name_{$counter}' value='Tax' /> \n
+			<input type='hidden' name='c_description_{$counter}' value='{$tax}%' /> \n
+			<input type='hidden' name='c_price_{$counter}' value='{$tax_cart}' />\n\n";
+	}
+
+	return $output;
+}
 
 function web_invoice_print_help($invoice_id) {
 	global $web_invoice_print;

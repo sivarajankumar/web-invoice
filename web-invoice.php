@@ -201,6 +201,10 @@ class Web_Invoice {
 				require_once("gateways/paypal.class.php");
 				$pf_obj = new Web_Invoice_Paypal($_GET['invoice_id']);
 				$pf_obj->processRequest($_SERVER['REMOTE_ADDR'], $_POST);
+			} else if (isset($_REQUEST['order_number'])) {
+				require_once("gateways/2co.class.php");
+				$tco_obj = new Web_Invoice_2CO($_GET['cart_order_id']);
+				$tco_obj->processRequest($_SERVER['REMOTE_ADDR'], $_REQUEST);
 			}
 			
 			wp_enqueue_script('jquery');
@@ -553,6 +557,11 @@ class Web_Invoice {
 		add_option('web_invoice_alertpay_test_mode','FALSE');
 		add_option('web_invoice_alertpay_ip', '67.205.87.225-67.205.87.226,67.205.87.235');
 
+		// 2CO
+		add_option('web_invoice_2co_sid','');
+		add_option('web_invoice_2co_secret_word',uniqid());
+		add_option('web_invoice_2co_demo_mode','FALSE');
+		
 		// Google Checkout
 		add_option('web_invoice_google_checkout_env','live');
 		add_option('web_invoice_google_checkout_merchant_id','');

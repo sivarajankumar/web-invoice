@@ -24,7 +24,7 @@ Some features:
 * Send invoice notifications to customers with a secured link back to the web invoice
 * Send invoice reminders to customers with a secured link back to the web invoice
 * Accept credit card payment via PayPal Payflow, Authorize.net, Sage Pay or MerchantPlus NaviGate
-* Moneybookers, AlertPay, Google Checkout or PayPal available if you don't have a credit card processing account
+* Moneybookers, AlertPay, Google Checkout, 2Checkout or PayPal available if you don't have a credit card processing account
 * Setup recurring billing using Authorize.net's ARB (Automatic Recurring Billing) feature, Google Checkout Subscriptions, PayPal, AlertPay or Moneybookers
 * Force web invoice pages to be viewed in SSL mode
 * Archive old invoices
@@ -98,6 +98,7 @@ or submit feature requests.
 * Fixed issue 28: Web/HTML Invoice Template
 * Fixed issue 29: Tabbed settings and templates page
 * Fixed issue 31: Per invoice payment options
+* Support payments via 2Checkout
 
 **Version 2.0.7**
 

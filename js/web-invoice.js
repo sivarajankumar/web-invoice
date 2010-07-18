@@ -253,6 +253,9 @@ jQuery(document)
 						payment_method_array = "";
 					}
 					
+					if (payment_method_array.indexOf && payment_method_array.indexOf('2co') != -1) {
+						jQuery('.2co_info').show();
+					}
 					if (payment_method_array.indexOf && payment_method_array.indexOf('cc') != -1) {
 						jQuery('.gateway_info').show();
 					}
@@ -329,6 +332,10 @@ jQuery(document)
 							jQuery('#web_invoice_alertpay_register_link')
 									.hide();
 						}
+						if (jQuery('#web_invoice_2co_sid').val() != '') {
+							jQuery('#web_invoice_2co_register_link')
+									.hide();
+						}
 					}
 					if (payment_method_array.indexOf && payment_method_array.indexOf('google_checkout') != -1) {
 						jQuery('.google_checkout_info').show();
@@ -348,6 +355,7 @@ jQuery(document)
 										payment_method_array = (jQuery(this)
 												.val() + "");
 
+										jQuery('.2co_info').hide();
 										jQuery('.paypal_info').hide();
 										jQuery('.payflow_info').hide();
 										jQuery('.pfp_info').hide();
@@ -357,16 +365,13 @@ jQuery(document)
 										jQuery('.alertpay_info').hide();
 										jQuery('.google_checkout_info').hide();
 										jQuery('.gateway_info').hide();
-										if (payment_method_array
-												.indexOf('paypal') != -1) {
+										if (payment_method_array.indexOf('paypal') != -1) {
 											jQuery('.paypal_info').show();
 										}
-										if (payment_method_array
-												.indexOf('payflow') != -1) {
+										if (payment_method_array.indexOf('payflow') != -1) {
 											jQuery('.payflow_info').show();
 										}
-										if (payment_method_array
-												.indexOf('pfp') != -1) {
+										if (payment_method_array.indexOf('pfp') != -1) {
 											jQuery('.pfp_info').show();
 											
 											if (jQuery('#web_invoice_pfp_authentication').val() == '3token') {
@@ -380,73 +385,50 @@ jQuery(document)
 												jQuery('.pfp_info.unipay').hide();
 											}
 										}
-										if (payment_method_array
-												.indexOf('other') != -1) {
+										if (payment_method_array.indexOf('other') != -1) {
 											jQuery('.other_info').show();
 										}
-										if (payment_method_array
-												.indexOf('sagepay') != -1) {
+										if (payment_method_array.indexOf('sagepay') != -1) {
 											jQuery('.sagepay_info').show();
 										}
-										if (payment_method_array
-												.indexOf('moneybookers') != -1) {
+										if (payment_method_array.indexOf('moneybookers') != -1) {
 											jQuery('.moneybookers_info').show();
 
-											if (jQuery(
-													'#web_invoice_moneybookers_merchant')
-													.val() == 'False') {
-												jQuery(
-														'.moneybookers_info_merchant')
-														.hide();
+											if (jQuery('#web_invoice_moneybookers_merchant').val() == 'False') {
+												jQuery('.moneybookers_info_merchant').hide();
 											}
-											if (jQuery(
-													'#web_invoice_moneybookers_address')
-													.val() != '') {
-												jQuery(
-														'#web_invoice_moneybookers_register_link')
-														.hide();
+											if (jQuery('#web_invoice_moneybookers_address').val() != '') {
+												jQuery('#web_invoice_moneybookers_register_link').hide();
 											}
 										}
-										if (payment_method_array
-												.indexOf('alertpay') != -1) {
+										if (payment_method_array.indexOf('alertpay') != -1) {
 											jQuery('.alertpay_info').show();
 
-											if (jQuery(
-													'#web_invoice_alertpay_merchant')
-													.val() == 'False') {
-												jQuery(
-														'.alertpay_info_merchant')
-														.hide();
+											if (jQuery('#web_invoice_alertpay_merchant').val() == 'False') {
+												jQuery('.alertpay_info_merchant').hide();
 											}
-											if (jQuery(
-													'#web_invoice_alertpay_address')
-													.val() != '') {
-												jQuery(
-														'#web_invoice_alertpay_register_link')
-														.hide();
+											if (jQuery('#web_invoice_alertpay_address').val() != '') {
+												jQuery('#web_invoice_alertpay_register_link').hide();
+											}
+											if (jQuery('#web_invoice_2co_sid').val() != '') {
+												jQuery('#web_invoice_2co_register_link').hide();
 											}
 										}
-										if (payment_method_array
-												.indexOf('google_checkout') != -1) {
+										if (payment_method_array.indexOf('google_checkout') != -1) {
 											jQuery('.google_checkout_info').show();
 
-											if (jQuery(
-													'#web_invoice_google_checkout_merchant')
-													.val() == 'False') {
-												jQuery(
-														'.google_checkout_info_merchant')
-														.hide();
+											if (jQuery('#web_invoice_google_checkout_merchant').val() == 'False') {
+												jQuery('.google_checkout_info_merchant').hide();
 											}
-											if (jQuery(
-													'#web_invoice_google_checkout_merchant_id')
-													.val() != '') {
-												jQuery(
-														'#web_invoice_google_checkout_register_link')
-														.hide();
+											if (jQuery('#web_invoice_google_checkout_merchant_id').val() != '') {
+												jQuery('#web_invoice_google_checkout_register_link').hide();
 											}
 										}
 										if (payment_method_array.indexOf('cc') != -1) {
 											jQuery('.gateway_info').show();
+										}
+										if (payment_method_array.indexOf('2co') != -1) {
+											jQuery('.2co_info').show();
 										}
 									});
 
