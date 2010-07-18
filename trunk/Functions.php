@@ -898,6 +898,11 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_alertpay_test_mode');
 	delete_option('web_invoice_alertpay_ip');
 	
+	// 2CO
+	delete_option('web_invoice_2co_sid');
+	delete_option('web_invoice_2co_secret_word');
+	delete_option('web_invoice_2co_demo_mode');
+	
 	// Google Checkout
 	delete_option('web_invoice_google_checkout_env');
 	delete_option('web_invoice_google_checkout_merchant_id');
@@ -2407,7 +2412,12 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_alertpay_secret'])) update_option('web_invoice_alertpay_secret', $_POST['web_invoice_alertpay_secret']);
 	if(isset($_POST['web_invoice_alertpay_test_mode'])) update_option('web_invoice_alertpay_test_mode', $_POST['web_invoice_alertpay_test_mode']);
 	if(isset($_POST['web_invoice_alertpay_ip'])) update_option('web_invoice_alertpay_ip', $_POST['web_invoice_alertpay_ip']);
-		
+	
+	// 2CO
+	if(isset($_POST['web_invoice_2co_sid'])) update_option('web_invoice_2co_sid', $_POST['web_invoice_2co_sid']);
+	if(isset($_POST['web_invoice_2co_secret_word'])) update_option('web_invoice_2co_secret_word', $_POST['web_invoice_2co_secret_word']);
+	if(isset($_POST['web_invoice_2co_demo_mode'])) update_option('web_invoice_2co_demo_mode', $_POST['web_invoice_2co_demo_mode']);
+	
 	// Google Checkout
 	if(isset($_POST['web_invoice_google_checkout_env'])) update_option('web_invoice_google_checkout_env', $_POST['web_invoice_google_checkout_env']);
 	if(isset($_POST['web_invoice_google_checkout_merchant_id'])) update_option('web_invoice_google_checkout_merchant_id', $_POST['web_invoice_google_checkout_merchant_id']);
@@ -2518,6 +2528,7 @@ function web_invoice_clear_cache() {
 
 function web_invoice_get_all_payment_options() {
 	return array(
+		'2co' => array('text' => '2Checkout', 'secure' => false),
 		'alertpay' => array('text' => 'AlertPay', 'secure' => false),
 		'cc' => array('text' => 'Credit Card', 'secure' => true),
 		'moneybookers' => array('text' => 'Moneybookers', 'secure' => false),
