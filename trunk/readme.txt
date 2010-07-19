@@ -45,6 +45,7 @@ Sponsored features:
 * Google Checkout subscriptions and PayPal Payflow support sponsored by Sean Ham, http://consulting.dynamisart.com
 * Sage Pay support sponsored by Euan Robertson, http://euan.co.uk/
 * AlertPay subscriptions support sponsored by Nathan Prescott, http://neopetsguru.com/
+* 2Checkout integration and per invoice payment methods sponsored by Rezwan Mortuza, http://graffias.net/
 
 Would you like to see this plugin in other languages? Please show your interest in
 the [Web Invoice community forum](http://mohanjith.com/forum/forum.php?id=1).
