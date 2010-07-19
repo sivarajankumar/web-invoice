@@ -1311,6 +1311,22 @@ function web_invoice_show_settings()
 	</tr>
 	
 	<tr>
+		<th><a class="web_invoice_tooltip"
+			title="<?php _e("Your clients will be allowed to settle an invoice in installments. Experimental feature, only some payment methods are supported.", WEB_INVOICE_TRANS_DOMAIN) ?>"
+			><?php _e("Allow partial payments", WEB_INVOICE_TRANS_DOMAIN) ?></a>:</th>
+
+		<td>
+			<select name="web_invoice_partial_payments" id="web_invoice_partial_payments" >
+				<option></option>
+				<option style="padding-right: 10px;" value="yes"
+				<?php if(get_option('web_invoice_partial_payments') == 'yes') echo 'selected="yes"';?>><?php _e("yes", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+				<option style="padding-right: 10px;" value="no"
+				<?php if(get_option('web_invoice_partial_payments') == 'no') echo 'selected="yes"';?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			</select>
+		</td>
+	</tr>
+	
+	<tr>
 		<th width="200"><?php _e("Number of taxes", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><input name="web_invoice_tax_count" type="text"
 			class="input_field"
@@ -2429,6 +2445,38 @@ function web_invoice_show_billing_address($invoice_id) {
 	<?php
 }
 
+function web_invoice_show_payments($invoice_id) {
+	global $web_invoice_print;
+	
+	$invoice = new Web_Invoice_GetInfo($invoice_id);
+	$Web_Invoice = new Web_Invoice();
+	
+	$payments = web_invoice_payments($invoice->id, 1);
+	
+	if (is_array($payments) && count($payments) > 0) {
+?>
+	<h2><?php _e('Payments', WEB_INVOICE_TRANS_DOMAIN); ?></h2>
+	<table id="web_invoice_payments_table">
+	  <tr>
+	    <th><?php _e('Paid on', WEB_INVOICE_TRANS_DOMAIN); ?></th>
+	    <th><?php _e('Amount', WEB_INVOICE_TRANS_DOMAIN); ?></th>
+	  </tr>
+	<?php 
+	$i = 0;
+	foreach ($payments as $payment) {
+	?>
+	  <tr class="<?php print ($i%2 == 1)?'alt_row':'';?>">
+	    <td style="padding: 2px; width: 120px; text-align: left;"><?php print date(__('Y-m-d H:i', WEB_INVOICE_TRANS_DOMAIN), web_invoice_payment_meta($payment->payment_id, 'time_stamp')); ?></td>
+	    <td style="padding: 2px; width: 70px; text-align: right;"><?php print web_invoice_display_payment($invoice->display('currency'), $payment->amount); ?></td>
+	  </tr>
+	<?php 
+		$i++;
+	} ?>
+	</table>
+<?php
+	}
+}
+
 function web_invoice_show_billing_information($invoice_id) {
 	global $web_invoice_print;
 	
@@ -2537,10 +2585,9 @@ function web_invoice_show_alertpay_form($invoice_id, $invoice) {
 	class="clearfix"><input type="hidden" name="ap_currency"
 	value="<?php echo $invoice->display('currency'); ?>" /> <input
 	type="hidden" name="ap_merchant"
-	value="<?php echo get_option('web_invoice_alertpay_address'); ?>" /> <input
-	type="hidden" name="ap_totalamount"
-	value="<?php echo $invoice->display('amount'); ?>" /> <input
-	type="hidden" name="ap_itemname" id="invoice_num"
+	value="<?php echo get_option('web_invoice_alertpay_address'); ?>" />
+	<input type="hidden" name="ap_totalamount" value="<?php echo $invoice->display('amount'); ?>" />
+	<input type="hidden" name="ap_itemname" id="invoice_num"
 	value="<?php echo  $invoice->display('display_id'); ?>" /> <input
 	type="hidden" name="ap_returnurl"
 	value="<?php echo web_invoice_build_invoice_link($invoice_id); ?>" /> <?php
@@ -2576,11 +2623,14 @@ function web_invoice_show_2co_form($invoice_id, $invoice) {
 <form action="https://www.2checkout.com/checkout/purchase" method="post"
 	class="clearfix"><input
 	type="hidden" name="sid"
-	value="<?php echo get_option('web_invoice_2co_sid'); ?>" /> <input
-	type="hidden" name="total"
-	value="<?php echo $invoice->display('amount'); ?>" /> <input
-	type="hidden" name="cart_order_id" id="invoice_num"
-	value="<?php echo  $invoice->display('display_id'); ?>" /> <input
+	value="<?php echo get_option('web_invoice_2co_sid'); ?>" />
+	<?php if (get_option('web_invoice_partial_payments') != 'yes') { ?>
+	<input type="hidden" name="total" value="<?php echo $invoice->display('due_amount'); ?>" />
+	<input type="hidden" name="cart_order_id" id="invoice_num" value="<?php echo  $invoice->display('display_id'); ?>" />
+	<?php } else { ?>
+	<input type="hidden" name="cart_order_id" id="invoice_num" value="<?php print uniqid($invoice->display('display_id').'_'); ?>" />
+	<?php } ?>
+	<input
 	type="hidden" name="x_Receipt_Link_URL"
 	value="<?php echo web_invoice_build_invoice_link($invoice_id); ?>" /> 
 	<?php if (get_option('web_invoice_2co_demo_mode') == 'TRUE') { ?>
@@ -2593,6 +2643,10 @@ function web_invoice_show_2co_form($invoice_id, $invoice) {
 	}?>
 	<fieldset id="credit_card_information">
 	<ol>
+	<?php if (get_option('web_invoice_partial_payments') == 'yes') { ?>
+		<li><label for="total"><?php _e('Amount you would like to pay?', WEB_INVOICE_TRANS_DOMAIN); ?></label>
+	<?php echo web_invoice_draw_inputfield("total",number_format($invoice->display('due_amount'),2)); ?></li>
+	<?php } ?>
 		<li><label for="submit">&nbsp;</label> <input type="image"
 			src="<?php echo Web_Invoice::frontend_path(); ?>/images/2co.png"
 			style="border: 0; width: 218px; height: 54px; padding: 0;"
@@ -3689,7 +3743,7 @@ function web_invoice_create_moneybookers_itemized_list($itemized_array,$invoice_
 function web_invoice_create_alertpay_itemized_list($itemized_array,$invoice_id) {
 	$invoice = new Web_Invoice_GetInfo($invoice_id);
 	$tax = $invoice->display('tax_percent');
-	$amount = $invoice->display('amount');
+	$amount = $invoice->display('due_amount');
 	$display_id = $invoice->display('display_id');
 
 	$tax_free_sum = 0;
@@ -3701,8 +3755,9 @@ function web_invoice_create_alertpay_itemized_list($itemized_array,$invoice_id) 
 
 	$output = "
 		<input type='hidden' name='ap_description' value='Reference Invoice # $display_id' /> \n
-		<input type='hidden' name='ap_amount' value='$tax_free_sum' />\n
 		<input type='hidden' name='ap_quantity' value='1' />\n";
+	
+	$output .= "<input type='hidden' name='ap_amount' value='$tax_free_sum' />\n";
 
 	// Add tax only by using tax_free_sum (which is the sums of all the individual items * quantities.
 	if(!empty($tax)) {
@@ -3770,6 +3825,8 @@ function web_invoice_generate_html_content($invoice_id) {
 	// Show this if recurring
 	if($recurring)  web_invoice_show_recurring_info($invoice_id);
 
+	web_invoice_show_payments($invoice_id);
+	
 	if(web_invoice_paid_status($invoice_id)) {
 		web_invoice_show_already_paid($invoice_id);
 		do_action('web_invoice_front_paid', $invoice_id);

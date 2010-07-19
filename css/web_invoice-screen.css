@@ -115,7 +115,7 @@
 	margin-bottom: 10px;
 }
 
-#invoice_page #web_invoice_itemized_table .alt_row {
+#invoice_page #web_invoice_itemized_table .alt_row, #invoice_page #web_invoice_payments_table .alt_row {
 	background: #EFEFEF
 }
 

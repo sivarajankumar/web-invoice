@@ -115,17 +115,43 @@ function web_invoice_meta($invoice_id,$meta_key)
 	return $_web_invoice_meta_cache[$invoice_id][$meta_key];
 }
 
-function web_invoice_payment_register($invoice_id, $amount) {
+function web_invoice_payment_register($invoice_id, $amount, $trx_id = "", $status = 0) {
 	global $wpdb;
 	global $_web_invoice_payment_cache;
 	
-	if (!isset($_web_invoice_payment_cache[$invoice_id]) || !$_web_invoice_payment_cache[$invoice_id]) {
+	if (empty($trx_id)) {
 		$trx_id = uniqid('web_invoice_');
-		$wpdb->query("INSERT INTO `".Web_Invoice::tablename('payment')."` (invoice_id, trx_id, amount, status) VALUES ('$invoice_id', '$trx_id', '$amount', 0)");
-		$_web_invoice_payment_cache[$invoice_id] = $trx_id;
 	}
+	$wpdb->query("INSERT INTO `".Web_Invoice::tablename('payment')."` (invoice_id, trx_id, amount, status) VALUES ('$invoice_id', '$trx_id', '$amount', '$status')");
+	$_web_invoice_payment_cache[$trx_id] = mysql_insert_id();
+	
+	return $_web_invoice_payment_cache[$trx_id];
+}
 
-	return $_web_invoice_payment_cache[$invoice_id];
+function web_invoice_payment_update_status($trx_id, $status = 0) {
+	global $wpdb;
+	global $_web_invoice_payment_cache;
+	
+	$wpdb->query("UPDATE `".Web_Invoice::tablename('payment')."` SET status = '$status' WHERE trx_id = '$trx_id';");
+	$_web_invoice_payment_cache[$trx_id] = $trx_id;
+	
+	return $_web_invoice_payment_cache[$trx_id];
+}
+
+function web_invoice_sum_payments($invoice_id) {
+	global $wpdb;
+	
+	$sum = $wpdb->get_var("SELECT SUM(amount) FROM `".Web_Invoice::tablename('payment')."` WHERE invoice_id = '$invoice_id'");
+	
+	return $sum;
+}
+
+function web_invoice_payments($invoice_id, $status = 0) {
+	global $wpdb;
+	
+	$rows = $wpdb->get_results("SELECT * FROM `".Web_Invoice::tablename('payment')."` WHERE invoice_id = '$invoice_id' AND status = '$status'");
+	
+	return $rows;
 }
 
 function web_invoice_get_invoice_id_by_payment($trx_id) {
@@ -832,6 +858,7 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_tax_count');
 	delete_option('web_invoice_tax_name');
 	delete_option('web_invoice_self_generate_from_template');
+	delete_option('web_invoice_partial_payments');
 	delete_option('web_invoice_billing_meta');
 	delete_option('web_invoice_show_billing_address');
 	delete_option('web_invoice_show_quantities');
@@ -2332,6 +2359,7 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_cc_thank_you_email'])) update_option('web_invoice_cc_thank_you_email', $_POST['web_invoice_cc_thank_you_email']);
 	if(isset($_POST['web_invoice_redirect_after_user_add'])) update_option('web_invoice_redirect_after_user_add', $_POST['web_invoice_redirect_after_user_add']);
 	if(isset($_POST['web_invoice_self_generate_from_template'])) update_option('web_invoice_self_generate_from_template', $_POST['web_invoice_self_generate_from_template']);
+	if(isset($_POST['web_invoice_partial_payments'])) update_option('web_invoice_partial_payments', $_POST['web_invoice_partial_payments']);
 	if(isset($_POST['web_invoice_show_business_address'])) update_option('web_invoice_show_business_address', $_POST['web_invoice_show_business_address']);
 	if(isset($_POST['web_invoice_show_billing_address'])) update_option('web_invoice_show_billing_address', $_POST['web_invoice_show_billing_address']);
 	if(isset($_POST['web_invoice_show_quantities'])) update_option('web_invoice_show_quantities', $_POST['web_invoice_show_quantities']);
@@ -2592,6 +2620,9 @@ function web_invoice_return_bytes_nice($bytes) {
 	return round($bytes, 0) . $units[$pow]; 
 }
 
+function web_invoice_display_payment($currency, $amount) {
+	return sprintf(web_invoice_currency_symbol_format($currency), web_invoice_currency_format($amount));
+}
 
 if (!function_exists('sys_get_temp_dir')) {
 	function sys_get_temp_dir() {
