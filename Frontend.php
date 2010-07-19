@@ -221,8 +221,8 @@ function web_invoice_frontend_css() {
 		echo '<meta name="robots" content="noindex, nofollow" />';
 
 		if(get_option('web_invoice_use_css') == 'yes') {
-			echo '<link type="text/css" media="print" rel="stylesheet" href="' . Web_Invoice::frontend_path() . '/css/web_invoice-print.css?2010031201"></link>' . "\n";
-			echo '<link type="text/css" media="screen" rel="stylesheet" href="' . Web_Invoice::frontend_path() . '/css/web_invoice-screen.css?201031201"></link>' . "\n";
+			echo '<link type="text/css" media="print" rel="stylesheet" href="' . Web_Invoice::frontend_path() . '/css/web_invoice-print.css?2.0.8"></link>' . "\n";
+			echo '<link type="text/css" media="screen" rel="stylesheet" href="' . Web_Invoice::frontend_path() . '/css/web_invoice-screen.css?2.0.8"></link>' . "\n";
 		}
 	}
 }
