@@ -490,6 +490,7 @@ class Web_Invoice {
 		add_option('web_invoice_web_invoice_page','');
 		add_option('web_invoice_redirect_after_user_add', 'no');
 		add_option('web_invoice_self_generate_from_template', 'no');
+		add_option('web_invoice_partial_payments', 'no');
 		add_option('web_invoice_default_currency_code','USD');
 
 		add_option('web_invoice_show_quantities','Hide');
@@ -993,6 +994,11 @@ class Web_Invoice_GetInfo {
 			case 'amount':
 				return $invoice_info->amount;
 				break;
+			
+			case 'due_amount':
+				$payments = web_invoice_sum_payments($this->id);
+				return max(0, $invoice_info->amount-$payments);
+				break;
 
 			case 'tax_percent':
 				$_tax_values = unserialize(web_invoice_meta($this->id,'tax_value'));
@@ -1025,7 +1031,7 @@ class Web_Invoice_GetInfo {
 				break;
 
 			case 'display_amount':
-				return sprintf(web_invoice_currency_symbol_format($this->display('currency')), web_invoice_currency_format($invoice_info->amount));
+				return web_invoice_display_payment($this->display('currency'), $invoice_info->amount);
 				break;
 
 			case 'description':

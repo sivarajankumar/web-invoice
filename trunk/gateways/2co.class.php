@@ -31,8 +31,16 @@ class Web_Invoice_2CO {
 	var $tco_credit_card_processed;
 	var $tco_key;
 	var $tco_demo;
+	var $tco_total;
+	
+	var $trx_id;
 
 	function Web_Invoice_2CO($invoice_id) {
+		if (get_option('web_invoice_partial_payments') == 'yes') {
+			$invoice_id_parts = explode('_', $invoice_id);
+			$invoice_id = $invoice_id_parts[0];
+			$this->trx_id = $invoice_id_parts[1];
+		}
 		$this->invoice = new Web_Invoice_GetInfo($invoice_id);
 	}
 
@@ -53,6 +61,7 @@ class Web_Invoice_2CO {
 		$this->tco_credit_card_processed = $request['credit_card_processed'];
 		$this->tco_key = $request['key'];
 		$this->tco_demo = $request['demo'];
+		$this->tco_total = $request['total'];
 
 		if (!$this->invoice->id) {
 			$this->_logFailure('Invoice not found');
@@ -63,7 +72,7 @@ class Web_Invoice_2CO {
 			exit(0);
 		}
 		
-		$calc_key = md5(get_option('web_invoice_2co_secret_word').get_option('web_invoice_2co_sid').$this->tco_order_number.number_format($this->invoice->display('amount'), 2));
+		$calc_key = md5(get_option('web_invoice_2co_secret_word').get_option('web_invoice_2co_sid').$this->tco_order_number.$this->tco_total);
 
 		if (strtolower($this->tco_key) != strtolower($calc_key)) {
 			$this->_logFailure('Invalid security code');
@@ -88,7 +97,11 @@ class Web_Invoice_2CO {
 				$this->_logFailure('Test payment');
 			}
 		} else {
-			web_invoice_mark_as_paid($this->invoice->id);
+			if (intval($this->tco_total) >= $this->invoice->display('due_amount')) {
+				web_invoice_mark_as_paid($this->invoice->id);
+			}
+			$payment_id = web_invoice_payment_register($this->invoice->id, $this->tco_total, $this->trx_id, 1);
+			web_invoice_update_payment_meta($payment_id,'time_stamp',time());
 		}
 
 		header('HTTP/1.0 200 OK');

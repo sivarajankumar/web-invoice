@@ -99,6 +99,7 @@ or submit feature requests.
 * Fixed issue 29: Tabbed settings and templates page
 * Fixed issue 31: Per invoice payment options
 * Support payments via 2Checkout
+* Fixed issue 9: Partial payments on an invoice
 
 **Version 2.0.7**
 
