@@ -139,6 +139,10 @@
 	display: none;
 }
 
+#web_invoice_first_time_setup .tco_info {
+	display: none;
+}
+
 #web_invoice_first_time_setup input {
 	width: 300px;
 }
@@ -398,6 +402,10 @@
 }
 
 #settings_page_table  .sagepay_info {
+	display: none;
+}
+
+#settings_page_table  .tco_info {
 	display: none;
 }
 

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: web-invoice\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/web-invoice\n"
 "POT-Creation-Date: 2010-07-07 08:15+0000\n"
-"PO-Revision-Date: 2010-07-07 13:57+0530\n"
+"PO-Revision-Date: 2010-07-20 14:22+0530\n"
 "Last-Translator: S H Mohanjith <moha@mohanjith.net>\n"
 "Language-Team: NetMDP <etruel@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,7 @@ msgstr "Resumen de Facturación"
 #: Display.php:51
 #: Display.php:366
 msgid "Add New"
-msgstr ""
+msgstr "Añadir nuevo"
 
 #: Display.php:55
 #: Display.php:385
@@ -104,12 +104,12 @@ msgstr "Todas las Facturas"
 #: Display.php:71
 #: Display.php:226
 msgid "Paid"
-msgstr "Pagado"
+msgstr "Paid"
 
 #: Display.php:73
 #: Display.php:228
 msgid "Unpaid"
-msgstr "No pagado"
+msgstr "Unpaid"
 
 #: Display.php:75
 #: Display.php:230
@@ -160,43 +160,43 @@ msgstr "Usuario"
 #: Display.php:294
 #: Display.php:470
 msgid " Paid"
-msgstr " Pagado"
+msgstr "Paid"
 
 #: Display.php:151
 #: Display.php:302
 #: Display.php:478
 msgid "Sent Today. "
-msgstr "Enviada Hoy."
+msgstr "Enviado Hoy."
 
 #: Display.php:152
 #: Display.php:303
 #: Display.php:479
 msgid "Sent Yesterday. "
-msgstr "Enviada Ayer."
+msgstr "Enviado Ayer."
 
 #: Display.php:153
 #: Display.php:304
 #: Display.php:480
 #, php-format
 msgid "Sent %s days ago. "
-msgstr "Enviada %s días atras."
+msgstr "Enviado %s días atras."
 
 #: Display.php:155
 #: Display.php:307
 #: Display.php:483
 msgid "Not Sent"
-msgstr "No Envíada"
+msgstr "No Envíado"
 
 #: Display.php:166
 #: Display.php:322
 #: Display.php:498
 msgid "View Web Invoice"
-msgstr "Ver Factura Web"
+msgstr "Ver en la web"
 
 #: Display.php:168
 #: Display.php:500
 msgid "Copy this link and add to a post/page/widget to allow unprivileged users create invoices for self."
-msgstr ""
+msgstr "Copiar este enlace y agregarlo a un post/página/widget para permitir la creación de albaranes a usuarios no autorizados."
 
 #: Display.php:169
 #: Display.php:501
@@ -521,9 +521,8 @@ msgstr "Agregar Otro Item"
 #: Display.php:911
 #: Display.php:2061
 #: Display.php:2065
-#, fuzzy
 msgid "Invoice Total"
-msgstr "Total de la Factura:"
+msgstr "Total"
 
 #: Display.php:916
 #, fuzzy
@@ -747,15 +746,15 @@ msgstr "Nivel de usuario para administrar facturas web"
 
 #: Display.php:1271
 msgid "Allow users not allowed to manage web-invoice to create invoices for self from templates with no access to the admin dashboard. Anonymous users are not allowed to create any invoices."
-msgstr ""
+msgstr "Permitir a usuarios no autorizados la creación de albaranes a partir de plantillas sin tener acceso al panel de control. Usuarios no registrados no podrán crear albaranes."
 
 #: Display.php:1272
 msgid "Allow users to create invoices for self"
-msgstr ""
+msgstr "Permitir a los usuarios crear albaránes"
 
 #: Display.php:1285
 msgid "Number of taxes"
-msgstr ""
+msgstr "Tipos de impuestos"
 
 #: Display.php:1294
 msgid "Invoice Page Display Settings:"
@@ -865,7 +864,7 @@ msgstr "Banco/Otros"
 #: Display.php:1386
 #: Display.php:2361
 msgid "Sage Pay"
-msgstr ""
+msgstr "Sage Pay"
 
 #: Display.php:1391
 msgid "Your AlertPay username:"
@@ -1043,7 +1042,7 @@ msgstr "UNIPAY"
 
 #: Display.php:1653
 msgid "Website Payments Pro"
-msgstr ""
+msgstr "Website Payments Pro"
 
 #: Display.php:1657
 msgid "PayPal Payflow Pro Username:"
@@ -1059,7 +1058,7 @@ msgstr "PayPal Payflow Pro Firma:"
 
 #: Display.php:1679
 msgid "Website Payments Pro Vendor:"
-msgstr ""
+msgstr "Website Payments Pro Vendor:"
 
 #: Display.php:1686
 #, fuzzy
@@ -1266,11 +1265,11 @@ msgstr "Precio unitario"
 
 #: Display.php:1988
 msgid "Item"
-msgstr "Item"
+msgstr "Elemento"
 
 #: Display.php:1988
 msgid "Cost"
-msgstr "Coste"
+msgstr "Importe"
 
 #: Display.php:2116
 msgid "Billing / Invoicing Info"
@@ -1384,23 +1383,23 @@ msgstr "La factura %s ha sido pagada."
 #: Display.php:2256
 #, php-format
 msgid "This invoice was paid on %s."
-msgstr "Esta factura fue pagada el %s."
+msgstr "Albarán pagado el %s."
 
 #: Display.php:2268
 #, php-format
 msgid "Welcome, %s"
-msgstr "¡Bienvenido, %s!"
+msgstr "Usuario: %s"
 
 #: Display.php:2270
 #, php-format
 msgid "We have sent you invoice <b>%1$s</b> with a total amount of %2$s"
-msgstr "Env&iacute;amos su factura '<b>%1$s</b>' por un total de %2$s"
+msgstr "Albarán nº<b> %1$s</b>, por un importe de <b> %2$s</b>"
 
 #: Display.php:2272
 #: Display.php:3201
 #, php-format
 msgid "Due Date: %s"
-msgstr "Fecha de pago: %s"
+msgstr "Vencimiento:<b> %s</b>"
 
 #: Display.php:2292
 msgid "Invoice From:"
@@ -1409,7 +1408,7 @@ msgstr "Factura de:"
 #: Display.php:2297
 #: Display.php:2319
 msgid "Tax ID: "
-msgstr "Taza de Impuesto: "
+msgstr "NIF: "
 
 #: Display.php:2310
 msgid "Invoice To:"
@@ -1430,7 +1429,7 @@ msgstr "Otro/Banco"
 
 #: Display.php:2462
 msgid "Tax may not be applied if you are from a different state"
-msgstr ""
+msgstr "Los impuestos no se apliquen al estar en otro Estado."
 
 #: Display.php:2531
 #: Display.php:2636
@@ -1568,7 +1567,7 @@ msgstr "Crear una cuenta nueva."
 #: Display.php:3564
 #, php-format
 msgid "You can download a %s or print a copy of this invoice for your records; just "
-msgstr ""
+msgstr "- "
 
 #: Frontend.php:135
 #: Frontend.php:194
@@ -1648,19 +1647,19 @@ msgstr "Dic"
 
 #: Functions.php:1932
 msgid "Australian Dollars"
-msgstr ""
+msgstr "Dolares Australianos"
 
 #: Functions.php:1933
 msgid "Canadian Dollars"
-msgstr ""
+msgstr "Dolares Canadienses"
 
 #: Functions.php:1934
 msgid "Euros"
-msgstr ""
+msgstr "Euros"
 
 #: Functions.php:1935
 msgid "Pounds Sterling"
-msgstr ""
+msgstr "Libras"
 
 #: Functions.php:1936
 #, fuzzy
@@ -1669,7 +1668,7 @@ msgstr "Sí"
 
 #: Functions.php:1937
 msgid "U.S. Dollars"
-msgstr ""
+msgstr "Dolares Americanos"
 
 #: Functions.php:1938
 msgid "New Zealand Dollar"
@@ -1736,12 +1735,12 @@ msgstr ""
 #: Functions.php:1988
 #, php-format
 msgid "$%s"
-msgstr ""
+msgstr "$%s"
 
 #: Functions.php:1982
 #, php-format
 msgid "&euro;%s"
-msgstr ""
+msgstr "&euro;%s"
 
 #: Functions.php:1983
 #, php-format
