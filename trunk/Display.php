@@ -1490,7 +1490,7 @@ function web_invoice_show_settings()
 			class="web_invoice_click_me"><?php _e("Do you need an AlertPay account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
 	</tr>
-	<tr class="2co_info">
+	<tr class="tco_info 2co_info">
 		<th><?php _e("2Checkout seller id:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><input id='web_invoice_2co_sid'
 			name="web_invoice_2co_sid" class="search-input input_field"
@@ -1500,7 +1500,7 @@ function web_invoice_show_settings()
 			class="web_invoice_click_me"><?php _e("Do you need a 2CO account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
 	</tr>
-	<tr class="2co_info">
+	<tr class="tco_info 2co_info">
 		<th><?php _e("2Checkout secret word:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><input id='web_invoice_2co_secret_word'
 			name="web_invoice_2co_secret_word" class="search-input input_field"
@@ -2485,26 +2485,29 @@ function web_invoice_show_billing_information($invoice_id) {
 	$pp = false; $pf = false; $pfp = false; $cc = false; $sp = false; $mb = false; $alertpay = false; $gc = false; $tco = false;
 	
 	$method_count = 0;
-	
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'paypal') &&
+	$invoice_payment_methods = web_invoice_meta($invoice_id,'web_invoice_payment_methods');
+	if (empty($invoice_payment_methods)) {
+		$invoice_payment_methods = get_option('web_invoice_payment_method');
+	}
+	if (stristr($invoice_payment_methods, 'paypal') &&
 		stristr(get_option('web_invoice_payment_method'), 'paypal')) { $pp = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'payflow') &&
+	if (stristr($invoice_payment_methods, 'payflow') &&
 		stristr(get_option('web_invoice_payment_method'), 'payflow')) { $pf = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'pfp') &&
+	if (stristr($invoice_payment_methods, 'pfp') &&
 		stristr(get_option('web_invoice_payment_method'), 'pfp')) { $pfp = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'sagepay') &&
+	if (stristr($invoice_payment_methods, 'sagepay') &&
 		stristr(get_option('web_invoice_payment_method'), 'sagepay') && !web_invoice_recurring($invoice_id)) { $sp = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'moneybookers') &&
+	if (stristr($invoice_payment_methods, 'moneybookers') &&
 		stristr(get_option('web_invoice_payment_method'), 'moneybookers')) { $mb = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'alertpay') &&
+	if (stristr($invoice_payment_methods, 'alertpay') &&
 		stristr(get_option('web_invoice_payment_method'), 'alertpay')) { $alertpay = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'cc') &&
+	if (stristr($invoice_payment_methods, 'cc') &&
 		stristr(get_option('web_invoice_payment_method'), 'cc')) { $cc = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), '2co') &&
+	if (stristr($invoice_payment_methods, '2co') &&
 		stristr(get_option('web_invoice_payment_method'), '2co')) { $tco = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'google_checkout') &&
+	if (stristr($invoice_payment_methods, 'google_checkout') &&
 		stristr(get_option('web_invoice_payment_method'), 'google_checkout')) { $gc = true; $method_count++; }
-	if (stristr(web_invoice_meta($invoice_id,'web_invoice_payment_methods'), 'other') &&
+	if (stristr($invoice_payment_methods, 'other') &&
 		stristr(get_option('web_invoice_payment_method'), 'other')) { $other = true; $method_count++; }
 
 	if (!$web_invoice_print) {
@@ -2515,42 +2518,42 @@ function web_invoice_show_billing_information($invoice_id) {
 <p><?php _e('Pay with:', WEB_INVOICE_TRANS_DOMAIN); ?> 
 <?php if ($method_count > 1) { ?>
 <br />
-	<?php if ($cc) { ?> <a href="#cc_payment_form"
+	<?php if ($cc) { ?> <a href="<?php print $invoice->display('link'); ?>#cc_payment_form"
 	title="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select cc"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/cc_logo.png"
 	alt="Visa Master American Express" width="265" height="45" /></a> <?php } ?>
-	<?php if ($tco) { ?> <a href="#2co_payment_form"
+	<?php if ($tco) { ?> <a href="<?php print $invoice->display('link'); ?>#2co_payment_form"
 	title="<?php _e('2Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select 2co"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/2co_logo.png"
 	alt="2Checkout" width="96" height="54" /></a> <?php } ?>
-	<?php if ($alertpay) { ?> <a href="#alertpay_payment_form"
+	<?php if ($alertpay) { ?> <a href="<?php print $invoice->display('link'); ?>#alertpay_payment_form"
 	title="<?php _e('AlertPay', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select moneybookers"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/alertpay_logo.png"
 	alt="AlertPay" width="81" height="45" /></a> <?php } ?> <?php if ($sp) { ?>
-<a href="#sagepay_payment_form"
+<a href="<?php print $invoice->display('link'); ?>#sagepay_payment_form"
 	title="<?php _e('Sage Pay', WEB_INVOICE_TRANS_DOMAIN); ?>"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/sage_pay_logo.gif"
 	alt="Sage Pay" width="145" height="33" /></a> <?php } ?> <?php if ($mb) { ?>
-<a href="#moneybookers_payment_form"
+<a href="<?php print $invoice->display('link'); ?>#moneybookers_payment_form"
 	title="<?php _e('Moneybookers', WEB_INVOICE_TRANS_DOMAIN); ?>"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/moneybookers_logo.png"
 	alt="Moneybookers" width="75" height="42" /></a> <?php } ?> <?php if ($gc) { ?>
-<a href="#google_checkout_payment_form"
+<a href="<?php print $invoice->display('link'); ?>#google_checkout_payment_form"
 	title="<?php _e('Google Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select google_checkout"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/google_checkout.gif"
 	alt="Google Checkout" height="46" width="180" /></a> <?php } ?> <?php if ($pp) { ?>
-<a href="#paypal_payment_form"
+<a href="<?php print $invoice->display('link'); ?>#paypal_payment_form"
 	title="<?php _e('PayPal', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select paypal"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/paypal_logo.png"
 	alt="PayPal" width="80" height="45" /></a> <?php } ?> <?php if ($pfp) { ?> <a href="#pfp_payment_form"
 	title="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select pfp"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/cc_logo.png"
 	alt="Visa Master American Express" width="265" height="45" /></a> <?php } ?> <?php if ($pf) { ?>
-<a href="#payflow_payment_form"
+<a href="<?php print $invoice->display('link'); ?>#payflow_payment_form"
 	title="<?php _e('PayPal Payflow', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select payflow"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/payflow_logo.png"
 	alt="PayPal Payflow" width="80" height="45" /></a> <?php } ?> <?php if ($other) { ?>
-<a href="#other_payment_form"
+<a href="<?php print $invoice->display('link'); ?>#other_payment_form"
 	title="<?php _e('Other/Bank', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select other"><img
 	src="<?php echo Web_Invoice::frontend_path(); ?>/images/bank_logo.png"
 	alt="Other/Bank" width="80" height="45" /></a> <?php } ?>
