@@ -45,7 +45,7 @@ Sponsored features:
 * Google Checkout subscriptions and PayPal Payflow support sponsored by Sean Ham, http://consulting.dynamisart.com
 * Sage Pay support sponsored by Euan Robertson, http://euan.co.uk/
 * AlertPay subscriptions support sponsored by Nathan Prescott, http://neopetsguru.com/
-* 2Checkout integration and per invoice payment methods sponsored by Rezwan Mortuza, http://graffias.net/
+* 2Checkout integration and per invoice payment methods sponsored by Graffias Network, http://www.graffiasnetwork.com/
 
 Would you like to see this plugin in other languages? Please show your interest in
 the [Web Invoice community forum](http://mohanjith.com/forum/forum.php?id=1).
@@ -91,6 +91,11 @@ or submit feature requests.
 1. Frontend Example
 
 == Change Log ==
+
+**Version 2.0.11**
+
+* Fixed issue 34: Handle users using PHP4 gracefully
+* Fixed issue 35: HTML table was blowing out on my pdf
 
 **Version 2.0.10**
 
