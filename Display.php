@@ -2154,7 +2154,7 @@ function web_invoice_draw_itemized_table($invoice_id) {
 		
 					$response .= "<td>".$_tax_names[$_x]." (". round($_tax_percentx,2). "%) </td>";
 					if(get_option('web_invoice_show_quantities') == "Show") {
-						$response .= "<td style='text-align:right;' colspan='2'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($_tax_value))."</td></tr>";
+						$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($_tax_value))."</td></tr>";
 					} else {
 						$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($_tax_value))."</td></tr>";
 					}
@@ -2169,7 +2169,7 @@ function web_invoice_draw_itemized_table($invoice_id) {
 				}
 				$response .= "<td>".__('Tax', WEB_INVOICE_TRANS_DOMAIN)." (". round($tax_percent,2). "%) </td>";
 				if(get_option('web_invoice_show_quantities') == "Show") {
-					$response .= "<td style='text-align:right;' colspan='2'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
+					$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
 				} else {
 					$response .= "<td style='text-align:right;'>" . sprintf(web_invoice_currency_symbol_format($currency_code), web_invoice_currency_format($tax_value))."</td></tr>";
 				}
