@@ -55,7 +55,7 @@ $web_invoice_print = false;
 $php_version_check = version_compare(WEB_INVOICE_PHP_VERSION, PHP_VERSION, '<');
 
 if ($_GET['action'] == 'error_scrape') {
-    die(sprintf(__("Web Invoice requires PHP ".WEB_INVOICE_PHP_VERSION." or better. Please upgrade or switch to a host that supports PHP like %s.", WEB_INVOICE_TRANS_DOMAIN), '<a href="http://bit.ly/atOh9t" target="_blank">Pacific Host</a>'));
+    die(sprintf(__("Web Invoice requires PHP ".WEB_INVOICE_PHP_VERSION." or better. Please upgrade or switch to a host that supports PHP ".WEB_INVOICE_PHP_VERSION." like %s.", WEB_INVOICE_TRANS_DOMAIN), '<a href="http://bit.ly/atOh9t" target="_blank">Pacific Host</a>'));
 }
 
 if ( $php_version_check ) {	
@@ -1060,5 +1060,5 @@ if ( $php_version_check ) {
 	$web_invoice = new Web_Invoice();
 	$web_invoice->security();
 } else {
-	trigger_error(sprintf(__("Web Invoice requires PHP ".WEB_INVOICE_PHP_VERSION." or better. Please upgrade or switch to a host that supports PHP like %s.", WEB_INVOICE_TRANS_DOMAIN), '<a href="http://bit.ly/atOh9t" target="_blank">Pacific Host</a>'), E_USER_ERROR);
+	trigger_error(sprintf(__("Web Invoice requires PHP ".WEB_INVOICE_PHP_VERSION." or better. Please upgrade or switch to a host that supports PHP ".WEB_INVOICE_PHP_VERSION." like %s.", WEB_INVOICE_TRANS_DOMAIN), '<a href="http://bit.ly/atOh9t" target="_blank">Pacific Host</a>'), E_USER_ERROR);
 }
