@@ -2106,7 +2106,7 @@ function web_invoice_draw_itemized_table($invoice_id) {
 		$response .= "<p><table id=\"web_invoice_itemized_table\">
 		<tr>\n";
 		if(get_option('web_invoice_show_quantities') == "Show") {
-			$response .= '<th style="width: 40px; text-align: right;">'.__('Quantity', WEB_INVOICE_TRANS_DOMAIN).'</th><th style=\"width: 50px; text-align: right;\">'.__('Unit price', WEB_INVOICE_TRANS_DOMAIN).'</th>';
+			$response .= '<th style="width: 40px; text-align: right;">'.__('Quantity', WEB_INVOICE_TRANS_DOMAIN).'</th><th style="width: 50px; text-align: right;">'.__('Unit price', WEB_INVOICE_TRANS_DOMAIN).'</th>';
 		}
 		$response .="<th>".__('Item', WEB_INVOICE_TRANS_DOMAIN)."</th><th style=\"width: 70px; text-align: right;\">".__('Cost', WEB_INVOICE_TRANS_DOMAIN)."</th>
 		</tr> ";
