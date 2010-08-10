@@ -98,6 +98,10 @@ Upgrade immediately if your want your PDF invoice to look good.
 
 == Changelog ==
 
+= 2.0.12 =
+
+* Fixed issue 39: IPN (instant payment notification) errors from Paypal after invoice is paid
+
 = 2.0.11 =
 * Fixed issue 34: Handle users using PHP4 gracefully
 * Fixed issue 35: HTML table was blowing out on my pdf
