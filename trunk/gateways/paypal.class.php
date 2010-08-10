@@ -125,12 +125,12 @@ class Web_Invoice_Paypal {
 			exit(0);
 		}
 
-		if (($this->currency != web_invoice_meta($this->invoice->id, 'web_invoice_currency_code'))) {
+		if ($this->currency != $this->invoice->display('currency')) {
 			$this->_logFailure('Invalid currency');
 
 			header('HTTP/1.0 400 Bad Request');
 			header('Content-type: text/plain; charset=UTF-8');
-			print 'We were not expecting you. REF: MB0';
+			print 'We were not expecting you. REF: PP0';
 			exit(0);
 		}
 		if (($this->amount != $this->invoice->display('amount'))) {
@@ -138,7 +138,7 @@ class Web_Invoice_Paypal {
 
 			header('HTTP/1.0 400 Bad Request');
 			header('Content-type: text/plain; charset=UTF-8');
-			print 'We were not expecting you. REF: MB1';
+			print 'We were not expecting you. REF: PP1';
 			exit(0);
 		}
 		if (($this->pay_to_email != get_option('web_invoice_paypal_address'))) {
@@ -146,7 +146,7 @@ class Web_Invoice_Paypal {
 
 			header('HTTP/1.0 400 Bad Request');
 			header('Content-type: text/plain; charset=UTF-8');
-			print 'We were not expecting you. REF: MB2';
+			print 'We were not expecting you. REF: PP2';
 			exit(0);
 		}
 
@@ -155,7 +155,7 @@ class Web_Invoice_Paypal {
 
 			header('HTTP/1.0 400 Bad Request');
 			header('Content-type: text/plain; charset=UTF-8');
-			print 'We were not expecting you. REF: MB2';
+			print 'We were not expecting you. REF: PP2';
 			exit(0);
 		} else {
 			fputs ($fp, $header . $req);

@@ -371,8 +371,8 @@ function web_invoice_recurring_overview($message='')
 		'<a href="http://keti.ws/37281">MerchantPlus</a>', '<a href="http://keti.ws/37282">MerchantExpress.com</a>', 
 		'<a href="http://keti.ws/36282">MerchantWarehouse</a>', 
 		'<a href="http://keti.ws/27481" alt="moneybookers.com">Moneybookers</a>', 
-		'<a href="https://www.paypal.com/lk/mrb/pal=TW8P6LGF47FM4">PayPal Business</a>',
-		'<a href="https://www.paypal.com/lk/mrb/pal=TW8P6LGF47FM4">PayPal Payflow Pro</a>',
+		'<a href="https://www.paypal.com/us/mrb/pal=TW8P6LGF47FM4">PayPal Business</a>',
+		'<a href="https://www.paypal.com/us/mrb/pal=TW8P6LGF47FM4">PayPal Payflow Pro</a>',
 		'<a href="http://keti.ws/36283" alt="alertpay.com">AlertPay</a>'); ?></p>
 <p><?php _e('Once you have an account, enter in your username and transaction key into the ', WEB_INVOICE_TRANS_DOMAIN); ?><a
 	href="admin.php?page=web_invoice_settings"><?php _e('settings page', WEB_INVOICE_TRANS_DOMAIN); ?></a>.</p>
