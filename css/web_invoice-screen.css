@@ -104,7 +104,6 @@
 
 #invoice_page #invoice_overview {
 	width: 100%;
-	float: left;
 	padding-right: 10px;
 	margin-right: 15px;
 	position: relative;
@@ -170,11 +169,6 @@
 
 #invoice_page #billing_overview {
 	width: 100%;
-	float: left;
-}
-
-#invoice_page #billing_overview .submit_button {
-	
 }
 
 #invoice_page #billing_overview p {
@@ -303,7 +297,6 @@
 
 html[xmlns] #invoice_page .clearfix {
 	display: block;
-	float:left;
 }
 
 * html #invoice_page .clearfix {
