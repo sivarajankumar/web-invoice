@@ -98,6 +98,10 @@ Upgrade immediately if your want your PDF invoice to look good.
 
 == Changelog ==
 
+= 2.0.13 =
+
+* Fixed issue 40: Web Template Content not working 100%
+
 = 2.0.12 =
 
 * Fixed issue 39: IPN (instant payment notification) errors from Paypal after invoice is paid
