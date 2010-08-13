@@ -92,15 +92,16 @@ or submit feature requests.
 
 == Upgrade Notice ==
 
-= 2.0.11 =
-This version fixes important issue 35: HTML table was blowing out on my pdf.
-Upgrade immediately if your want your PDF invoice to look good.
+= 2.0.13 =
+This version fixes important issue 40: Web Template Content not working 100% and issue 18: 
+Allow users not on primary blog if installed on Multisite. Upgrade immediately if your want your PDF invoice to look good.
 
 == Changelog ==
 
 = 2.0.13 =
 
 * Fixed issue 40: Web Template Content not working 100%
+* Fixed issue 18: Allow users not on primary blog if installed on Multisite
 
 = 2.0.12 =
 

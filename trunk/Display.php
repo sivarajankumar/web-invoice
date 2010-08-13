@@ -3440,16 +3440,18 @@ function web_invoice_draw_user_selection_form($user_id) {
 		<td><select name='user_id' class='user_selection'>
 			<option></option>
 			<?php
-			if (is_dir(WP_CONTENT_DIR . '/mu-plugins')) {
+			if (is_dir(WP_CONTENT_DIR . '/mu-plugins') || MULTISITE) {
 				$prefix = $wpdb->base_prefix;
-				$get_all_users = $wpdb->get_results("SELECT * FROM {$prefix}users LEFT JOIN {$prefix}usermeta on {$prefix}users.id={$prefix}usermeta.user_id WHERE {$prefix}usermeta.meta_key='primary_blog' and {$prefix}usermeta.meta_value = {$blog_id} ORDER BY {$prefix}usermeta.meta_value");
+				$get_all_users = $wpdb->get_results("SELECT * FROM {$prefix}users LEFT JOIN {$prefix}usermeta on {$prefix}users.id={$prefix}usermeta.user_id WHERE ({$prefix}usermeta.meta_key='primary_blog' and {$prefix}usermeta.meta_value = {$blog_id}) OR ({$prefix}usermeta.meta_key='{$wpdb->prefix}capabilities') ORDER BY {$prefix}users.user_nicename");
 			} else {
 				$prefix = $wpdb->prefix;
 				$get_all_users = $wpdb->get_results("SELECT ID FROM {$prefix}users ORDER BY {$prefix}users.user_nicename");
 			}
 			
+			$_used_ids = array();
 			foreach ($get_all_users as $user)
 			{
+				if (isset($_used_ids[$user->ID])) continue;
 				$profileuser = get_user_to_edit($user->ID);
 				echo "<option ";
 				if(isset($user_id) && $user_id == $user->ID) echo " SELECTED ";
@@ -3458,6 +3460,7 @@ function web_invoice_draw_user_selection_form($user_id) {
 				{
 					echo " value=\"".$user->ID."\">". $profileuser->user_login. " (".$profileuser->user_email.")</option>\n";
 				}
+				$_used_ids[$user->ID] = true;
 			}
 			?>
 		</select> <input type='submit' class='button'
