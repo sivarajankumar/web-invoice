@@ -3,10 +3,10 @@ Contributors: mohanjith
 Donate link: http://mohanjith.com/c/wordpress
 Tags: bill, moneybookers, google checkout, alertpay, paypal, invoice, pay, online payment, send invoice, bill clients, authorize.net, credit cards, recurring billing, ARB
 Requires at least: 2.6
-Tested up to: 3.0.0
+Tested up to: 3.0.1
 Stable tag: 2.0.12
 
-Web-Invoice lets you create and send web invoices and setup recurring billing for your clients.
+Web Invoice lets you create and send web invoices and setup recurring billing for your clients.
 
 == Description ==
 
@@ -97,6 +97,10 @@ This version fixes important issue 40: Web Template Content not working 100% and
 Allow users not on primary blog if installed on Multisite. Upgrade immediately if your want your PDF invoice to look good.
 
 == Changelog ==
+
+= 2.0.14 = 
+
+* Fixed issue 45: ToolTip for each entry is not displayed
 
 = 2.0.13 =
 
