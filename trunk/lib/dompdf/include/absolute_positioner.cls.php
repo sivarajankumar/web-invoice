@@ -2,8 +2,8 @@
 /**
  * DOMPDF - PHP5 HTML to PDF renderer
  *
- * File: $RCSfile: canvas_factory.cls.php,v $
- * Created on: 2004-06-02
+ * File: $RCSfile: absolute_positioner.cls.php,v $
+ * Created on: 2004-06-08
  *
  * Copyright (c) 2004 - Benj Carson <benjcarson@digitaljunkies.ca>
  *
@@ -28,54 +28,54 @@
  * the case, you can obtain a copy at http://www.php.net/license/3_0.txt.
  *
  * The latest version of DOMPDF might be available at:
- * http://www.digitaljunkies.ca/dompdf
+ * http://www.dompdf.com/
  *
- * @link http://www.digitaljunkies.ca/dompdf
+ * @link http://www.dompdf.com/
  * @copyright 2004 Benj Carson
  * @author Benj Carson <benjcarson@digitaljunkies.ca>
  * @package dompdf
- * @version 0.5.1
+
  */
 
-/* $Id: canvas_factory.cls.php,v 1.4 2006/07/07 21:31:02 benjcarson Exp $ */
+/* $Id */
 
 /**
- * Create canvas instances
- *
- * The canvas factory creates canvas instances based on the
- * availability of rendering backends and config options.
- *
- * @package dompdf
+ * Positions absolutly positioned frames
  */
-class Canvas_Factory {
+class Absolute_Positioner extends Positioner {
 
-  /**
-   * Constructor is private: this is a static class
-   */
-  private function __construct() { }
+  function __construct(Frame_Decorator $frame) { parent::__construct($frame); }
 
-  static function get_instance($paper = null, $orientation = null,  $class = null) {
+  function position() {
 
-    $backend = strtolower(DOMPDF_PDF_BACKEND);
+    $cb = $this->_frame->get_containing_block();
+
+    $style = $this->_frame->get_style();
+
+    $top =    $style->length_in_pt($style->top, $cb["h"]);
+    $left =   $style->length_in_pt($style->left, $cb["h"]);
+    $right =  $style->length_in_pt($style->right, $cb["w"]);
+    $bottom = $style->length_in_pt($style->bottom, $cb["w"]);
     
-    if ( isset($class) && class_exists($class, false) )
-      $class .= "_Adapter";
-    
-    else if ( (DOMPDF_PDF_BACKEND == "auto" || $backend == "pdflib" ) &&
-              class_exists("PDFLib", false) )
-      $class = "PDFLib_Adapter";
+    $p = $this->_frame->find_block_parent();
 
-    else if ( (DOMPDF_PDF_BACKEND == "auto" || $backend == "cpdf") )
-      $class = "CPDF_Adapter";
+    if ( $p ) {
+      // Get the parent's padding box (see http://www.w3.org/TR/CSS21/visuren.html#propdef-top)
+      list($x, $y, $w, $h) = $p->get_padding_box();
+    } else {
+      $x = $cb["x"];
+      $y = $cb["y"];
+    }
 
-    else if ( $backend == "gd" )
-      $class = "GD_Adapter";
-    
-    else
-      $class = "CPDF_Adapter";
+    if ( isset($top) ) {
+      $y += $top;
+    } else if ( isset($bottom) ) {
+      // FIXME: need to know this frame's height before we can do this correctly
+    }
 
-    return new $class($paper, $orientation);
-        
+    $x += $left;
+
+    $this->_frame->set_position($x, $y);
+
   }
 }
-?>
