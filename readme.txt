@@ -101,6 +101,7 @@ Allow users not on primary blog if installed on Multisite. Upgrade immediately i
 = 2.0.14 = 
 
 * Fixed issue 45: ToolTip for each entry is not displayed
+* Fixed issue 44: Logo / images do not work in PDF
 
 = 2.0.13 =
 

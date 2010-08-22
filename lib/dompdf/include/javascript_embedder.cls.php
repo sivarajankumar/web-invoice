@@ -2,8 +2,8 @@
 /**
  * DOMPDF - PHP5 HTML to PDF renderer
  *
- * File: $RCSfile: canvas_factory.cls.php,v $
- * Created on: 2004-06-02
+ * File: $RCSfile: php_evaluator.cls.php,v $
+ * Created on: 2004-07-12
  *
  * Copyright (c) 2004 - Benj Carson <benjcarson@digitaljunkies.ca>
  *
@@ -28,54 +28,41 @@
  * the case, you can obtain a copy at http://www.php.net/license/3_0.txt.
  *
  * The latest version of DOMPDF might be available at:
- * http://www.digitaljunkies.ca/dompdf
+ * http://www.dompdf.com/
  *
- * @link http://www.digitaljunkies.ca/dompdf
+ * @link http://www.dompdf.com/
  * @copyright 2004 Benj Carson
  * @author Benj Carson <benjcarson@digitaljunkies.ca>
  * @package dompdf
- * @version 0.5.1
  */
 
-/* $Id: canvas_factory.cls.php,v 1.4 2006/07/07 21:31:02 benjcarson Exp $ */
+/* $Id: javascript_embedder.cls.php 291 2010-08-02 20:55:23Z fabien.menager $ */
 
 /**
- * Create canvas instances
+ * Embeds Javascript into the PDF document
  *
- * The canvas factory creates canvas instances based on the
- * availability of rendering backends and config options.
- *
+ * @access private
  * @package dompdf
  */
-class Canvas_Factory {
-
+class Javascript_Embedder {
+  
   /**
-   * Constructor is private: this is a static class
+   * @var DOMPDF
    */
-  private function __construct() { }
+  protected $_dompdf;
 
-  static function get_instance($paper = null, $orientation = null,  $class = null) {
+  function __construct(DOMPDF $dompdf) {
+    $this->_dompdf = $dompdf;
+  }
 
-    $backend = strtolower(DOMPDF_PDF_BACKEND);
-    
-    if ( isset($class) && class_exists($class, false) )
-      $class .= "_Adapter";
-    
-    else if ( (DOMPDF_PDF_BACKEND == "auto" || $backend == "pdflib" ) &&
-              class_exists("PDFLib", false) )
-      $class = "PDFLib_Adapter";
+  function insert($code) {
+    $this->_dompdf->get_canvas()->javascript($code);
+  }
 
-    else if ( (DOMPDF_PDF_BACKEND == "auto" || $backend == "cpdf") )
-      $class = "CPDF_Adapter";
-
-    else if ( $backend == "gd" )
-      $class = "GD_Adapter";
-    
-    else
-      $class = "CPDF_Adapter";
-
-    return new $class($paper, $orientation);
-        
+  function render($frame) {
+    if ( !DOMPDF_ENABLE_JAVASCRIPT )
+      return;
+      
+    $this->insert($frame->get_node()->nodeValue);
   }
 }
-?>

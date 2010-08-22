@@ -634,7 +634,7 @@ if ( $php_version_check ) {
 		</head>
 		<body>
 			<div id='invoice_page' class='clearfix'>
-				<img style='float: right;' src='".$this->the_path."/images/web-invoice.png' style='width:101px; height: 128px;' />
+				<img style='float: right;' src='".$this->the_path."/images/web-invoice.gif' style='width:101px; height: 128px;' />
 				<h1>Invoice</h1>
 				%content
 			</div>

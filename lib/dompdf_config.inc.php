@@ -70,7 +70,7 @@ define("DOMPDF_FONT_DIR", DOMPDF_DIR . "/lib/fonts/");
  * This directory must be writeable by the webserver process.
  * It is used to download remote images.
  */
-define("DOMPDF_TEMP_DIR", "/tmp");
+define("DOMPDF_TEMP_DIR", DOMPDF_DIR . "/tmp");
 
 /**
  * The path to the tt2pt1 utility (used to convert ttf to afm)
