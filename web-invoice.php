@@ -7,7 +7,7 @@
  Version: 2.0.13
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
- Stable tag: 2.0.12
+ Stable tag: 2.0.13
  License: GPL
 
  Copyright 2010  S H Mohanjith (email : moha@mohanjith.net)
@@ -37,7 +37,7 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-define("WEB_INVOICE_VERSION_NUM", "2.0.7");
+define("WEB_INVOICE_VERSION_NUM", "2.0.13");
 define("WEB_INVOICE_PHP_VERSION", "5.2");
 define("WEB_INVOICE_TRANS_DOMAIN", "web-invoice");
 
