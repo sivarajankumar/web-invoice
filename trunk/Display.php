@@ -3853,6 +3853,8 @@ function web_invoice_generate_pdf_content($invoice_id) {
 	global $post, $web_invoice_print;
 	$web_invoice_print = true;
 	
+	$lines = split("\n", get_option('web_invoice_business_address'));
+	
 	ob_start();
 	?>
 	<style type="text/css">
@@ -3870,8 +3872,8 @@ function web_invoice_generate_pdf_content($invoice_id) {
 		p { margin: 5px 0px; }
 		div.clear { clear: both; }
 		
-		#invoice_client_info { width: 100%; text-align: right; padding-top: -145; }
-		#invoice_business_info { width: 100%; text-align: left; height: 100; }
+		#invoice_client_info { width: 100%; text-align: right; padding-top: -<?php print ((count($lines)+3)*15)+7; ?>px; }
+		#invoice_business_info { width: 100%; text-align: left; height: <?php print ((count($lines)+3)*15)+7; ?>px; }
 	</style>
 	<?php
 	
