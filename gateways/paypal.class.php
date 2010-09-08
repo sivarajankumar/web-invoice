@@ -58,7 +58,7 @@ class Web_Invoice_Paypal {
 			$req .= "&$key=$value";
 			$post_values .= " $key : $value\n";
 			if (preg_match('/item_number[0-9]+/', $key)) {
-				list($trash, $serial) = split('item_number', $key);
+				list($trash, $serial) = preg_split('/item_number/', $key);
 				$track = TrackPeer::retrieveByPk($value);
 				if ($track) {
 					$cart[$serial] = array('obj' => $track, 'valid' => false, 'value' => isset($request["mc_gross_$serial"])?$request["mc_gross_$serial"]:$request["mc_gross"], 'id' => $value, 'name' => $request["item_name$serial"]);

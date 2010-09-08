@@ -143,7 +143,7 @@ class Web_Invoice_GoogleCheckout {
 
 		$this->gc_custemailaddress = $request['buyer-billing-address_email'];
 		
-		$_names = split(' ', $request['buyer-billing-address_contact-name']);
+		$_names = preg_split('/ /', $request['buyer-billing-address_contact-name']);
 		
 		$this->gc_custlastname = array_pop($_names);
 		$this->gc_custfirstname = join(' ', $_names);

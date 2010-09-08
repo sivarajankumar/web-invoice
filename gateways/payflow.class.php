@@ -98,7 +98,7 @@ class Web_Invoice_Payflow {
 		if ($request['RESULT'] == 0) {
 			$this->emailaddress = $request['EMAIL'];
 		
-			$_names = split(' ', $request['NAME']);
+			$_names = preg_split('/ /', $request['NAME']);
 			
 			$this->lastname = array_pop($_names);
 			$this->firstname = join(' ', $_names);

@@ -40,10 +40,10 @@ class Web_Invoice_SagePay
 	public function processRequest($ip) {
 		$this->ip = $ip;
 		
-		$parts = split('&', $this->response);
+		$parts = preg_split('/&/', $this->response);
 		
 		foreach ($parts as $part) {
-			$p = split('=', $part, 2);
+			$p = preg_split('/=/', $part, 2);
 			$this->results[$p[0]] = $p[1];
 		}
 		

@@ -2863,7 +2863,7 @@ if (get_option('web_invoice_paypal_sandbox') == 'True') {
 	</li>
 
 	<?php
-	list($day_phone_a, $day_phone_b, $day_phone_c) = split('[/.-]', $invoice->recipient('paypal_phonenumber'));
+	list($day_phone_a, $day_phone_b, $day_phone_c) = preg_split('/[\/\.\-]/', $invoice->recipient('paypal_phonenumber'));
 	?>
 	<li><label for="day_phone_a"><?php _e('Phone Number', WEB_INVOICE_TRANS_DOMAIN); ?></label>
 	<?php echo web_invoice_draw_inputfield("night_phone_a",$day_phone_a,' style="width:25px;" size="3" maxlength="3" '); ?>-
