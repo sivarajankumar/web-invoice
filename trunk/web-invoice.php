@@ -4,7 +4,7 @@
  Plugin URI: http://mohanjith.com/wordpress/web-invoice.html
  Description: Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href="admin.php?page=web_invoice_settings">Web Invoice Settings Page</a> to setup.
  Author: S H Mohanjith
- Version: 2.0.13
+ Version: 2.0.15
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
  Stable tag: 2.0.13
@@ -157,7 +157,7 @@ if ( $php_version_check )
 	{
 	    $file = "web-invoice/" . basename(__FILE__);
 	    
-	    add_menu_page(__('Web Invoice System', WEB_INVOICE_TRANS_DOMAIN), __('Web Invoice', WEB_INVOICE_TRANS_DOMAIN),  $this->web_invoice_user_level, 'web_invoice_overview', array(&$this,'invoice_overview'),$this->uri."/images/web_invoice.png");
+	    add_menu_page(__('Web Invoice System', WEB_INVOICE_TRANS_DOMAIN), __('Web Invoice', WEB_INVOICE_TRANS_DOMAIN),  $this->web_invoice_user_level, $file, array(&$this,'invoice_overview'),$this->uri."/images/web_invoice.png");
 	    add_submenu_page($file, __("Recurring Billing", WEB_INVOICE_TRANS_DOMAIN), __("Recurring Billing", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_recurring_billing', array(&$this,'recurring'));
 	    add_submenu_page($file, __("Manage Invoice", WEB_INVOICE_TRANS_DOMAIN), __("New Invoice", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'new_web_invoice', array(&$this,'new_web_invoice'));
 	    add_submenu_page($file, __("Templates", WEB_INVOICE_TRANS_DOMAIN), __("Templates", WEB_INVOICE_TRANS_DOMAIN), $this->web_invoice_user_level, 'web_invoice_templates', array(&$this,'template_page'));
@@ -226,7 +226,7 @@ if ( $php_version_check )
 		    $pf_obj->processRequest($_SERVER['REMOTE_ADDR']);
 		} else if (isset($_GET['paypal_ipn'])) {
 		    require_once("gateways/paypal.class.php");
-		    $pf_obj = new Web_Invoice_Paypal($_GET['invoice_id']);
+		    $pf_obj = new Web_Invoice_Paypal($_POST['invoice']);
 		    $pf_obj->processRequest($_SERVER['REMOTE_ADDR'], $_POST);
 		} else if (isset($_REQUEST['order_number'])) {
 		    require_once("gateways/2co.class.php");

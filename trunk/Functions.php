@@ -789,8 +789,11 @@ function web_invoice_build_invoice_link_paypal($invoice_id) {
 
 	$link_to_page = get_permalink(get_option('web_invoice_web_invoice_page'));
 
-	if(get_option("permalink_structure")) { $link = $link_to_page . "?paypal_ipn=1&invoice_id=" .$invoice_id; }
-	else { $link =  $link_to_page . "&paypal_ipn=1&invoice_id=" . $invoice_id; }
+	if(get_option("permalink_structure")) {
+		$link = $link_to_page;
+	} else {
+		$link =  $link_to_page;
+	}
 
 	return $link;
 }

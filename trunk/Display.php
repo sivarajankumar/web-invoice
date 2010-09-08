@@ -2845,6 +2845,7 @@ if (get_option('web_invoice_paypal_sandbox') == 'True') {
 	?>
 	<input type="hidden" name="amount" value="<?php echo $invoice->display('amount'); ?>" /> 
 	<input type="hidden" name="notify_url" value="<?php echo web_invoice_build_invoice_link_paypal($invoice_id); ?>" />
+	<input type="hidden" name="invoice" value="<?php echo $invoice_id; ?>" />
 <fieldset id="credit_card_information">
 <ol>
 
