@@ -60,7 +60,7 @@ class Web_Invoice_Moneybookers {
 	}
 
 	function _quadIpToInt($ip) {
-		$ip_parts = split('\.', $ip);
+		$ip_parts = preg_split('/\./', $ip);
 		$numeric_ip = 0;
 
 		foreach ($ip_parts as $ip_part) {
@@ -74,10 +74,10 @@ class Web_Invoice_Moneybookers {
 		$allowed_ips = get_option('web_invoice_moneybookers_ip');
 		$this->int_ip = $this->_quadIpToInt($this->ip);
 
-		$ip_ranges = split(',', $allowed_ips);
+		$ip_ranges = preg_split('/,/', $allowed_ips);
 
 		foreach ($ip_ranges as $ip_range) {
-			list($start_ips,$end_ips) = split('-', $ip_range);
+			list($start_ips,$end_ips) = preg_split('/\-/', $ip_range);
 
 			$start_ip = $this->_quadIpToInt($start_ips);
 			$end_ip = $this->_quadIpToInt($end_ips);
