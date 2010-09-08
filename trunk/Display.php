@@ -3854,7 +3854,7 @@ function web_invoice_generate_pdf_content($invoice_id) {
 	global $post, $web_invoice_print;
 	$web_invoice_print = true;
 	
-	$lines = split("\n", get_option('web_invoice_business_address'));
+	$lines = preg_split("/\n/", get_option('web_invoice_business_address'));
 	
 	ob_start();
 	?>
