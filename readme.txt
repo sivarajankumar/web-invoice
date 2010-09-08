@@ -100,6 +100,7 @@ Important fixes for PDF generation, fixed issue 44 and 41. Also fixed issue with
 = 2.0.15 =
 
 * Fixed issue 46: Ques: What url do I give Paypal to restart IPN?
+* Fixed issue 48: PHP error for DOMPDF - Web Invoice does not send
 
 = 2.0.14 = 
 

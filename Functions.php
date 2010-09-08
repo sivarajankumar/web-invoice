@@ -1057,6 +1057,7 @@ function web_invoice_pdf_get($invoice_id) {
 	ob_clean();
 	
 	require_once "lib/dompdf_config.inc.php";
+	spl_autoload_register('DOMPDF_autoload');
 	
 	$url_parts = parse_url($web_invoice->the_path);
 	
