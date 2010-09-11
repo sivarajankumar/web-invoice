@@ -2028,17 +2028,17 @@ function web_invoice_show_settings()
 <table class="form-table">
 	<tr>
 		<td>
-		<h2><?php _e('Web Invoice Database Tables'); ?></h2>
+		<h2><?php _e('Web Invoice Database Tables', WEB_INVOICE_TRANS_DOMAIN); ?></h2>
 		<p>Check to see if the database tables are installed properly. If not,
 		try deactivating and reactivating the plugin, if that doesn't work, <a
 			href="http://mohanjith.com/contact.html">contact us</a>.</p>
 			<?php
 
-			echo __("Main Table - ");  if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('main')."';")) {echo __("Good");} else {echo __("Not Found"); }
-			echo "<br />".__("Meta Table - "); if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('meta')."';")) {echo __("Good");} else {echo __("Not Found"); }
-			echo "<br />".__("Log Table - ");  if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('log')."';")) {echo __("Good");} else {echo __("Not Found"); }
-			echo "<br />".__("Payment Table - "); if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('payment')."';")) {echo __("Good");} else {echo __("Not Found"); }
-			echo "<br />".__("Payment Meta Table - ");  if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('payment_meta')."';")) {echo __("Good");} else {echo __("Not Found"); }
+			echo __("Main Table - ", WEB_INVOICE_TRANS_DOMAIN);  if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('main')."';")) {echo __("Good", WEB_INVOICE_TRANS_DOMAIN);} else {echo __("Not Found", WEB_INVOICE_TRANS_DOMAIN); }
+			echo "<br />".__("Meta Table - ", WEB_INVOICE_TRANS_DOMAIN); if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('meta')."';")) {echo __("Good", WEB_INVOICE_TRANS_DOMAIN);} else {echo __("Not Found", WEB_INVOICE_TRANS_DOMAIN); }
+			echo "<br />".__("Log Table - ", WEB_INVOICE_TRANS_DOMAIN);  if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('log')."';")) {echo __("Good", WEB_INVOICE_TRANS_DOMAIN);} else {echo __("Not Found", WEB_INVOICE_TRANS_DOMAIN); }
+			echo "<br />".__("Payment Table - ", WEB_INVOICE_TRANS_DOMAIN); if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('payment')."';")) {echo __("Good", WEB_INVOICE_TRANS_DOMAIN);} else {echo __("Not Found", WEB_INVOICE_TRANS_DOMAIN); }
+			echo "<br />".__("Payment Meta Table - ", WEB_INVOICE_TRANS_DOMAIN);  if($wpdb->query("SHOW TABLES LIKE '".Web_Invoice::tablename('payment_meta')."';")) {echo __("Good", WEB_INVOICE_TRANS_DOMAIN);} else {echo __("Not Found", WEB_INVOICE_TRANS_DOMAIN); }
 			?></td>
 	</tr>
 	<tr>

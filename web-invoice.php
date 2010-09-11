@@ -4,10 +4,10 @@
  Plugin URI: http://mohanjith.com/wordpress/web-invoice.html
  Description: Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href="admin.php?page=web_invoice_settings">Web Invoice Settings Page</a> to setup.
  Author: S H Mohanjith
- Version: 2.0.15
+ Version: 2.0.17
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
- Stable tag: 2.0.13
+ Stable tag: 2.0.16
  License: GPL
 
  Copyright 2010  S H Mohanjith (email : moha@mohanjith.net)
@@ -1036,18 +1036,18 @@ Best regards,
 		    
 		    if ($web_invoice_subscription_start_month && $web_invoice_subscription_start_year && $web_invoice_subscription_start_day)
 		    {
-		        return date(__('Y-m-d'), strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
+		        return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
 		    } else {
-		        return date(__("Y-m-d"));
+		        return date(__("Y-m-d", WEB_INVOICE_TRANS_DOMAIN));
 		    }
 		    break;
 		
 		case 'endDate':
-		    return date(__('Y-m-d'), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))));
+		    return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))));
 		    break;
 		
 		case 'profileEndDate':
-		    return date(__('Y-m-d'), strtotime("+".($this->display('interval_length')*($this->display('totalOccurrences')-1))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))+3600*24));
+		    return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("+".($this->display('interval_length')*($this->display('totalOccurrences')-1))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))+3600*24));
 		    break;
 		    
 		case 'archive_status':
