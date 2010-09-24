@@ -3443,6 +3443,9 @@ function web_invoice_draw_user_selection_form($user_id) {
 			<?php
 			if (is_dir(WP_CONTENT_DIR . '/mu-plugins') || MULTISITE) {
 				$prefix = $wpdb->base_prefix;
+				if ($prefix == "") {
+					$prefix = $wpdb->prefix;
+				}
 				$get_all_users = $wpdb->get_results("SELECT * FROM {$prefix}users LEFT JOIN {$prefix}usermeta on {$prefix}users.id={$prefix}usermeta.user_id WHERE ({$prefix}usermeta.meta_key='primary_blog' and {$prefix}usermeta.meta_value = {$blog_id}) OR ({$prefix}usermeta.meta_key='{$wpdb->prefix}capabilities') ORDER BY {$prefix}users.user_nicename");
 			} else {
 				$prefix = $wpdb->prefix;
