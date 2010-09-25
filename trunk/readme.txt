@@ -92,14 +92,18 @@ or submit feature requests.
 
 == Upgrade Notice ==
 
-= 2.0.14 =
-Important fixes for PDF generation, fixed issue 44 and 41. Also fixed issue with tool tips, 45
+= 2.0.18 =
+Added new field invoice date, fixed a long standing bug with some installations
+where user list was empty and also fixed issue 58 and 59.
 
 == Changelog ==
 
 = 2.0.18 =
 
-* Fixed issue 53: Can't attach a user to a WebInvoice
+* Fixed issue 53: Can't attach a user to a Web Invoice
+* Fixed issue 58: Company name in user profile not copied to shipping details
+* Fixed issue 59: User details not shown when shipping details are missing
+* Fixed issue 52: Add a field for the invoice date
 
 = 2.0.17 =
 

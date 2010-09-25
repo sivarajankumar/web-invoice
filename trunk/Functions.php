@@ -529,6 +529,7 @@ function web_invoice_email_variables($invoice_id) {
 		'subject' => $invoice_info->display('subject'),
 		'invoice_id' => $invoice_info->display('display_id'),
 		'invoice_hash' => $invoice_info->display('invoice_hash'),
+		'invoice_date' => $invoice_info->display('invoice_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -560,6 +561,7 @@ function web_invoice_pdf_variables($invoice_id) {
 		'invoice_id' => $invoice_info->display('display_id'),
 		'invoice_hash' => $invoice_info->display('invoice_hash'),
 		'content' => web_invoice_generate_pdf_content($invoice_id),
+		'invoice_date' => $invoice_info->display('invoice_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -597,6 +599,7 @@ select the 'Print' item under the 'File' menu in your browser, or use the
 neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your prompt 
 payment!", WEB_INVOICE_TRANS_DOMAIN), '<a href="'.$invoice_info->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'),
 		'pdf_link' =>  $invoice_info->display('print_link'),
+		'invoice_date' => $invoice_info->display('invoice_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -627,6 +630,7 @@ function web_invoice_web_variables($invoice_id) {
 		'subject' => $invoice_info->display('subject'),
 		'invoice_id' => $invoice_info->display('display_id'),
 		'invoice_hash' => $invoice_info->display('invoice_hash'),
+		'invoice_date' => $invoice_info->display('invoice_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -812,7 +816,7 @@ function web_invoice_draw_select($name,$values,$current_value = '', $id=null) {
 	$output .= "<option></option>";
 	foreach($values as $key => $value) {
 		$output .=  "<option value='$key'";
-		if($key == $current_value) $output .= " selected";
+		if($key == $current_value) $output .= " selected='selected'";
 		$output .= ">$value</option>";
 	}
 	$output .= "</select>";
@@ -2132,6 +2136,7 @@ function web_invoice_contextual_help_list($content, $screen_id, $screen) {
 		'<li><code>content</code> - Invoice table, only in PDF and web template</li>'.
 		'<li><code>print_message</code> - Instructions on how to print, only in web template</li>'.
 		'<li><code>pdf_link</code> - Link to the invoice PDF, only in web template</li>'.
+		'<li><code>invoice_date</code> - Invoice date or the date the invoice was created</li>'.
 		'</ul>';
 	}
 	// Will add help and FAQ here eventually
@@ -2156,6 +2161,15 @@ function web_invoice_self_generate_from_template($template_invoice_id, $user_id)
 	$_REQUEST['web_invoice_payment_methods'] = web_invoice_meta($template_invoice_id,'web_invoice_payment_methods');
 	
 	$_REQUEST['web_invoice_currency_code'] = web_invoice_meta($template_invoice_id,'web_invoice_currency_code');
+
+	$_REQUEST['web_invoice_date_day'] = web_invoice_meta($template_invoice_id,'web_invoice_date_day');
+	$_REQUEST['web_invoice_date_month'] = web_invoice_meta($template_invoice_id,'web_invoice_date_month');
+	$_REQUEST['web_invoice_date_year'] = web_invoice_meta($template_invoice_id,'web_invoice_date_year');
+	
+	$_REQUEST['web_invoice_date_day'] = date('d', strtotime($invoice_info->invoice_date));
+	$_REQUEST['web_invoice_date_month'] = date('m', strtotime($invoice_info->invoice_date));
+	$_REQUEST['web_invoice_date_year'] = date('Y', strtotime($invoice_info->invoice_date));
+
 	$_REQUEST['web_invoice_due_date_day'] = web_invoice_meta($template_invoice_id,'web_invoice_due_date_day');
 	$_REQUEST['web_invoice_due_date_month'] = web_invoice_meta($template_invoice_id,'web_invoice_due_date_month');
 	$_REQUEST['web_invoice_due_date_year'] = web_invoice_meta($template_invoice_id,'web_invoice_due_date_year');
@@ -2194,6 +2208,9 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	
 	$itemized_list = $_REQUEST['itemized_list'];
 	$web_invoice_custom_invoice_id = $_REQUEST['web_invoice_custom_invoice_id'];
+	
+	$web_invoice_date = "{$_REQUEST['web_invoice_date_year']}-{$_REQUEST['web_invoice_date_month']}-{$_REQUEST['web_invoice_date_day']}";
+	
 	$web_invoice_due_date_month = $_REQUEST['web_invoice_due_date_month'];
 	$web_invoice_due_date_day = $_REQUEST['web_invoice_due_date_day'];
 	$web_invoice_due_date_year = $_REQUEST['web_invoice_due_date_year'];
@@ -2266,6 +2283,12 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 			$message .= "Amount updated. ";
 			web_invoice_clear_cache();
 		}
+		if(web_invoice_get_invoice_attrib($invoice_id,'invoice_date') != $web_invoice_date) { 
+			$wpdb->query("UPDATE ".Web_Invoice::tablename('main')." SET invoice_date = '$web_invoice_date' WHERE invoice_num = $invoice_id"); 
+			web_invoice_update_log($invoice_id, 'updated', ' Invoice Date Updated '); 
+			$message .= "Invoice date updated. ";
+			web_invoice_clear_cache();
+		}
 		if(web_invoice_get_invoice_attrib($invoice_id,'itemized') != $itemized) { 
 			$wpdb->query("UPDATE ".Web_Invoice::tablename('main')." SET itemized = '$itemized' WHERE invoice_num = $invoice_id"); 
 			web_invoice_update_log($invoice_id, 'updated', ' Itemized List Updated '); 
@@ -2275,7 +2298,7 @@ function web_invoice_process_invoice_update($invoice_id, $unprivileged = false) 
 	}
 	else {
 		// Create New Invoice
-		if($wpdb->query("INSERT INTO ".Web_Invoice::tablename('main')." (amount,description,invoice_num,user_id,subject,itemized,status)	VALUES ('$amount','$description','$invoice_id','$user_id','$subject','$itemized','0')")) {
+		if($wpdb->query("INSERT INTO ".Web_Invoice::tablename('main')." (amount,invoice_date,description,invoice_num,user_id,subject,itemized,status)	VALUES ('$amount','$web_invoice_date','$description','$invoice_id','$user_id','$subject','$itemized','0')")) {
 			$message = "New Invoice saved.";
 			web_invoice_update_log($invoice_id, 'created', ' Created ');;
 		}

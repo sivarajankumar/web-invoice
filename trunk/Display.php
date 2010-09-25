@@ -580,6 +580,10 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 
 	$web_invoice_tax_names = unserialize(get_option('web_invoice_tax_name'));
 	
+	$web_invoice_date_day = date('d');
+	$web_invoice_date_month = date('m');
+	$web_invoice_date_year = date('Y');
+	
 	// New Invoice From Template
 	if(isset($_POST['copy_from_template']) && $_POST['user_id']) {
 		$template_invoice_id = $_POST['copy_from_template'];
@@ -589,10 +593,16 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 		$subject = $invoice_info->subject;
 		$description = $invoice_info->description;
 		$itemized = $invoice_info->itemized;
+		
+		$web_invoice_date_day = date('d', strtotime($invoice_info->invoice_date));
+		$web_invoice_date_month = date('m', strtotime($invoice_info->invoice_date));
+		$web_invoice_date_year = date('Y', strtotime($invoice_info->invoice_date));
+		
 		$profileuser = get_user_to_edit($_POST['user_id']);
 		$itemized_array = unserialize(urldecode($itemized));
 		$web_invoice_tax = unserialize(web_invoice_meta($template_invoice_id,'tax_value'));
 		$web_invoice_currency_code = web_invoice_meta($template_invoice_id,'web_invoice_currency_code');
+		
 		$web_invoice_due_date_day = web_invoice_meta($template_invoice_id,'web_invoice_due_date_day');
 		$web_invoice_due_date_month = web_invoice_meta($template_invoice_id,'web_invoice_due_date_month');
 		$web_invoice_due_date_year = web_invoice_meta($template_invoice_id,'web_invoice_due_date_year');
@@ -618,13 +628,20 @@ function web_invoice_options_manageInvoice($invoice_id = '',$message='')
 		$subject = $invoice_info->subject;
 		$description = $invoice_info->description;
 		$itemized = $invoice_info->itemized;
+		
+		$web_invoice_date_day = date('d', strtotime($invoice_info->invoice_date));
+		$web_invoice_date_month = date('m', strtotime($invoice_info->invoice_date));
+		$web_invoice_date_year = date('Y', strtotime($invoice_info->invoice_date));
+		
 		$profileuser = get_userdata($invoice_info->user_id);
 		$itemized_array = unserialize(urldecode($itemized));
 		$web_invoice_tax = unserialize(web_invoice_meta($invoice_id,'tax_value'));
 		$web_invoice_custom_invoice_id = web_invoice_meta($invoice_id,'web_invoice_custom_invoice_id');
+		
 		$web_invoice_due_date_day = web_invoice_meta($invoice_id,'web_invoice_due_date_day');
 		$web_invoice_due_date_month = web_invoice_meta($invoice_id,'web_invoice_due_date_month');
 		$web_invoice_due_date_year = web_invoice_meta($invoice_id,'web_invoice_due_date_year');
+		
 		$web_invoice_currency_code = web_invoice_meta($invoice_id,'web_invoice_currency_code');
 		$web_invoice_recurring_billing = web_invoice_meta($invoice_id,'web_invoice_recurring_billing');
 
@@ -998,6 +1015,20 @@ if(get_option('web_invoice_business_name') == '') 		echo "<tr><th colspan=\"2\">
 		}
 		?>
 		</select></td>
+	</tr>
+	
+	<tr class="">
+		<th><?php _e("Invoice Date", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td>
+		<div id="timestampdiv" style="display: block;"><?php echo web_invoice_draw_select('web_invoice_date_month', web_invoice_month_array(), $web_invoice_date_month, 'web_invoice_date_month'); ?>
+		<input type="text" id="web_invoice_date_day" name="web_invoice_date_day"
+			value="<?php echo $web_invoice_date_day; ?>" size="2"
+			maxlength="2" class="noautocomplete" />, <input type="text" id="web_invoice_date_year"
+			name="web_invoice_date_year"
+			value="<?php echo $web_invoice_date_year; ?>" size="4"
+			maxlength="5" class="noautocomplete" />
+		</div>
+		</td>
 	</tr>
 
 	<tr class="">
@@ -2391,6 +2422,8 @@ function web_invoice_show_invoice_overview($invoice_id) {
 <h2 id="web_invoice_welcome_message" class="invoice_page_subheading"><?php printf(__('Welcome, %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->recipient('callsign')); ?>!</h2></div>
 <?php } ?>
 <p class="web_invoice_main_description"><?php printf(__('We have sent you invoice <b>%1$s</b> with a total amount of %2$s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('display_id'), $invoice->display('display_amount')); ?>.</p>
+	<?php if($invoice->display('invoice_date')) { ?>
+<p class="web_invoice_date"><?php printf(__('Invoice Date: %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('invoice_date')); } ?>
 	<?php if($invoice->display('due_date')) { ?>
 <p class="web_invoice_due_date"><?php printf(__('Due Date: %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('due_date')); } ?>
 	<?php if($invoice->display('description')) { ?></p>
@@ -3415,6 +3448,8 @@ function web_invoice_show_recurring_info($invoice_id) {
 if (web_invoice_meta($invoice_id,'web_invoice_subscription_start_day') != '' && web_invoice_meta($invoice_id,'web_invoice_subscription_start_month')  != '' && web_invoice_meta($invoice_id,'web_invoice_subscription_start_year'  != ''))
 echo web_invoice_meta($invoice_id,'web_invoice_subscription_start_day') .", ". web_invoice_meta($invoice_id,'web_invoice_subscription_start_month') .", ".  web_invoice_meta($invoice_id,'web_invoice_subscription_start_year');
 ?>.</p>
+<?php if($invoice->display('invoice_date')) { ?>
+<p class="web_invoice_date"><?php printf(__('Invoice Date: %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('invoice_date')); } ?>
 <?php if($invoice->display('due_date')) { ?>
 <p class="web_invoice_due_date"><?php printf(__("Due Date: %s", WEB_INVOICE_TRANS_DOMAIN), $invoice->display('due_date')); ?></p><?php } ?>
 <?php 	
