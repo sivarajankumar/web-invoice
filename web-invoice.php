@@ -437,19 +437,31 @@ if ( $php_version_check )
 		$wpdb->query($sql_update);
 	    }
 	    
-	    $sql_main = "CREATE TABLE IF NOT EXISTS ". Web_Invoice::tablename('main') ." (
-			    id int(11) NOT NULL auto_increment,
-			    amount double default '0',
-			    description text NOT NULL,
-			    invoice_num varchar(45) NOT NULL default '',
-			    user_id varchar(20) NOT NULL default '',
-			    subject text NOT NULL,
-			    itemized text NOT NULL,
-			    status int(11) NOT NULL,
-			    PRIMARY KEY  (id),
-			    UNIQUE KEY invoice_num (invoice_num)
-			) {$charset_collate};";
-	    dbDelta($sql_main);
+	    if($wpdb->get_var("SHOW TABLES LIKE '". Web_Invoice::tablename('main') ."'") != Web_Invoice::tablename('main'))
+	    {
+		$sql_main = "CREATE TABLE IF NOT EXISTS ". Web_Invoice::tablename('main') ." (
+				id int(11) NOT NULL auto_increment,
+				amount double default '0',
+				description text NOT NULL,
+				invoice_num varchar(45) NOT NULL default '',
+				user_id varchar(20) NOT NULL default '',
+				subject text NOT NULL,
+				itemized text NOT NULL,
+				status int(11) NOT NULL,
+				PRIMARY KEY  (id),
+				UNIQUE KEY invoice_num (invoice_num)
+			    ) {$charset_collate};";
+		dbDelta($sql_main);
+	    } else {
+		if ($wpdb->get_var("SHOW COLUMNS FROM ". Web_Invoice::tablename('main') ." LIKE 'invoice_date'") != 'invoice_date')
+		{
+		    $wpdb->query("ALTER TABLE ". Web_Invoice::tablename('main') ." ADD invoice_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER id;");
+		    $all_invoices = $wpdb->get_results("SELECT DISTINCT invoice_id, time_stamp FROM ". Web_Invoice::tablename('log') ." WHERE action_type = 'created'");
+		    foreach ($all_invoices as $invoice_log) {
+			$wpdb->query("UPDATE ". Web_Invoice::tablename('main') ." SET invoice_date = '{$invoice_log->time_stamp}' WHERE invoice_date = '0000-00-00 00:00:00' AND invoice_num = '{$invoice_log->invoice_id}'");
+		    }
+		}
+	    }
 	
 	    if(preg_match('/^4\.0.*/', $wpdb->get_var("SELECT version()")) > 0)
 	    {
@@ -1152,6 +1164,13 @@ Best regards,
 		    if (!empty($web_invoice_due_date_month) && !empty($web_invoice_due_date_year) && !empty($web_invoice_due_date_day))
 		    {
 			return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("$web_invoice_due_date_year-$web_invoice_due_date_month-$web_invoice_due_date_day"));
+		    }
+		    return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN));
+		    break;
+		
+		case 'invoice_date':
+		    if ($invoice_info && $invoice_info->invoice_date && !empty($invoice_info->invoice_date)) {
+			date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime($invoice_info->invoice_date));
 		    }
 		    return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN));
 		    break;
