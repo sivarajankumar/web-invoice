@@ -1,4 +1,5 @@
 #summary Frequently asked questions and answers
+#labels Featured
 
  # Does this plugin support WordPress 3.x and WPMU 3.0?
    Yes
@@ -6,4 +7,3 @@
    PHP 5.2
  # Are there known issues?
    See [http://code.google.com/p/web-invoice/issues/list Issues]
-
