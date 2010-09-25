@@ -2040,27 +2040,29 @@ function web_invoice_process_cc_transaction($cc_data) {
 
 function web_invoice_currency_array() {
 	$currency_list = array(
-	"AUD"=> __("Australian Dollars", WEB_INVOICE_TRANS_DOMAIN),
-	"CAD"=> __("Canadian Dollars", WEB_INVOICE_TRANS_DOMAIN),
-	"EUR"=> __("Euros", WEB_INVOICE_TRANS_DOMAIN),
-	"GBP"=> __("Pounds Sterling", WEB_INVOICE_TRANS_DOMAIN),
-	"JPY"=> __("Yen", WEB_INVOICE_TRANS_DOMAIN),
-	"USD"=> __("U.S. Dollars", WEB_INVOICE_TRANS_DOMAIN),
-	"NZD"=> __("New Zealand Dollar", WEB_INVOICE_TRANS_DOMAIN),
-	"CHF"=> __("Swiss Franc", WEB_INVOICE_TRANS_DOMAIN),
-	"HKD"=> __("Hong Kong Dollar", WEB_INVOICE_TRANS_DOMAIN),
-	"SGD"=> __("Singapore Dollar", WEB_INVOICE_TRANS_DOMAIN),
-	"SEK"=> __("Swedish Krona", WEB_INVOICE_TRANS_DOMAIN),
-	"DKK"=> __("Danish Krone", WEB_INVOICE_TRANS_DOMAIN),
-	"PLN"=> __("Polish Zloty", WEB_INVOICE_TRANS_DOMAIN),
-	"NOK"=> __("Norwegian Krone", WEB_INVOICE_TRANS_DOMAIN),
-	"HUF"=> __("Hungarian Forint", WEB_INVOICE_TRANS_DOMAIN),
-	"CZK"=> __("Czech Koruna", WEB_INVOICE_TRANS_DOMAIN),
-	"ILS"=> __("Israeli Shekel", WEB_INVOICE_TRANS_DOMAIN),
-	"MXN"=> __("Mexican Peso", WEB_INVOICE_TRANS_DOMAIN),
-	"BRL"=> __("Brazilian Real", WEB_INVOICE_TRANS_DOMAIN),
-	"MYR"=> __("Malaysian Ringgit", WEB_INVOICE_TRANS_DOMAIN),
-	"ZAR"=> __("South African Rand", WEB_INVOICE_TRANS_DOMAIN));
+		"AUD"=> __("Australian Dollars", WEB_INVOICE_TRANS_DOMAIN),
+		"CAD"=> __("Canadian Dollars", WEB_INVOICE_TRANS_DOMAIN),
+		"EUR"=> __("Euros", WEB_INVOICE_TRANS_DOMAIN),
+		"GBP"=> __("Pounds Sterling", WEB_INVOICE_TRANS_DOMAIN),
+		"JPY"=> __("Yen", WEB_INVOICE_TRANS_DOMAIN),
+		"USD"=> __("U.S. Dollars", WEB_INVOICE_TRANS_DOMAIN),
+		"NZD"=> __("New Zealand Dollar", WEB_INVOICE_TRANS_DOMAIN),
+		"CHF"=> __("Swiss Franc", WEB_INVOICE_TRANS_DOMAIN),
+		"HKD"=> __("Hong Kong Dollar", WEB_INVOICE_TRANS_DOMAIN),
+		"SGD"=> __("Singapore Dollar", WEB_INVOICE_TRANS_DOMAIN),
+		"SEK"=> __("Swedish Krona", WEB_INVOICE_TRANS_DOMAIN),
+		"DKK"=> __("Danish Krone", WEB_INVOICE_TRANS_DOMAIN),
+		"PLN"=> __("Polish Zloty", WEB_INVOICE_TRANS_DOMAIN),
+		"NOK"=> __("Norwegian Krone", WEB_INVOICE_TRANS_DOMAIN),
+		"HUF"=> __("Hungarian Forint", WEB_INVOICE_TRANS_DOMAIN),
+		"CZK"=> __("Czech Koruna", WEB_INVOICE_TRANS_DOMAIN),
+		"ILS"=> __("Israeli Shekel", WEB_INVOICE_TRANS_DOMAIN),
+		"MXN"=> __("Mexican Peso", WEB_INVOICE_TRANS_DOMAIN),
+		"BRL"=> __("Brazilian Real", WEB_INVOICE_TRANS_DOMAIN),
+		"MYR"=> __("Malaysian Ringgit", WEB_INVOICE_TRANS_DOMAIN),
+		"ZAR"=> __("South African Rand", WEB_INVOICE_TRANS_DOMAIN),
+		"COP"=> __("Colombian Pesos", WEB_INVOICE_TRANS_DOMAIN),
+	);
 
 	return $currency_list;
 }
@@ -2068,16 +2070,17 @@ function web_invoice_currency_array() {
 function web_invoice_currency_symbol($currency = "USD" )
 {
 	$currency_list = array(
-	'CAD'=> '$',
-	'EUR'=> '&euro;',
-	'GBP'=> '&pound;',
-	'JPY'=> '&yen;',
-	'USD'=> '$',
-	'BRL'=> 'R$',
-	'MYR'=> 'RM',
-	'AUD'=> '$',
-	'ZAR'=> 'R');
-
+		'CAD'=> '$',
+		'EUR'=> '&euro;',
+		'GBP'=> '&pound;',
+		'JPY'=> '&yen;',
+		'USD'=> '$',
+		'BRL'=> 'R$',
+		'MYR'=> 'RM',
+		'AUD'=> '$',
+		'ZAR'=> 'R',
+		'COP'=> '$',
+	);
 
 	foreach($currency_list as $value => $display)
 	{
@@ -2089,14 +2092,15 @@ function web_invoice_currency_symbol($currency = "USD" )
 function web_invoice_currency_symbol_format($currency = "USD" )
 {
 	$currency_list = array(
-	'CAD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-	'EUR'=> __('&euro;%s', WEB_INVOICE_TRANS_DOMAIN),
-	'GBP'=> __('&pound;%s', WEB_INVOICE_TRANS_DOMAIN),
-	'JPY'=> __('&yen;%s', WEB_INVOICE_TRANS_DOMAIN),
-	'USD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-	'BRL'=> __('R$%s', WEB_INVOICE_TRANS_DOMAIN),
-	'ZAR'=> __('R%s', WEB_INVOICE_TRANS_DOMAIN),
-	'AUD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'CAD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'EUR'=> __('&euro;%s', WEB_INVOICE_TRANS_DOMAIN),
+		'GBP'=> __('&pound;%s', WEB_INVOICE_TRANS_DOMAIN),
+		'JPY'=> __('&yen;%s', WEB_INVOICE_TRANS_DOMAIN),
+		'USD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'BRL'=> __('R$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'ZAR'=> __('R%s', WEB_INVOICE_TRANS_DOMAIN),
+		'AUD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'COP'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
 	);
 
 
