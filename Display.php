@@ -1484,6 +1484,17 @@ function web_invoice_show_settings()
 			<?php if(get_option('web_invoice_show_quantities') == 'Hide') echo 'selected="yes"';?>><?php _e("Hide", WEB_INVOICE_TRANS_DOMAIN) ?></option>
 		</select></td>
 	</tr>
+	
+	<tr>
+		<th width="200"><a class="web_invoice_tooltip"
+			title="<?php _e("Show invoice date on the front-end.", WEB_INVOICE_TRANS_DOMAIN) ?>"><?php _e("Invoice date on Front End", WEB_INVOICE_TRANS_DOMAIN) ?></a></th>
+		<td><select name="web_invoice_show_invoice_date">
+			<option value="Show"
+			<?php if(get_option('web_invoice_show_invoice_date') == 'Show') echo 'selected="yes"';?>><?php _e("Show", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			<option value="Hide"
+			<?php if(get_option('web_invoice_show_invoice_date') == 'Hide') echo 'selected="yes"';?>><?php _e("Hide", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		</select></td>
+	</tr>
 </table>
 </div>
 
@@ -2422,7 +2433,7 @@ function web_invoice_show_invoice_overview($invoice_id) {
 <h2 id="web_invoice_welcome_message" class="invoice_page_subheading"><?php printf(__('Welcome, %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->recipient('callsign')); ?>!</h2></div>
 <?php } ?>
 <p class="web_invoice_main_description"><?php printf(__('We have sent you invoice <b>%1$s</b> with a total amount of %2$s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('display_id'), $invoice->display('display_amount')); ?>.</p>
-	<?php if($invoice->display('invoice_date')) { ?>
+	<?php if($invoice->display('invoice_date') && get_option('web_invoice_show_invoice_date','Hide') == 'Show') { ?>
 <p class="web_invoice_date"><?php printf(__('Invoice Date: %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('invoice_date')); } ?>
 	<?php if($invoice->display('due_date')) { ?>
 <p class="web_invoice_due_date"><?php printf(__('Due Date: %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('due_date')); } ?>
@@ -3448,7 +3459,7 @@ function web_invoice_show_recurring_info($invoice_id) {
 if (web_invoice_meta($invoice_id,'web_invoice_subscription_start_day') != '' && web_invoice_meta($invoice_id,'web_invoice_subscription_start_month')  != '' && web_invoice_meta($invoice_id,'web_invoice_subscription_start_year'  != ''))
 echo web_invoice_meta($invoice_id,'web_invoice_subscription_start_day') .", ". web_invoice_meta($invoice_id,'web_invoice_subscription_start_month') .", ".  web_invoice_meta($invoice_id,'web_invoice_subscription_start_year');
 ?>.</p>
-<?php if($invoice->display('invoice_date')) { ?>
+<?php if($invoice->display('invoice_date') && get_option('web_invoice_show_invoice_date','Hide') == 'Show') { ?>
 <p class="web_invoice_date"><?php printf(__('Invoice Date: %s', WEB_INVOICE_TRANS_DOMAIN), $invoice->display('invoice_date')); } ?>
 <?php if($invoice->display('due_date')) { ?>
 <p class="web_invoice_due_date"><?php printf(__("Due Date: %s", WEB_INVOICE_TRANS_DOMAIN), $invoice->display('due_date')); ?></p><?php } ?>
@@ -3892,7 +3903,12 @@ function web_invoice_generate_pdf_content($invoice_id) {
 	global $post, $web_invoice_print;
 	$web_invoice_print = true;
 	
+	$invoice = new Web_Invoice_GetInfo($invoice_id);
+	
 	$lines = preg_split("/\n/", get_option('web_invoice_business_address'));
+	$lines_recepient = preg_split("/\n/", $invoice->recipient('streetaddress'));
+	
+	$lc = max(count($lines_recepient), count($lines));
 	
 	ob_start();
 	?>
@@ -3911,11 +3927,10 @@ function web_invoice_generate_pdf_content($invoice_id) {
 		p { margin: 5px 0px; }
 		div.clear { clear: both; }
 		
-		#invoice_client_info { width: 100%; text-align: right; padding-top: -<?php print ((count($lines)+3)*15)+7; ?>px; }
-		#invoice_business_info { width: 100%; text-align: left; height: <?php print ((count($lines)+3)*15)+7; ?>px; }
+		#invoice_client_info { width: 100%; text-align: right; padding-top: -<?php print (($lc+3)*20)+7; ?>px; }
+		#invoice_business_info { width: 100%; text-align: left; height: <?php print (($lc+3)*15)+7; ?>px; }
 	</style>
 	<?php
-	
 		do_action('web_invoice_front_top', $invoice_id);
 	
 		print '<div class="clear"></div>';
@@ -3935,7 +3950,7 @@ function web_invoice_generate_pdf_content($invoice_id) {
 			do_action('web_invoice_front_unpaid', $invoice_id);
 		}
 		do_action('web_invoice_front_bottom', $invoice_id);
-		?>
+	?>
 	<script type="text/php">
 		if ( isset($pdf) ) {
     		$font = Font_Metrics::get_font("verdana", "bold");

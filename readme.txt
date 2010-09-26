@@ -98,6 +98,12 @@ where user list was empty and also fixed issue 58 and 59.
 
 == Changelog ==
 
+= 2.0.19 =
+
+* Fixed: invoice_date column not added on initial Web Invoice table creation
+* Added option to hide invoice date
+* Fixed: possible issue with item list table width
+
 = 2.0.18 =
 
 * Fixed issue 53: Can't attach a user to a Web Invoice
