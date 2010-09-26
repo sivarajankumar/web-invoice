@@ -286,7 +286,7 @@
 }
 
 #invoice_page.clearfix {
-	display: inline-block;
+	display: block;
 }
 
 #invoice_page .web_invoice_pdf_link {

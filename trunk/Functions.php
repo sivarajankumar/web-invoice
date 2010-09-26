@@ -869,6 +869,7 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_billing_meta');
 	delete_option('web_invoice_show_billing_address');
 	delete_option('web_invoice_show_quantities');
+	delete_option('web_invoice_show_invoice_date');
 	delete_option('web_invoice_use_css');
 	delete_option('web_invoice_hide_page_title');
 	delete_option('web_invoice_send_thank_you_email');
@@ -2394,6 +2395,7 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_show_business_address'])) update_option('web_invoice_show_business_address', $_POST['web_invoice_show_business_address']);
 	if(isset($_POST['web_invoice_show_billing_address'])) update_option('web_invoice_show_billing_address', $_POST['web_invoice_show_billing_address']);
 	if(isset($_POST['web_invoice_show_quantities'])) update_option('web_invoice_show_quantities', $_POST['web_invoice_show_quantities']);
+	if(isset($_POST['web_invoice_show_invoice_date'])) update_option('web_invoice_show_invoice_date', $_POST['web_invoice_show_invoice_date']);
 	if(isset($_POST['web_invoice_use_css'])) update_option('web_invoice_use_css', $_POST['web_invoice_use_css']);
 	if(isset($_POST['web_invoice_user_level'])) {
 		if (is_array($_POST['web_invoice_user_level']) && count($_POST['web_invoice_user_level']) > 0) {

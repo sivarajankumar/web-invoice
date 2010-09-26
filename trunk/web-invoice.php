@@ -4,7 +4,7 @@
  Plugin URI: http://mohanjith.com/wordpress/web-invoice.html
  Description: Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href="admin.php?page=web_invoice_settings">Web Invoice Settings Page</a> to setup.
  Author: S H Mohanjith
- Version: 2.0.18
+ Version: 2.0.19
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
  Stable tag: 2.0.18
@@ -441,6 +441,7 @@ if ( $php_version_check )
 	    {
 		$sql_main = "CREATE TABLE IF NOT EXISTS ". Web_Invoice::tablename('main') ." (
 				id int(11) NOT NULL auto_increment,
+				invoice_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				amount double default '0',
 				description text NOT NULL,
 				invoice_num varchar(45) NOT NULL default '',
@@ -607,6 +608,7 @@ if ( $php_version_check )
 	    add_option('web_invoice_default_currency_code','USD');
 	    
 	    add_option('web_invoice_show_quantities','Hide');
+	    add_option('web_invoice_show_invoice_date','Hide');
 	    add_option('web_invoice_use_css','yes');
 	    add_option('web_invoice_force_https','false');
 	    add_option('web_invoice_send_thank_you_email','no');
