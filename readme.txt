@@ -4,7 +4,7 @@ Donate link: http://mohanjith.com/c/wordpress
 Tags: bill, moneybookers, google checkout, alertpay, paypal, invoice, pay, online payment, send invoice, bill clients, authorize.net, credit cards, recurring billing, ARB
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 2.0.18
+Stable tag: 2.0.19
 
 Web Invoice lets you create and send web invoices and setup recurring billing for your clients.
 
@@ -92,9 +92,9 @@ or submit feature requests.
 
 == Upgrade Notice ==
 
-= 2.0.18 =
-Added new field invoice date, fixed a long standing bug with some installations
-where user list was empty and also fixed issue 58 and 59.
+= 2.0.19 =
+New Spanish translation and option to hide invoice date. Also fixed bug with invoice_date column not added on
+Web Invoice table creation and also possible issue with item list table width.
 
 == Changelog ==
 
