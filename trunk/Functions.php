@@ -2063,6 +2063,7 @@ function web_invoice_currency_array() {
 		"MYR"=> __("Malaysian Ringgit", WEB_INVOICE_TRANS_DOMAIN),
 		"ZAR"=> __("South African Rand", WEB_INVOICE_TRANS_DOMAIN),
 		"COP"=> __("Colombian Pesos", WEB_INVOICE_TRANS_DOMAIN),
+		"RON"=> __("Romanian New Leu", WEB_INVOICE_TRANS_DOMAIN),
 	);
 
 	return $currency_list;
