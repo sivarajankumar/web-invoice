@@ -98,6 +98,10 @@ Web Invoice table creation and also possible issue with item list table width.
 
 == Changelog ==
 
+= 2.0.20 =
+
+* Fixed issue 62: new currency (RON)
+
 = 2.0.19 =
 
 * Fixed: invoice_date column not added on initial Web Invoice table creation
