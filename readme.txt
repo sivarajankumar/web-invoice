@@ -56,8 +56,10 @@ Web Invoice is already translated to:
 * Belarusian (be_BY) by iam, http://www.antsar.info
 * Portugese (pt_BR) by André Luiz, http://andrewebmaster.com.br
 * Spanish (es_ES) by Danilo Casati, http://www.e-rgonomy.com/
+* Spanish, Columbian (es_CO) by Juan Salcedo
 * Swedish (sv_SE) by Lena Petersson, http://designerstudion.se/
 * French (fr_FR) by Aphrodite, http://mgr-artagency.com/
+* German (de_DE) by Miguel, http://zwilla-research.com/
 
 If you like this plugin please give it a good rating, and consider saying thanks, sponsoring a feature or making a donation.
 
@@ -101,6 +103,7 @@ Web Invoice table creation and also possible issue with item list table width.
 = 2.0.20 =
 
 * Fixed issue 62: new currency (RON)
+* New localization de_DE
 
 = 2.0.19 =
 
