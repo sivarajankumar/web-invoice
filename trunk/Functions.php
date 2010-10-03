@@ -2632,11 +2632,11 @@ function web_invoice_return_bytes($val) {
 	$last = strtolower($val[strlen($val)-1]);
 	switch($last) {
 		case 'g':
-			$val *= 1024;
+			$val *= 1000;
 		case 'm':
-			$val *= 1024;
+			$val *= 1000;
 		case 'k':
-			$val *= 1024;
+			$val *= 1000;
 	}
 	return $val;
 }
@@ -2645,10 +2645,10 @@ function web_invoice_return_bytes_nice($bytes) {
 	$units = array('B', 'K', 'M', 'G');
   
 	$bytes = max($bytes, 0);
-	$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+	$pow = floor(($bytes ? log($bytes) : 0) / log(1000));
 	$pow = min($pow, count($units) - 1);
   
-	$bytes /= pow(1024, $pow);
+	$bytes /= pow(1000, $pow);
   
 	return round($bytes, 0) . $units[$pow]; 
 }
