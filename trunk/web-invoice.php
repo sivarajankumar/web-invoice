@@ -385,7 +385,7 @@ if ( $php_version_check )
 		    // Convert MD5 hash into Actual Invoice ID
 		    $invoice_id = web_invoice_md5_to_invoice($md5_invoice_id);
 		    
-		    //Check if invoice exists, SSL enforcement is setp, and we are not currently browing HTTPS,  then reload page into HTTPS
+		    //Check if invoice exists, SSL enforcement is setup, and we are not currently browing HTTPS,  then reload page into HTTPS
 		    if (!function_exists('wp_https_redirect'))
 		    {
 			if (web_invoice_does_invoice_exist($invoice_id) &&

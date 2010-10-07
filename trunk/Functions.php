@@ -1948,7 +1948,7 @@ function web_invoice_process_cc_transaction($cc_data) {
 	
 				//Mark invoice as paid
 				web_invoice_paid($invoice_id);
-                web_invoice_mark_as_paid($invoice_id);
+				web_invoice_mark_as_paid($invoice_id);
 				// if(get_option('web_invoice_send_thank_you_email') == 'yes') web_invoice_send_email_receipt($invoice_id);
 	
 				if($recurring) {
