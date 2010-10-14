@@ -1129,7 +1129,7 @@ function web_invoice_profile_update() {
 class web_invoice_Date
 {
 
-	function convert($string, $from_mask, $to_mask='', $return_unix=false)
+	static function convert($string, $from_mask, $to_mask='', $return_unix=false)
 	{
 		// define the valid values that we will use to check
 		// value => length
@@ -1143,59 +1143,66 @@ class web_invoice_Date
 			'd' => 'dd'
 			);
 
-			// this will give us a mask with full length fields
-			$from_mask = str_replace(array_keys($all), $all, $from_mask);
+		// this will give us a mask with full length fields
+		$from_mask = str_replace(array_keys($all), $all, $from_mask);
 
-			$vals = array();
-			foreach($all as $type => $chars)
-			{
-				// get the position of the current character
-				if(($pos = strpos($from_mask, $chars)) === false)
+		$vals = array();
+		foreach($all as $type => $chars)
+		{
+			// get the position of the current character
+			if(($pos = strpos($from_mask, $chars)) === false)
 				continue;
 
-				// find the value in the original string
-				$val = substr($string, $pos, strlen($chars));
+			// find the value in the original string
+			$val = substr($string, $pos, strlen($chars));
 
-				// store it for later processing
-				$vals[$type] = $val;
-			}
+			// store it for later processing
+			$vals[$type] = $val;
+		}
+		
+		$hours = 0;
+		$minutes = 0;
+		$seconds = 0;
+		$month = 0;
+		$day = 0;
+		$year = 0;
 
-			foreach($vals as $type => $val)
+		foreach($vals as $type => $val)
+		{
+			switch($type)
 			{
-				switch($type)
-				{
-					case 's' :
-						$seconds = $val;
-						break;
-					case 'i' :
-						$minutes = $val;
-						break;
-					case 'H':
-						$hours = $val;
-						break;
-					case 'y':
-						$year = '20'.$val; // Year 3k bug right here
-						break;
-					case 'Y':
-						$year = $val;
-						break;
-					case 'm':
-						$month = $val;
-						break;
-					case 'd':
-						$day = $val;
-						break;
-				}
+				case 's' :
+					$seconds = $val;
+					break;
+				case 'i' :
+					$minutes = $val;
+					break;
+				case 'H':
+					$hours = $val;
+					break;
+				case 'y':
+					$year = '20'.$val; // Year 3k bug right here
+					break;
+				case 'Y':
+					$year = $val;
+					break;
+				case 'm':
+					$month = $val;
+					break;
+				case 'd':
+					$day = $val;
+					break;
 			}
+		}
 
-			$unix_time = mktime(
-			(int)$hours, (int)$minutes, (int)$seconds,
-			(int)$month, (int)$day, (int)$year);
+		$unix_time = mktime(
+		(int)$hours, (int)$minutes, (int)$seconds,
+		(int)$month, (int)$day, (int)$year);
 
-			if($return_unix)
+		if($return_unix)
 			return $unix_time;
 
-			return date($to_mask, $unix_time);
+		return date($to_mask, $unix_time);
 	}
 }
 

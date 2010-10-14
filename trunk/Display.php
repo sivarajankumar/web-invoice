@@ -2143,7 +2143,7 @@ function web_invoice_draw_itemized_table($invoice_id) {
 	if(!strpos($amount,'.')) $amount = $amount . ".00";
 	$itemized_array = unserialize(urldecode($itemized));
 
-
+	$response = "";
 	if(is_array($itemized_array)) {
 		$response .= "<p><table id=\"web_invoice_itemized_table\">
 		<tr>\n";
@@ -2160,23 +2160,23 @@ function web_invoice_draw_itemized_table($invoice_id) {
 			if(get_option('web_invoice_show_quantities') == 'Show') $show_quantity = true;
 
 
-			if(!empty($itemized_item[name])) {
-				if(!strpos($itemized_item[price],'.')) $itemized_item[price] = $itemized_item[price] . ".00";
+			if(!empty($itemized_item['name'])) {
+				if(!strpos($itemized_item['price'],'.')) $itemized_item['price'] = $itemized_item['price'] . ".00";
 
 				if($i % 2) { $response .= "<tr class='alt_row'>"; }
 				else { $response .= "<tr >"; }
 
 				//Quantities
 				if($show_quantity) {
-					$response .= "<td style=\"width: 70px; text-align: right;\">" . $itemized_item[quantity] . "</td>";
-					$response .= "<td style=\"width: 50px; text-align: right;\">" . web_invoice_currency_format($itemized_item[price]) . "</td>";
+					$response .= "<td style=\"width: 70px; text-align: right;\">" . $itemized_item['quantity'] . "</td>";
+					$response .= "<td style=\"width: 50px; text-align: right;\">" . web_invoice_currency_format($itemized_item['price']) . "</td>";
 				}
 
 				//Item Name
-				$response .= "<td>" . stripslashes($itemized_item[name]) . " <br /><span class='description_text'>" . stripslashes($itemized_item[description]) . "</span></td>";
+				$response .= "<td>" . stripslashes($itemized_item['name']) . " <br /><span class='description_text'>" . stripslashes($itemized_item['description']) . "</span></td>";
 
 				//Item Price
-				$response .= "<td style=\"width: 70px; text-align: right;\">" . sprintf(web_invoice_currency_symbol_format($currency_code),  web_invoice_currency_format($itemized_item[quantity] * $itemized_item[price])) . "</td>";
+				$response .= "<td style=\"width: 70px; text-align: right;\">" . sprintf(web_invoice_currency_symbol_format($currency_code),  web_invoice_currency_format($itemized_item['quantity'] * $itemized_item['price'])) . "</td>";
 
 				$response .="</tr>";
 				$i++;
@@ -2677,9 +2677,7 @@ function web_invoice_show_2co_form($invoice_id, $invoice) {
 	<?php } else { ?>
 	<input type="hidden" name="cart_order_id" id="invoice_num" value="<?php print uniqid($invoice->display('display_id').'_'); ?>" />
 	<?php } ?>
-	<input
-	type="hidden" name="x_Receipt_Link_URL"
-	value="<?php echo web_invoice_build_invoice_link($invoice_id); ?>" /> 
+	<input type="hidden" name="x_Receipt_Link_URL" value="<?php echo web_invoice_build_invoice_link($invoice_id); ?>" /> 
 	<?php if (get_option('web_invoice_2co_demo_mode') == 'TRUE') { ?>
 	<input type="hidden" name="demo" value="Y" />
 	<?php } ?>
