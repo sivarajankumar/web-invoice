@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="ebe41440-4e14-44fc-94a6-225e0c0a5e99" kpf_version="4" name="Web-Invoice.kpf">
+<preference-set idref="ebe41440-4e14-44fc-94a6-225e0c0a5e99">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>
