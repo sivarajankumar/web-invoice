@@ -2072,6 +2072,7 @@ function web_invoice_currency_array() {
 		"COP"=> __("Colombian Pesos", WEB_INVOICE_TRANS_DOMAIN),
 		"RON"=> __("Romanian New Leu", WEB_INVOICE_TRANS_DOMAIN),
 		"PHP"=> __("Philippine Peso", WEB_INVOICE_TRANS_DOMAIN),
+		"IDR"=> __("Indonesian Rupiah", WEB_INVOICE_TRANS_DOMAIN),
 	);
 
 	return $currency_list;
@@ -2080,17 +2081,17 @@ function web_invoice_currency_array() {
 function web_invoice_currency_symbol($currency = "USD" )
 {
 	$currency_list = array(
-		'CAD'=> '$',
-		'EUR'=> '&euro;',
-		'GBP'=> '&pound;',
-		'JPY'=> '&yen;',
-		'USD'=> '$',
-		'BRL'=> 'R$',
-		'MYR'=> 'RM',
-		'AUD'=> '$',
-		'ZAR'=> 'R',
-		'COP'=> '$',
-		'PHP'=> 'P',
+		'CAD' => '$',
+		'EUR' => '&euro;',
+		'GBP' => '&pound;',
+		'JPY' => '&yen;',
+		'USD' => '$',
+		'BRL' => 'R$',
+		'MYR' => 'RM',
+		'AUD' => '$',
+		'ZAR' => 'R',
+		'COP' => '$',
+		'IDR' => 'Rp',
 	);
 
 	foreach($currency_list as $value => $display)
@@ -2103,15 +2104,16 @@ function web_invoice_currency_symbol($currency = "USD" )
 function web_invoice_currency_symbol_format($currency = "USD" )
 {
 	$currency_list = array(
-		'CAD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'EUR'=> __('&euro;%s', WEB_INVOICE_TRANS_DOMAIN),
-		'GBP'=> __('&pound;%s', WEB_INVOICE_TRANS_DOMAIN),
-		'JPY'=> __('&yen;%s', WEB_INVOICE_TRANS_DOMAIN),
-		'USD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'BRL'=> __('R$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'ZAR'=> __('R%s', WEB_INVOICE_TRANS_DOMAIN),
-		'AUD'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'COP'=> __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'CAD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'EUR' => __('&euro;%s', WEB_INVOICE_TRANS_DOMAIN),
+		'GBP' => __('&pound;%s', WEB_INVOICE_TRANS_DOMAIN),
+		'JPY' => __('&yen;%s', WEB_INVOICE_TRANS_DOMAIN),
+		'USD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'BRL' => __('R$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'ZAR' => __('R%s', WEB_INVOICE_TRANS_DOMAIN),
+		'AUD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'COP' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
+		'IDR' => __('Rp %s', WEB_INVOICE_TRANS_DOMAIN),
 	);
 
 

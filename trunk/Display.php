@@ -2353,6 +2353,12 @@ function web_invoice_user_profile_fields()
 		<td><input type="text" name="shipto_company_name" id="shipto_company_name"
 			value="<?php echo get_usermeta($user_id,'shipto_company_name'); ?>" /></td>
 	</tr>
+	
+	<tr>
+		<th><label for="shipto_streetaddress"><?php _e('Street Address', WEB_INVOICE_TRANS_DOMAIN); ?></label></th>
+		<td><input type="text" name="shipto_streetaddress" id="shipto_streetaddress"
+			value="<?php echo get_usermeta($user_id,'shipto_streetaddress'); ?>" /></td>
+	</tr>
 
 	<tr>
 		<th><label for="shipto_city"><?php _e('City', WEB_INVOICE_TRANS_DOMAIN); ?></label></th>

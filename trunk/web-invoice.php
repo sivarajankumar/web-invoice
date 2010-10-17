@@ -4,7 +4,7 @@
  Plugin URI: http://mohanjith.com/wordpress/web-invoice.html
  Description: Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href="admin.php?page=web_invoice_settings">Web Invoice Settings Page</a> to setup.
  Author: S H Mohanjith
- Version: 2.0.21
+ Version: 2.0.22
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
  Stable tag: 2.0.21
@@ -37,7 +37,7 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-define("WEB_INVOICE_VERSION_NUM", "2.0.13");
+define("WEB_INVOICE_VERSION_NUM", "2.0.22");
 define("WEB_INVOICE_PHP_VERSION", "5.2");
 define("WEB_INVOICE_TRANS_DOMAIN", "web-invoice");
 
@@ -150,7 +150,7 @@ if ( $php_version_check )
 	
 	function admin_head()
 	{
-	    echo "<link rel='stylesheet' href='".$this->uri."/css/wp_admin.css?v=2.0.9' type='text/css'type='text/css' media='all' />";
+	    echo "<link rel='stylesheet' href='".$this->uri."/css/wp_admin.css?v=".WEB_INVOICE_VERSION_NUM."' type='text/css'type='text/css' media='all' />";
 	}
 	
 	function web_invoice_add_pages()
@@ -235,7 +235,7 @@ if ( $php_version_check )
 		}
 		
 		wp_enqueue_script('jquery');
-		wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice-frontend.js", array('jquery'), '2.0.8');
+		wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice-frontend.js", array('jquery'), WEB_INVOICE_VERSION_NUM);
 		
 		// Make sure proper MD5 is being passed (32 chars), and strip of everything but numbers and letters
 		if(isset($_GET['invoice_id']) && strlen($_GET['invoice_id']) != 32)
@@ -364,7 +364,7 @@ if ( $php_version_check )
 		wp_enqueue_script('jquery-calculation',$this->uri."/js/jquery.calculation.min.js", array('jquery'), '1.8.0');
 		wp_enqueue_script('jquery-tablesorter',$this->uri."/js/jquery.tablesorter.min.js", array('jquery'), '1.8.0');
 		wp_enqueue_script('jquery-autogrow-textarea',$this->uri."/js/jquery.autogrow-textarea.js", array('jquery'), '1.8.0');
-		wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice.js", array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), '2.0.8', true);
+		wp_enqueue_script('web-invoice',$this->uri."/js/web-invoice.js", array('jquery', 'jquery-ui-core', 'jquery-ui-tabs'), WEB_INVOICE_VERSION_NUM, true);
 	    } else {
 		if(isset($_POST['web_invoice_id_hash']))
 		{

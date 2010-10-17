@@ -92,7 +92,7 @@ function web_invoice_subscription_start_time(add_days) {
 }
 
 function web_invoice_copy_billing(prefix) {
-	_web_invoice_profile_billing_fields = ['company_name', 'first_name', 'last_name', 'phonenumber', 'email_address', 'address', 'city', 'state', 'zip', 'country'];
+	_web_invoice_profile_billing_fields = ['company_name', 'first_name', 'last_name', 'phonenumber', 'email_address', 'streetaddress', 'city', 'state', 'zip', 'country'];
 	
 	for (_i=0; _i<_web_invoice_profile_billing_fields.length; _i++) {
 		jQuery('form #'+prefix+'_'+_web_invoice_profile_billing_fields[_i]).val(jQuery('form #'+_web_invoice_profile_billing_fields[_i]).val());
@@ -535,8 +535,13 @@ jQuery(document)
 					var tog = false; // or true if they are checked on load
 					jQuery('#invoice_sorter_table #CheckAll').click(
 							function() {
-								jQuery("input[type=checkbox]").attr("checked",
+								if (!tog) {
+									jQuery("input[type=checkbox]:visible").attr("checked",
 										!tog);
+								} else {
+									jQuery("input[type=checkbox]").attr("checked",
+										!tog);
+								}
 								tog = !tog;
 							});
 
