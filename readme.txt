@@ -94,10 +94,16 @@ or submit feature requests.
 
 == Upgrade Notice ==
 
-= 2.0.21 =
-New localization de_DE and new curriencies RON (New Romanian Leu) and PHP (Philippine Peso)
+= 2.0.22 =
+Important bug fixes; prevent checking archived invoices when check all is clicked
+and also add missing address in the shipping info in the user profile.
 
 == Changelog ==
+
+= 2.0.22 =
+
+* Added missing address in the shipping info in the user profile
+* Prevent checking archived invoices when check all is clicked
 
 = 2.0.21 =
 
