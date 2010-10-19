@@ -7,7 +7,7 @@
  Version: 2.0.22
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
- Stable tag: 2.0.21
+ Stable tag: 2.0.22
  License: GPL
 
  Copyright 2010  S H Mohanjith (email : moha@mohanjith.net)
