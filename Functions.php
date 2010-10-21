@@ -2124,7 +2124,7 @@ function web_invoice_currency_symbol_format($currency = "USD" )
 	if(!$success) return __("{$currency}%s", WEB_INVOICE_TRANS_DOMAIN);
 }
 
-function web_invoice_contextual_help_list($content, $screen_id, $screen) {
+function web_invoice_contextual_help_list($content, $screen_id) {
 	if (strstr($screen_id, 'web-invoice')) {
 		$content = '<h2>WordPress</h2>'.$content;
 		$content .= '<h2>Web Invoice</h2>'.
