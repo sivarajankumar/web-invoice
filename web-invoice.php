@@ -1048,7 +1048,7 @@ Best regards,
 		    $web_invoice_subscription_start_year = web_invoice_meta($this->id,'web_invoice_subscription_start_year');
 		    $web_invoice_subscription_start_month = web_invoice_meta($this->id,'web_invoice_subscription_start_month');
 		    
-		    if ($web_invoice_subscription_start_month && $web_invoice_subscription_start_year && $web_invoice_subscription_start_day)
+		    if ($web_invoice_subscription_start_month && $web_invoice_subscription_start_year && $web_invoice_subscription_start_day && strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day) > time())
 		    {
 		        return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
 		    } else {
@@ -1058,6 +1058,23 @@ Best regards,
 		
 		case 'endDate':
 		    return date(__('Y-m-d', WEB_INVOICE_TRANS_DOMAIN), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))));
+		    break;
+		
+		case 'startDateM':
+		    $web_invoice_subscription_start_day = web_invoice_meta($this->id,'web_invoice_subscription_start_day');
+		    $web_invoice_subscription_start_year = web_invoice_meta($this->id,'web_invoice_subscription_start_year');
+		    $web_invoice_subscription_start_month = web_invoice_meta($this->id,'web_invoice_subscription_start_month');
+		    
+		    if ($web_invoice_subscription_start_month && $web_invoice_subscription_start_year && $web_invoice_subscription_start_day && strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day) > time())
+		    {
+		        return date('Y-m-d', strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
+		    } else {
+		        return date("Y-m-d");
+		    }
+		    break;
+		
+		case 'endDateM':
+		    return date('Y-m-d', strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDateM'))));
 		    break;
 		
 		case 'profileEndDate':
