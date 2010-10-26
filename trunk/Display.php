@@ -2773,9 +2773,9 @@ function web_invoice_show_moneybookers_form($invoice_id, $invoice) {
 <input type="hidden" name="rec_period"
 	value="<?php echo $invoice->display('interval_length'); ?>" /> <input
 	type="hidden" name="rec_start_date"
-	value="<?php echo date('d/m/Y', strtotime($invoice->display('startDate'))); ?>" /> <input
+	value="<?php echo date('d/m/Y', strtotime($invoice->display('startDateM'))); ?>" /> <input
 	type="hidden" name="rec_end_date"
-	value="<?php echo date('d/m/Y', strtotime($invoice->display('endDate'))); ?>" /> <input
+	value="<?php echo date('d/m/Y', strtotime($invoice->display('endDateM'))); ?>" /> <input
 	type="hidden" name="rec_amount"
 	value="<?php echo $invoice->display('amount'); ?>" /> <?php
 	} else {
