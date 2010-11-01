@@ -100,6 +100,10 @@ and also add missing address in the shipping info in the user profile.
 
 == Changelog ==
 
+= 2.0.23 =
+
+* Subscription start date issue
+
 = 2.0.22 =
 
 * Added missing address in the shipping info in the user profile
