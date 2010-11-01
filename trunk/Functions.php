@@ -2116,7 +2116,8 @@ function web_invoice_currency_symbol_format($currency = "USD" )
 		'IDR' => __('Rp %s', WEB_INVOICE_TRANS_DOMAIN),
 	);
 
-
+	$success = false;
+	
 	foreach($currency_list as $value => $display)
 	{
 		if($currency == $value) { return $display; $success = true; break;}

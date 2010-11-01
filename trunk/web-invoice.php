@@ -575,7 +575,7 @@ if ( $php_version_check )
 	    }
 	    
 	    add_option('web_invoice_version', WEB_INVOICE_SCHEDULER_VERSION_NUM);
-	    add_option('web_invoice_email_address',get_bloginfo('admin_email'));
+	    add_option('web_invoice_email_address', get_bloginfo('admin_email'));
 	    add_option('web_invoice_business_name', get_bloginfo('blogname'));
 	    add_option('web_invoice_business_address', '');
 	    add_option('web_invoice_show_billing_address', 'no');
