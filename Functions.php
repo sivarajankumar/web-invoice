@@ -896,11 +896,13 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_gateway_email_customer');
 
 	// PayPal
+	delete_option('web_invoice_paypal_button');
 	delete_option('web_invoice_paypal_address');
 	delete_option('web_invoice_paypal_only_button');
 	delete_option('web_invoice_paypal_sandbox');
 	
 	// Payflow
+	delete_option('web_invoice_payflow_button');
 	delete_option('web_invoice_payflow_login');
 	delete_option('web_invoice_payflow_partner');
 	delete_option('web_invoice_payflow_only_button');
@@ -920,10 +922,11 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_pfp_3rdparty_email');
 	delete_option('web_invoice_pfp_shipping_details');
 	
-	// PayPal
+	// Other
 	delete_option('web_invoice_other_details');
 
 	// Moneybookers
+	delete_option('web_invoice_moneybookers_button');
 	delete_option('web_invoice_moneybookers_address');
 	delete_option('web_invoice_moneybookers_recurring_address');
 	delete_option('web_invoice_moneybookers_merchant');
@@ -931,6 +934,7 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_moneybookers_ip');
 
 	// AlertPay
+	delete_option('web_invoice_alertpay_button');
 	delete_option('web_invoice_alertpay_address');
 	delete_option('web_invoice_alertpay_merchant');
 	delete_option('web_invoice_alertpay_secret');
@@ -938,11 +942,13 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_alertpay_ip');
 	
 	// 2CO
+	delete_option('web_invoice_2co_button');
 	delete_option('web_invoice_2co_sid');
 	delete_option('web_invoice_2co_secret_word');
 	delete_option('web_invoice_2co_demo_mode');
 	
 	// Google Checkout
+	delete_option('web_invoice_google_checkout_button');
 	delete_option('web_invoice_google_checkout_env');
 	delete_option('web_invoice_google_checkout_merchant_id');
 	delete_option('web_invoice_google_checkout_level2');
@@ -950,6 +956,7 @@ function web_invoice_complete_removal()
 	delete_option('web_invoice_google_checkout_tax_state');
 	
 	// Sage Pay
+	delete_option('web_invoice_sagepay_button');
 	delete_option('web_invoice_sagepay_env');
 	delete_option('web_invoice_sagepay_vendor_name');
 	delete_option('web_invoice_sagepay_vendor_key');
@@ -2077,8 +2084,9 @@ function web_invoice_currency_array() {
 		"RON"=> __("Romanian New Leu", WEB_INVOICE_TRANS_DOMAIN),
 		"PHP"=> __("Philippine Peso", WEB_INVOICE_TRANS_DOMAIN),
 		"IDR"=> __("Indonesian Rupiah", WEB_INVOICE_TRANS_DOMAIN),
-		"CHF"=> __("Swiss franc", WEB_INVOICE_TRANS_DOMAIN),
 	);
+	
+	asort($currency_list);
 
 	return $currency_list;
 }
@@ -2454,11 +2462,14 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_gateway_email_customer'])) update_option('web_invoice_gateway_email_customer', $_POST['web_invoice_gateway_email_customer']);
 
 	// PayPal
+	if(isset($_POST['web_invoice_paypal_button'])) update_option('web_invoice_paypal_button', $_POST['web_invoice_paypal_button']);
+	if(isset($_POST['web_invoice_paypal_subscribe_button'])) update_option('web_invoice_paypal_subscribe_button', $_POST['web_invoice_paypal_subscribe_button']);
 	if(isset($_POST['web_invoice_paypal_address'])) update_option('web_invoice_paypal_address', $_POST['web_invoice_paypal_address']);
 	if(isset($_POST['web_invoice_paypal_only_button'])) update_option('web_invoice_paypal_only_button', $_POST['web_invoice_paypal_only_button']);
 	if(isset($_POST['web_invoice_paypal_sandbox'])) update_option('web_invoice_paypal_sandbox', $_POST['web_invoice_paypal_sandbox']);
 
 	// Payflow
+	if(isset($_POST['web_invoice_payflow_button'])) update_option('web_invoice_payflow_button', $_POST['web_invoice_payflow_button']);
 	if(isset($_POST['web_invoice_payflow_login'])) update_option('web_invoice_payflow_login', $_POST['web_invoice_payflow_login']);
 	if(isset($_POST['web_invoice_payflow_partner'])) update_option('web_invoice_payflow_partner', $_POST['web_invoice_payflow_partner']);
 	if(isset($_POST['web_invoice_payflow_only_button'])) update_option('web_invoice_payflow_only_button', $_POST['web_invoice_payflow_only_button']);
@@ -2482,6 +2493,7 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_other_details'])) update_option('web_invoice_other_details', $_POST['web_invoice_other_details']);
 	
 	// Moneybookers
+	if(isset($_POST['web_invoice_moneybookers_button'])) update_option('web_invoice_moneybookers_button', $_POST['web_invoice_moneybookers_button']);
 	if(isset($_POST['web_invoice_moneybookers_address'])) update_option('web_invoice_moneybookers_address', $_POST['web_invoice_moneybookers_address']);
 	if(isset($_POST['web_invoice_moneybookers_recurring_address'])) update_option('web_invoice_moneybookers_recurring_address', $_POST['web_invoice_moneybookers_recurring_address']);
 	if(isset($_POST['web_invoice_moneybookers_merchant'])) update_option('web_invoice_moneybookers_merchant', $_POST['web_invoice_moneybookers_merchant']);
@@ -2489,6 +2501,7 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_moneybookers_ip'])) update_option('web_invoice_moneybookers_ip', $_POST['web_invoice_moneybookers_ip']);
 
 	// AlertPay
+	if(isset($_POST['web_invoice_alertpay_button'])) update_option('web_invoice_alertpay_button', $_POST['web_invoice_alertpay_button']);
 	if(isset($_POST['web_invoice_alertpay_address'])) update_option('web_invoice_alertpay_address', $_POST['web_invoice_alertpay_address']);
 	if(isset($_POST['web_invoice_alertpay_merchant'])) update_option('web_invoice_alertpay_merchant', $_POST['web_invoice_alertpay_merchant']);
 	if(isset($_POST['web_invoice_alertpay_secret'])) update_option('web_invoice_alertpay_secret', $_POST['web_invoice_alertpay_secret']);
@@ -2496,11 +2509,13 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_alertpay_ip'])) update_option('web_invoice_alertpay_ip', $_POST['web_invoice_alertpay_ip']);
 	
 	// 2CO
+	if(isset($_POST['web_invoice_2co_button'])) update_option('web_invoice_2co_button', $_POST['web_invoice_2co_button']);
 	if(isset($_POST['web_invoice_2co_sid'])) update_option('web_invoice_2co_sid', $_POST['web_invoice_2co_sid']);
 	if(isset($_POST['web_invoice_2co_secret_word'])) update_option('web_invoice_2co_secret_word', $_POST['web_invoice_2co_secret_word']);
 	if(isset($_POST['web_invoice_2co_demo_mode'])) update_option('web_invoice_2co_demo_mode', $_POST['web_invoice_2co_demo_mode']);
 	
 	// Google Checkout
+	if(isset($_POST['web_invoice_google_checkout_button'])) update_option('web_invoice_google_checkout_button', $_POST['web_invoice_google_checkout_button']);
 	if(isset($_POST['web_invoice_google_checkout_env'])) update_option('web_invoice_google_checkout_env', $_POST['web_invoice_google_checkout_env']);
 	if(isset($_POST['web_invoice_google_checkout_merchant_id'])) update_option('web_invoice_google_checkout_merchant_id', $_POST['web_invoice_google_checkout_merchant_id']);
 	if(isset($_POST['web_invoice_google_checkout_level2'])) update_option('web_invoice_google_checkout_level2', $_POST['web_invoice_google_checkout_level2']);
@@ -2508,6 +2523,7 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_google_checkout_tax_state'])) update_option('web_invoice_google_checkout_tax_state', $_POST['web_invoice_google_checkout_tax_state']);
 	
 	// Sage Pay
+	if(isset($_POST['web_invoice_sagepay_button'])) update_option('web_invoice_sagepay_button', $_POST['web_invoice_sagepay_button']);
 	if(isset($_POST['web_invoice_sagepay_env'])) update_option('web_invoice_sagepay_env', $_POST['web_invoice_sagepay_env']);
 	if(isset($_POST['web_invoice_sagepay_vendor_name'])) update_option('web_invoice_sagepay_vendor_name', $_POST['web_invoice_sagepay_vendor_name']);
 	if(isset($_POST['web_invoice_sagepay_vendor_key'])) update_option('web_invoice_sagepay_vendor_key', $_POST['web_invoice_sagepay_vendor_key']);
@@ -2524,6 +2540,8 @@ function web_invoice_process_email_templates() {
 	if(isset($_POST['web_invoice_email_send_invoice_content'])) update_option('web_invoice_email_send_invoice_content', $_POST['web_invoice_email_send_invoice_content']);
 	if(isset($_POST['web_invoice_email_send_reminder_subject'])) update_option('web_invoice_email_send_reminder_subject', $_POST['web_invoice_email_send_reminder_subject']);
 	if(isset($_POST['web_invoice_email_send_reminder_content'])) update_option('web_invoice_email_send_reminder_content', $_POST['web_invoice_email_send_reminder_content']);
+	if(isset($_POST['web_invoice_email_send_reminder_pre_due_subject'])) update_option('web_invoice_email_send_reminder_pre_due_subject', $_POST['web_invoice_email_send_reminder_pre_due_subject']);
+	if(isset($_POST['web_invoice_email_send_reminder_pre_due_content'])) update_option('web_invoice_email_send_reminder_pre_due_content', $_POST['web_invoice_email_send_reminder_pre_due_content']);
 	if(isset($_POST['web_invoice_email_send_receipt_subject'])) update_option('web_invoice_email_send_receipt_subject', $_POST['web_invoice_email_send_receipt_subject']);
 	if(isset($_POST['web_invoice_email_send_receipt_content'])) update_option('web_invoice_email_send_receipt_content', $_POST['web_invoice_email_send_receipt_content']);
 

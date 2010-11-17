@@ -70,6 +70,39 @@
 	border-radius: 5px;
 }
 
+#invoice_page .pay_button.moneybookers {
+	border: 0;
+	width: 240px;
+	height: 80px;
+	padding: 0;
+}
+
+#invoice_page .pay_button.paypal {
+	border: 0;
+	width: 107px;
+	height: 26px;
+	padding: 0;
+}
+
+#invoice_page .pay_button.payflow {
+	width: 230px;
+	font-size: 1.1em;
+	color: #FFF;
+	border: #CF7319 1px solid;
+	background: #FFAA28;
+	padding: 7px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#invoice_page .pay_button.sagepay {
+	border: 0;
+	width: 145px;
+	height: 33px;
+	padding: 0;
+	background-color: white;
+}
+
 #invoice_page #state {
 	width: 235px;
 	border: 0;
@@ -293,6 +326,66 @@
 	background: url(../images/pdf.png) no-repeat left top;
 	padding-left: 18px;
 	line-height: 18px;
+}
+
+#invoice_page .payment_select.cc img, #invoice_page .payment_select.pfp img {
+	background: url(../images/cc_logo.png) no-repeat left top;
+	width: 265px;
+	height: 45px;
+}
+
+#invoice_page .payment_select.twoco img {
+	background: url(../images/2co_logo.png) no-repeat left top;
+	width: 96px;
+	height: 54px;
+}
+
+#invoice_page .payment_select.alertpay img {
+	background: url(../images/alertpay_logo.png) no-repeat left top;
+	width: 81px;
+	height: 45px;
+}
+
+#invoice_page .payment_select.sagepay img {
+	background: url(../images/sage_pay_logo.gif) no-repeat left top;
+	width: 145px;
+	height: 33px;
+}
+
+#invoice_page .payment_select.moneybookers img {
+	background: url(../images/moneybookers_logo.png) no-repeat left top;
+	width: 75px;
+	height: 42px;
+}
+
+#invoice_page .payment_select.moneybookers img {
+	background: url(../images/moneybookers_logo.png) no-repeat left top;
+	width: 75px;
+	height: 42px;
+}
+
+#invoice_page .payment_select.google_checkout img {
+	background: url(../images/google_checkout.gif) no-repeat left top;
+	width: 180px;
+	height: 46px;
+}
+
+#invoice_page .payment_select.paypal img {
+	background: url(../images/paypal_logo.png) no-repeat left top;
+	width: 80px;
+	height: 45px;
+}
+
+#invoice_page .payment_select.payflow img {
+	background: url(../images/payflow_logo.png) no-repeat left top;
+	width: 80px;
+	height: 45px;
+}
+
+#invoice_page .payment_select.other img {
+	background: url(../images/bank_logo.png) no-repeat left top;
+	width: 80px;
+	height: 45px;
 }
 
 html[xmlns] #invoice_page .clearfix {
