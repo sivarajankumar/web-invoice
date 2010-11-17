@@ -1114,8 +1114,25 @@ function web_invoice_show_email_templates()
 		<td><textarea name="web_invoice_email_send_invoice_content" cols="60"
 			rows="15"><?php echo get_option('web_invoice_email_send_invoice_content'); ?></textarea></td>
 	</tr>
+	
 	<tr>
-		<th><h3><?php _e("Reminder", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
+		<th><h3><?php _e("Reminder (before due date)", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
+		<td></td>
+	</tr>
+	<tr>
+		<th><?php _e("Subject", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
+		<td><input size="60" type="text"
+			name="web_invoice_email_send_reminder_pre_due_subject"
+			value="<?php echo get_option('web_invoice_email_send_reminder_pre_due_subject'); ?>" /></td>
+	</tr>
+	<tr>
+		<th><?php _e("Content", WEB_INVOICE_TRANS_DOMAIN) ?>:</th>
+		<td><textarea name="web_invoice_email_send_reminder_pre_due_content" cols="60"
+			rows="15"><?php echo get_option('web_invoice_email_send_reminder_pre_due_content'); ?></textarea></td>
+	</tr>
+	
+	<tr>
+		<th><h3><?php _e("Reminder (past due date)", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
 		<td></td>
 	</tr>
 	<tr>
@@ -1368,6 +1385,8 @@ function web_invoice_show_settings()
 	<tr>
 		<th><?php _e("Default Currency:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><?php echo web_invoice_draw_select('web_invoice_default_currency_code',web_invoice_currency_array(),get_option('web_invoice_default_currency_code')); ?>
+		<a id="web_invoice_add_currency_link" href="http://keti.ws/351281"
+			class="web_invoice_click_me"><?php _e("Is your currency missing, report it?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
 	</tr>
 
@@ -1532,32 +1551,13 @@ function web_invoice_show_settings()
 			class="web_invoice_click_me"><?php _e("Do you need an AlertPay account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
 	</tr>
-	<tr class="tco_info 2co_info">
-		<th><?php _e("2Checkout seller id:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
-		<td><input id='web_invoice_2co_sid'
-			name="web_invoice_2co_sid" class="search-input input_field"
-			type="text"
-			value="<?php echo stripslashes(get_option('web_invoice_2co_sid')); ?>" />
-		<a id="web_invoice_2co_register_link" href="http://keti.ws/256281"
-			class="web_invoice_click_me"><?php _e("Do you need a 2CO account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
+	<tr class="alertpay_info">
+		<th width="200"><?php _e("AlertPay Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_alertpay_button'
+			name="web_invoice_alertpay_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_alertpay_button')); ?>" />
+			<span class="web_invoice_alertpay_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
 		</td>
-	</tr>
-	<tr class="tco_info 2co_info">
-		<th><?php _e("2Checkout secret word:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
-		<td><input id='web_invoice_2co_secret_word'
-			name="web_invoice_2co_secret_word" class="search-input input_field"
-			type="text"
-			value="<?php echo stripslashes(get_option('web_invoice_2co_secret_word',uniqid())); ?>" />
-		</td>
-	</tr>
-	<tr class="2co_info">
-		<th><?php _e("Demo / Live Mode:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
-		<td><select name="web_invoice_2co_demo_mode">
-			<option value="TRUE" style="padding-right: 10px;"
-			<?php if(get_option('web_invoice_2co_demo_mode') == 'TRUE') echo 'selected="yes"';?>><?php _e("Demo - Do Not Process Transactions", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-			<option value="FALSE" style="padding-right: 10px;"
-			<?php if(get_option('web_invoice_2co_demo_mode') == 'FALSE') echo 'selected="yes"';?>><?php _e("Live - Process Transactions", WEB_INVOICE_TRANS_DOMAIN) ?></option>
-		</select></td>
 	</tr>
 	<tr class="alertpay_info">
 		<th><?php _e("Enable AlertPay IPN:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
@@ -1596,6 +1596,42 @@ function web_invoice_show_settings()
 			class="search-input input_field" type="text"
 			value="<?php echo stripslashes(get_option('web_invoice_alertpay_ip')); ?>" /></td>
 	</tr>
+	
+	<tr class="tco_info 2co_info">
+		<th><?php _e("2Checkout seller id:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_2co_sid'
+			name="web_invoice_2co_sid" class="search-input input_field"
+			type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_2co_sid')); ?>" />
+		<a id="web_invoice_2co_register_link" href="http://keti.ws/256281"
+			class="web_invoice_click_me"><?php _e("Do you need a 2CO account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
+		</td>
+	</tr>
+	<tr class="tco_info 2co_info">
+		<th><?php _e("2Checkout secret word:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_2co_secret_word'
+			name="web_invoice_2co_secret_word" class="search-input input_field"
+			type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_2co_secret_word',uniqid())); ?>" />
+		</td>
+	</tr>
+	<tr class="tco_info 2co_info">
+		<th><?php _e("Demo / Live Mode:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><select name="web_invoice_2co_demo_mode">
+			<option value="TRUE" style="padding-right: 10px;"
+			<?php if(get_option('web_invoice_2co_demo_mode') == 'TRUE') echo 'selected="yes"';?>><?php _e("Demo - Do Not Process Transactions", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+			<option value="FALSE" style="padding-right: 10px;"
+			<?php if(get_option('web_invoice_2co_demo_mode') == 'FALSE') echo 'selected="yes"';?>><?php _e("Live - Process Transactions", WEB_INVOICE_TRANS_DOMAIN) ?></option>
+		</select></td>
+	</tr>
+	<tr class="tco_info 2co_info">
+		<th width="200"><?php _e("2Checkout Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_2co_button'
+			name="web_invoice_2co_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_2co_button')); ?>" />
+			<span class="web_invoice_2co_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
+		</td>
+	</tr>
 
 	<tr class="moneybookers_info">
 		<th width="200"><?php _e("Moneybookers Username:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
@@ -1608,7 +1644,6 @@ function web_invoice_show_settings()
 			class="web_invoice_click_me"><?php _e("Do you need a Moneybookers account?", WEB_INVOICE_TRANS_DOMAIN) ?></a>
 		</td>
 	</tr>
-	
 	<tr class="moneybookers_info">
 		<th width="200"><?php _e("Moneybookers Username for recurring payments (optional):", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><input id='web_invoice_moneybookers_recurring_address'
@@ -1617,7 +1652,14 @@ function web_invoice_show_settings()
 			value="<?php echo stripslashes(get_option('web_invoice_moneybookers_recurring_address')); ?>" />
 		</td>
 	</tr>
-
+	<tr class="moneybookers_info">
+		<th width="200"><?php _e("Moneybookers Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_moneybookers_button'
+			name="web_invoice_moneybookers_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_moneybookers_button')); ?>" />
+			<span class="web_invoice_moneybookers_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
+		</td>
+	</tr>
 	<tr class="moneybookers_info">
 		<th width="200"><?php _e("Enable Moneybookers payment notifications:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><select id='web_invoice_moneybookers_merchant'
@@ -1661,6 +1703,14 @@ function web_invoice_show_settings()
 			<option value="live" style="padding-right: 10px;"
 			<?php if(get_option('web_invoice_google_checkout_env') == 'live') echo 'selected="yes"';?>><?php _e('Live - Process Transactions', WEB_INVOICE_TRANS_DOMAIN); ?></option>
 		</select></td>
+	</tr>
+	<tr class="google_checkout_info">
+		<th width="200"><?php _e("Google Checkout Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_google_checkout_button'
+			name="web_invoice_google_checkout_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_google_checkout_button')); ?>" />
+			<span class="web_invoice_googlecheckout_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
+		</td>
 	</tr>
 	<tr class="google_checkout_info">
 		<th width="200"><?php _e("Enable Google Checkout Level 2 integration:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
@@ -1724,6 +1774,22 @@ function web_invoice_show_settings()
 		</select></td>
 	</tr>
 	<tr class="paypal_info">
+		<th width="200"><?php _e("PayPal Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_paypal_button'
+			name="web_invoice_paypal_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_paypal_button')); ?>" />
+			<span class="web_invoice_paypal_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
+		</td>
+	</tr>
+	<tr class="paypal_info">
+		<th width="200"><?php _e("PayPal Subscribe Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_paypal_subscribe_button'
+			name="web_invoice_paypal_subscribe_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_paypal_subscribe_button')); ?>" />
+			<span class="web_invoice_paypal_subscribe_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>
+		</td>
+	</tr>
+	<tr class="paypal_info">
 		<th width="200"><?php _e("PayPal Sandbox:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
 		<td><select id='web_invoice_paypal_sandbox'
 			name="web_invoice_paypal_sandbox">
@@ -1768,6 +1834,14 @@ function web_invoice_show_settings()
 			<option value="False"
 			<?php echo (get_option('web_invoice_payflow_shipping_details')=='False')?'selected="selected"':''; ?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
 		</select></td>
+	</tr>
+	<tr class="payflow_info">
+		<th width="200"><?php _e("PayPal Payflow Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_payflow_button'
+			name="web_invoice_payflow_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_payflow_button')); ?>" />
+			<span class="web_invoice_payflow_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
+		</td>
 	</tr>
 	<tr class="payflow_info">
 		<th width="200"><?php _e("Enable PayPal Payflow silent post integration:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
@@ -1915,6 +1989,14 @@ function web_invoice_show_settings()
 			<option value="False"
 			<?php echo (get_option('web_invoice_sagepay_shipping_details')=='False')?'selected="selected"':''; ?>><?php _e("no", WEB_INVOICE_TRANS_DOMAIN) ?></option>
 		</select></td>
+	</tr>
+	<tr class="sagepay_info">
+		<th width="200"><?php _e("Sage Pay Button URL:", WEB_INVOICE_TRANS_DOMAIN) ?></th>
+		<td><input id='web_invoice_sagepay_button'
+			name="web_invoice_sagepay_button" class="input_field" type="text"
+			value="<?php echo stripslashes(get_option('web_invoice_sagepay_button')); ?>" />
+			<span class="web_invoice_sagepay_button_info web_invoice_info"><?php _e("Leave blank for default", WEB_INVOICE_TRANS_DOMAIN) ?></span>	
+		</td>
 	</tr>
 	
 	<tr class="other_info">
@@ -2568,45 +2650,54 @@ function web_invoice_show_billing_information($invoice_id) {
 <p><?php _e('Pay with:', WEB_INVOICE_TRANS_DOMAIN); ?> 
 <?php if ($method_count > 1) { ?>
 <br />
-	<?php if ($cc) { ?> <a href="<?php print $invoice->display('link'); ?>#cc_payment_form"
+	<?php if ($cc) { ?>
+<a href="<?php print $invoice->display('link'); ?>#cc_payment_form"
 	title="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select cc"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/cc_logo.png"
-	alt="Visa Master American Express" width="265" height="45" /></a> <?php } ?>
-	<?php if ($tco) { ?> <a href="<?php print $invoice->display('link'); ?>#2co_payment_form"
-	title="<?php _e('2Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select 2co"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/2co_logo.png"
-	alt="2Checkout" width="96" height="54" /></a> <?php } ?>
-	<?php if ($alertpay) { ?> <a href="<?php print $invoice->display('link'); ?>#alertpay_payment_form"
-	title="<?php _e('AlertPay', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select moneybookers"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/alertpay_logo.png"
-	alt="AlertPay" width="81" height="45" /></a> <?php } ?> <?php if ($sp) { ?>
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" /></a> <?php } ?>
+	<?php if ($tco) { ?>
+<a href="<?php print $invoice->display('link'); ?>#2co_payment_form"
+	title="<?php _e('2Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select twoco"><img
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('2Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" width="96" height="54" /></a> <?php } ?>
+	<?php if ($alertpay) { ?>
+<a href="<?php print $invoice->display('link'); ?>#alertpay_payment_form"
+	title="<?php _e('AlertPay', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select alertpay"><img
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('AlertPay', WEB_INVOICE_TRANS_DOMAIN); ?>" width="81" height="45" /></a> <?php } ?>
+	<?php if ($sp) { ?>
 <a href="<?php print $invoice->display('link'); ?>#sagepay_payment_form"
-	title="<?php _e('Sage Pay', WEB_INVOICE_TRANS_DOMAIN); ?>"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/sage_pay_logo.gif"
-	alt="Sage Pay" width="145" height="33" /></a> <?php } ?> <?php if ($mb) { ?>
+	title="<?php _e('Sage Pay', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select sagepay"><img
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('Sage Pay', WEB_INVOICE_TRANS_DOMAIN); ?>" width="145" height="33" /></a> <?php } ?>
+	<?php if ($mb) { ?>
 <a href="<?php print $invoice->display('link'); ?>#moneybookers_payment_form"
-	title="<?php _e('Moneybookers', WEB_INVOICE_TRANS_DOMAIN); ?>"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/moneybookers_logo.png"
-	alt="Moneybookers" width="75" height="42" /></a> <?php } ?> <?php if ($gc) { ?>
+	title="<?php _e('Moneybookers', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select moneybookers"><img
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('Moneybookers', WEB_INVOICE_TRANS_DOMAIN); ?>" width="75" height="42" /></a> <?php } ?>
+	<?php if ($gc) { ?>
 <a href="<?php print $invoice->display('link'); ?>#google_checkout_payment_form"
 	title="<?php _e('Google Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select google_checkout"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/google_checkout.gif"
-	alt="Google Checkout" height="46" width="180" /></a> <?php } ?> <?php if ($pp) { ?>
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('Google Checkout', WEB_INVOICE_TRANS_DOMAIN); ?>" height="46" width="180" /></a> <?php } ?>
+	<?php if ($pp) { ?>
 <a href="<?php print $invoice->display('link'); ?>#paypal_payment_form"
 	title="<?php _e('PayPal', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select paypal"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/paypal_logo.png"
-	alt="PayPal" width="80" height="45" /></a> <?php } ?> <?php if ($pfp) { ?> <a href="#pfp_payment_form"
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('PayPal', WEB_INVOICE_TRANS_DOMAIN); ?>" width="80" height="45" /></a> <?php } ?>
+	<?php if ($pfp) { ?>
+<a href="#pfp_payment_form"
 	title="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select pfp"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/cc_logo.png"
-	alt="Visa Master American Express" width="265" height="45" /></a> <?php } ?> <?php if ($pf) { ?>
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('Visa Master American Express', WEB_INVOICE_TRANS_DOMAIN); ?>" width="265" height="45" /></a> <?php } ?> <?php if ($pf) { ?>
 <a href="<?php print $invoice->display('link'); ?>#payflow_payment_form"
 	title="<?php _e('PayPal Payflow', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select payflow"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/payflow_logo.png"
-	alt="PayPal Payflow" width="80" height="45" /></a> <?php } ?> <?php if ($other) { ?>
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('PayPal Payflow', WEB_INVOICE_TRANS_DOMAIN); ?>" width="80" height="45" /></a> <?php } ?> <?php if ($other) { ?>
 <a href="<?php print $invoice->display('link'); ?>#other_payment_form"
 	title="<?php _e('Other/Bank', WEB_INVOICE_TRANS_DOMAIN); ?>" class="payment_select other"><img
-	src="<?php echo Web_Invoice::frontend_path(); ?>/images/bank_logo.png"
-	alt="Other/Bank" width="80" height="45" /></a> <?php } ?>
+	src="<?php echo Web_Invoice::frontend_path(); ?>/images/transparent.png"
+	alt="<?php _e('Other/Bank', WEB_INVOICE_TRANS_DOMAIN); ?>" width="80" height="45" /></a> <?php } ?>
 <?php } ?>
 </p>
 </div>
@@ -2660,7 +2751,9 @@ function web_invoice_show_alertpay_form($invoice_id, $invoice) {
 <fieldset id="credit_card_information">
 <ol>
 	<li><label for="submit">&nbsp;</label> <input type="image"
-		src="https://www.alertpay.com/PayNow/4FF7280888FE4FD4AE1B4A286ED9B8D5a.gif"
+		src="<?php print (get_option('web_invoice_alertpay_button','') == '')?
+		'https://www.alertpay.com/PayNow/4FF7280888FE4FD4AE1B4A286ED9B8D5a.gif':
+		get_option('web_invoice_alertpay_button',''); ?>"
 		style="border: 0; width: 170px; height: 70px; padding: 0;"
 		name="submit" alt="Pay now with AlertPay" class="pay_button alertpay" /></li>
 </ol>
@@ -2699,7 +2792,9 @@ function web_invoice_show_2co_form($invoice_id, $invoice) {
 	<?php echo web_invoice_draw_inputfield("total",number_format($invoice->display('due_amount'),2)); ?></li>
 	<?php } ?>
 		<li><label for="submit">&nbsp;</label> <input type="image"
-			src="<?php echo Web_Invoice::frontend_path(); ?>/images/2co.png"
+			src="<?php echo (get_option('web_invoice_2co_button', '') == '')?
+			Web_Invoice::frontend_path()."/images/2co.png":
+			get_option('web_invoice_2co_button', ''); ?>"
 			style="border: 0; width: 218px; height: 54px; padding: 0;"
 			name="submit" alt="Pay now with 2Checkout" class="pay_button checkout" /></li>
 	</ol>
@@ -2735,7 +2830,9 @@ if ($invoice->display('tax_total')) {
 	<li><label for="submit">&nbsp;</label> <input type="image" name="Google Checkout" 
 		alt="Fast checkout through Google" height="46" width="180"
 		style="border: 0; width: 180px; height: 46px; padding: 0;"  class="pay_button google_checkout"
-		src="https://<?php echo $env_base_url; ?>/buttons/checkout.gif?merchant_id=<?php echo get_option('web_invoice_google_checkout_merchant_id'); ?>&w=180&h=46&style=white&variant=text&loc=en_US"/>
+		src="<?php print (get_option('web_invoice_google_checkout_button','') == '')?
+		"https://{$env_base_url}/buttons/checkout.gif?merchant_id=".get_option('web_invoice_google_checkout_merchant_id')."&w=180&h=46&style=white&variant=text&loc=en_US":
+		get_option('web_invoice_google_checkout_button',''); ?>"/>
 		</li>
 </ol>
 </fieldset>
@@ -2828,8 +2925,10 @@ function web_invoice_show_moneybookers_form($invoice_id, $invoice) {
 	</li>
 
 	<li><label for="submit">&nbsp;</label> <input type="image"
-		src="https://www.moneybookers.com/images/logos/checkout_logos/checkoutlogo_CCs_240x80.gif"
-		style="border: 0; width: 240px; height: 80px; padding: 0;" class="pay_button moneybookers"
+		src="<?php print (get_option('web_invoice_moneybookers_button','') == '')?
+		"https://www.moneybookers.com/images/logos/checkout_logos/checkoutlogo_CCs_240x80.gif":
+		get_option('web_invoice_moneybookers_button',''); ?>"
+		class="pay_button moneybookers"
 		name="submit" alt="Moneybookers.com and money moves" /></li>
 </ol>
 <br class="cb" />
@@ -2942,15 +3041,17 @@ if (get_option('web_invoice_paypal_sandbox') == 'True') {
 	<?php
 	if (web_invoice_recurring($invoice_id)) { ?>
 	<li><label for="submit">&nbsp;</label> <input type="image"
-		src="https://www.paypal.com/en_US/i/btn/btn_subscribe_LG.gif"
-		style="border: 0; width: 107px; height: 26px; padding: 0;"
+		src="<?php print (get_option('web_invoice_paypal_subscribe_button','') == '')?
+		"https://www.paypal.com/en_US/i/btn/btn_subscribe_LG.gif":
+		get_option('web_invoice_paypal_subscribe_button',''); ?>"
 		name="submit" class="pay_button paypal_subscription"
 		alt="Subscribe with PayPal - it's fast, free and secure!" /></li>
 	<?php 
 	} else { ?>
 	<li><label for="submit">&nbsp;</label> <input type="image"
-		src="https://www.paypal.com/en_US/i/btn/btn_paynow_LG.gif"
-		style="border: 0; width: 107px; height: 26px; padding: 0;"
+		src="<?php print (get_option('web_invoice_paypal_button','') == '')?
+		"https://www.paypal.com/en_US/i/btn/btn_paynow_LG.gif":
+		get_option('web_invoice_paypal_button',''); ?>"
 		name="submit" class="pay_button paypal"
 		alt="Make payments with PayPal - it's fast, free and secure!" /></li>
 	<?php 
@@ -3056,7 +3157,6 @@ function web_invoice_show_payflow_form($invoice_id, $invoice) {
 <?php }	?>
 <ol>
 	<li><label for="submit">&nbsp;</label> <input type="submit"
-		style="border: 0; width: 107px; height: 26px; padding: 0;"
 		name="submit"
 		value="Pay now!" class="pay_button payflow"
 		alt="Make payments with PayPal Payflow" /></li>
@@ -3314,8 +3414,10 @@ function web_invoice_show_sagepay_form($invoice_id, $invoice) {
 <?php } ?>
 <ol>
 	<li id="web_invoice_process_wait"><label for="submit">&nbsp;</label> <input type="image"
-		src="<?php echo Web_Invoice::frontend_path(); ?>/images/sage_pay_logo.gif"
-		style="border: 0; width: 145px; height: 33px; padding: 0; background-color: white;" class="pay_button sagepay"
+		src="<?php echo (get_option('web_invoice_sagepay_button','') == '')?
+		Web_Invoice::frontend_path()."/images/sage_pay_logo.gif":
+		get_option('web_invoice_sagepay_button',''); ?>"
+		class="pay_button sagepay"
 		name="submit" alt="Sage Pay" /> <span></span></li>
 </ol>
 </fieldset>

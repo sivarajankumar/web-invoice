@@ -255,6 +255,11 @@ jQuery(document)
 					
 					if (payment_method_array.indexOf && payment_method_array.indexOf('2co') != -1) {
 						jQuery('.2co_info').show();
+						
+						if (jQuery('#web_invoice_2co_sid').val() != '') {
+							jQuery('#web_invoice_2co_register_link')
+									.hide();
+						}
 					}
 					if (payment_method_array.indexOf && payment_method_array.indexOf('cc') != -1) {
 						jQuery('.gateway_info').show();
@@ -330,10 +335,6 @@ jQuery(document)
 						}
 						if (jQuery('#web_invoice_alertpay_address').val() != '') {
 							jQuery('#web_invoice_alertpay_register_link')
-									.hide();
-						}
-						if (jQuery('#web_invoice_2co_sid').val() != '') {
-							jQuery('#web_invoice_2co_register_link')
 									.hide();
 						}
 					}

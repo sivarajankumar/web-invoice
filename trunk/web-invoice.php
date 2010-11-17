@@ -633,10 +633,13 @@ if ( $php_version_check )
 	    add_option('web_invoice_gateway_email_customer','FALSE');
 	    
 	    // PayPal
+	    add_option('web_invoice_paypal_button','');
+	    add_option('web_invoice_paypal_subscribe_button','');
 	    add_option('web_invoice_paypal_address','');
 	    add_option('web_invoice_paypal_only_button', 'False');
 	    
 	    // Payflow
+	    add_option('web_invoice_payflow_button','');
 	    add_option('web_invoice_payflow_login','');
 	    add_option('web_invoice_payflow_partner','');
 	    add_option('web_invoice_payflow_only_button', 'False');
@@ -658,8 +661,9 @@ if ( $php_version_check )
 	    
 	    // Other
 	    add_option('web_invoice_other_details','');
-	
+	    
 	    // Moneybookers
+	    add_option('web_invoice_moneybookers_button','');
 	    add_option('web_invoice_moneybookers_address','');
 	    add_option('web_invoice_moneybookers_recurring_address','');
 	    add_option('web_invoice_moneybookers_merchant','False');
@@ -667,6 +671,7 @@ if ( $php_version_check )
 	    add_option('web_invoice_moneybookers_ip', '83.220.158.0-83.220.158.31,213.129.75.193-213.129.75.206,91.208.28.0-91.208.28.255');
 	    
 	    // AlertPay
+	    add_option('web_invoice_alertpay_button','');
 	    add_option('web_invoice_alertpay_address','');
 	    add_option('web_invoice_alertpay_merchant','False');
 	    add_option('web_invoice_alertpay_secret',uniqid());
@@ -674,11 +679,13 @@ if ( $php_version_check )
 	    add_option('web_invoice_alertpay_ip', '67.205.87.225-67.205.87.226,67.205.87.235');
 	    
 	    // 2CO
+	    add_option('web_invoice_2co_button','');
 	    add_option('web_invoice_2co_sid','');
 	    add_option('web_invoice_2co_secret_word',uniqid());
 	    add_option('web_invoice_2co_demo_mode','FALSE');
 	    
 	    // Google Checkout
+	    add_option('web_invoice_google_checkout_button','');
 	    add_option('web_invoice_google_checkout_env','live');
 	    add_option('web_invoice_google_checkout_merchant_id','');
 	    add_option('web_invoice_google_checkout_level2','False');
@@ -686,6 +693,7 @@ if ( $php_version_check )
 	    add_option('web_invoice_google_checkout_tax_state','NY');
 	    
 	    // Sage Pay
+	    add_option('web_invoice_sagepay_button','');
 	    add_option('web_invoice_sagepay_env','live');
 	    add_option('web_invoice_sagepay_vendor_name','');
 	    add_option('web_invoice_sagepay_vendor_key','');
@@ -707,13 +715,29 @@ You may pay, view and print the invoice online by visiting the following link:
 Best regards,
 %business_name ( %business_email )");
 	    
-	    // Send reminder
+	    // Send reminder (past due date)
 	    add_option('web_invoice_email_send_reminder_subject','[Reminder] %subject');
 	    add_option('web_invoice_email_send_reminder_content',
 "Dear %call_sign, 
 
 %business_name has sent you a reminder for the %recurring
 web invoice in the amount of %amount.
+
+%description
+
+You may pay, view and print the invoice online by visiting the following link: 
+%link.
+
+Best regards,
+%business_name ( %business_email )");
+	    
+	    // Send reminder (Due in future)
+	    add_option('web_invoice_email_send_reminder_pre_due_subject','[Reminder] %subject due on %due_date');
+	    add_option('web_invoice_email_send_reminder_pre_due_content',
+"Dear %call_sign, 
+
+%business_name has sent you a friendly reminder for the %recurring
+web invoice in the amount of %amount due on %due_date.
 
 %description
 
