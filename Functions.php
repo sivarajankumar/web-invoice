@@ -103,7 +103,7 @@ function web_invoice_query_log($invoice_id,$action_type) {
 	if($results = $wpdb->get_results("SELECT * FROM ".Web_Invoice::tablename('log')." WHERE invoice_id = '$invoice_id' AND action_type = '$action_type' ORDER BY 'time_stamp' DESC")) return $results;
 }
 
-function web_invoice_meta($invoice_id,$meta_key)
+function web_invoice_meta($invoice_id,$meta_key,$default=false)
 {
 	global $wpdb;
 	global $_web_invoice_meta_cache;
@@ -112,7 +112,7 @@ function web_invoice_meta($invoice_id,$meta_key)
 		$_web_invoice_meta_cache[$invoice_id][$meta_key] = $wpdb->get_var("SELECT meta_value FROM `".Web_Invoice::tablename('meta')."` WHERE meta_key = '$meta_key' AND invoice_id = '$invoice_id'");
 	}
 
-	return $_web_invoice_meta_cache[$invoice_id][$meta_key];
+	return ($_web_invoice_meta_cache[$invoice_id][$meta_key])?$_web_invoice_meta_cache[$invoice_id][$meta_key]:$default;
 }
 
 function web_invoice_payment_register($invoice_id, $amount, $trx_id = "", $status = 0) {
@@ -340,8 +340,17 @@ function web_invoice_mark_as_paid($invoice_id) {
 	{
 		foreach ($invoice_id as $single_invoice_id) {
 			$counter++;
+			
 			web_invoice_update_invoice_meta($single_invoice_id,'paid_status','paid');
 			web_invoice_update_log($single_invoice_id,'paid',"Invoice marked as paid");
+			
+			if (web_invoice_recurring($single_invoice_id)) {
+				web_invoice_update_invoice_meta(
+					$single_invoice_id,'installment',
+					web_invoice_meta($single_invoice_id,'installment',0)+1
+				);
+			}
+			
 			if(get_option('web_invoice_send_thank_you_email') == 'yes') web_invoice_send_email_receipt($single_invoice_id);
 			
 			do_action('web_invoice_mark_as_paid', $single_invoice_id);
@@ -359,7 +368,16 @@ function web_invoice_mark_as_paid($invoice_id) {
 		$counter++;
 		web_invoice_update_invoice_meta($invoice_id,'paid_status','paid');
 		web_invoice_update_log($invoice_id,'paid',"Invoice marked as paid");
+		
+		if (web_invoice_recurring($invoice_id)) {
+			web_invoice_update_invoice_meta(
+				$invoice_id,'installment',
+				web_invoice_meta($invoice_id,'installment',0)+1
+			);
+		}
+		
 		if(get_option('web_invoice_send_thank_you_email') == 'yes') web_invoice_send_email_receipt($invoice_id);
+		
 		do_action('web_invoice_mark_as_paid', $invoice_id);
 			
 		if(get_option('web_invoice_send_thank_you_email') == 'yes') {

@@ -412,7 +412,7 @@ function web_invoice_recurring_overview($message='')
 			<th class="check-column"><input type="checkbox" id="CheckAll" /></th>
 			<th class="invoice_id_col"><?php _e('Invoice Id', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Subject', WEB_INVOICE_TRANS_DOMAIN); ?></th>
-			<th><?php _e('Due date', WEB_INVOICE_TRANS_DOMAIN); ?></th>
+			<th><?php _e('Next Due date', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Amount', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('Status', WEB_INVOICE_TRANS_DOMAIN); ?></th>
 			<th><?php _e('User', WEB_INVOICE_TRANS_DOMAIN); ?></th>
@@ -437,7 +437,7 @@ function web_invoice_recurring_overview($message='')
 			//Basic Settings
 			$invoice_id = $invoice->invoice_num;
 			$invoice_info = new Web_Invoice_GetInfo($invoice_id);
-			$due_date = $invoice_info->display('due_date');
+			$due_date = $invoice_info->display('nextDate');
 
 			if(web_invoice_meta($invoice_id,'web_invoice_custom_invoice_id')) $custom_id = web_invoice_meta($invoice_id,'web_invoice_custom_invoice_id'); else $custom_id = $invoice_id;
 						
@@ -1116,7 +1116,7 @@ function web_invoice_show_email_templates()
 	</tr>
 	
 	<tr>
-		<th><h3><?php _e("Reminder (before due date)", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
+		<th><h3><?php _e("Reminder (before due date, only for recurring invoice)", WEB_INVOICE_TRANS_DOMAIN) ?></h3></th>
 		<td></td>
 	</tr>
 	<tr>
