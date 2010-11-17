@@ -100,6 +100,12 @@ and also add missing address in the shipping info in the user profile.
 
 == Changelog ==
 
+= 2.1.0 =
+
+* Currency CHF added (Issue 76)
+* due_date added as a template variable
+* Use date_format option when available
+
 = 2.0.23 =
 
 * Subscription start date issue
