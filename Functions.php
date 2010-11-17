@@ -530,6 +530,7 @@ function web_invoice_email_variables($invoice_id) {
 		'invoice_id' => $invoice_info->display('display_id'),
 		'invoice_hash' => $invoice_info->display('invoice_hash'),
 		'invoice_date' => $invoice_info->display('invoice_date'),
+		'due_date' => $invoice_info->display('due_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -562,6 +563,7 @@ function web_invoice_pdf_variables($invoice_id) {
 		'invoice_hash' => $invoice_info->display('invoice_hash'),
 		'content' => web_invoice_generate_pdf_content($invoice_id),
 		'invoice_date' => $invoice_info->display('invoice_date'),
+		'due_date' => $invoice_info->display('due_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -600,6 +602,7 @@ neatly laid-out format. <em>Thank you</em> for your business <em>and</em> your p
 payment!", WEB_INVOICE_TRANS_DOMAIN), '<a href="'.$invoice_info->display('print_link').'" class="web_invoice_pdf_link">PDF</a>'),
 		'pdf_link' =>  $invoice_info->display('print_link'),
 		'invoice_date' => $invoice_info->display('invoice_date'),
+		'due_date' => $invoice_info->display('due_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -631,6 +634,7 @@ function web_invoice_web_variables($invoice_id) {
 		'invoice_id' => $invoice_info->display('display_id'),
 		'invoice_hash' => $invoice_info->display('invoice_hash'),
 		'invoice_date' => $invoice_info->display('invoice_date'),
+		'due_date' => $invoice_info->display('due_date'),
 	);
 
 	if($invoice_info->display('description')) {
@@ -2073,6 +2077,7 @@ function web_invoice_currency_array() {
 		"RON"=> __("Romanian New Leu", WEB_INVOICE_TRANS_DOMAIN),
 		"PHP"=> __("Philippine Peso", WEB_INVOICE_TRANS_DOMAIN),
 		"IDR"=> __("Indonesian Rupiah", WEB_INVOICE_TRANS_DOMAIN),
+		"CHF"=> __("Swiss franc", WEB_INVOICE_TRANS_DOMAIN),
 	);
 
 	return $currency_list;
@@ -2092,6 +2097,7 @@ function web_invoice_currency_symbol($currency = "USD" )
 		'ZAR' => 'R',
 		'COP' => '$',
 		'IDR' => 'Rp',
+		'CHF' => 'CHF',
 	);
 
 	foreach($currency_list as $value => $display)
@@ -2114,6 +2120,7 @@ function web_invoice_currency_symbol_format($currency = "USD" )
 		'AUD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
 		'COP' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
 		'IDR' => __('Rp %s', WEB_INVOICE_TRANS_DOMAIN),
+		'CHF' => __('CHF %s', WEB_INVOICE_TRANS_DOMAIN),
 	);
 
 	$success = false;
@@ -2155,6 +2162,7 @@ function web_invoice_contextual_help_list($content, $screen_id) {
 		'<li><code>print_message</code> - Instructions on how to print, only in web template</li>'.
 		'<li><code>pdf_link</code> - Link to the invoice PDF, only in web template</li>'.
 		'<li><code>invoice_date</code> - Invoice date or the date the invoice was created</li>'.
+		'<li><code>due_date</code> - Due date or today</li>'.
 		'</ul>';
 	}
 	// Will add help and FAQ here eventually
