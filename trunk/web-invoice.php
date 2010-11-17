@@ -1040,7 +1040,7 @@ Best regards,
 		    $paid_date = $wpdb->get_var("SELECT time_stamp FROM  ".Web_Invoice::tablename('log')." WHERE action_type = 'paid' AND invoice_id = '".$this->id."' ORDER BY time_stamp DESC LIMIT 0, 1");
 		    if ($paid_date)
 		    {
-		        return web_invoice_Date::convert($paid_date, 'Y-m-d H', __('M d Y', WEB_INVOICE_TRANS_DOMAIN));
+		        return date(get_option('date_format', __('Y-m-d', WEB_INVOICE_TRANS_DOMAIN)), strtotime(web_invoice_Date::convert($paid_date, 'Y-m-d H', __('M d Y', WEB_INVOICE_TRANS_DOMAIN))));
 		    }
 		    break;
 		    
@@ -1067,6 +1067,10 @@ Best regards,
 		    return web_invoice_meta($this->id,'web_invoice_subscription_total_occurances');
 		    break;
 		
+		case 'installment':
+		    return web_invoice_meta($this->id,'installment',0);
+		    break;
+		
 		case 'startDate':
 		    $web_invoice_subscription_start_day = web_invoice_meta($this->id,'web_invoice_subscription_start_day');
 		    $web_invoice_subscription_start_year = web_invoice_meta($this->id,'web_invoice_subscription_start_year');
@@ -1081,7 +1085,19 @@ Best regards,
 		    break;
 		
 		case 'endDate':
-		    return date(get_option('date_format', __('Y-m-d', WEB_INVOICE_TRANS_DOMAIN)), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDate'))));
+		    return date(get_option('date_format', __('Y-m-d', WEB_INVOICE_TRANS_DOMAIN)), strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDateM'))));
+		    break;
+		
+		case 'nextDate':
+		    if ($this->display('totalOccurrences') > $this->display('installment')) {
+			if ($this->display('installment') == 0 && strtotime($this->display('startDateM')) >= strtotime($this->display('due_dateM'))) {
+			    $start_date = $this->display('due_dateM');
+			} else {
+			    $start_date = $this->display('startDateM');
+			}
+			return date(get_option('date_format', __('Y-m-d', WEB_INVOICE_TRANS_DOMAIN)), strtotime("+".($this->display('interval_length')*$this->display('installment'))." ".$this->display('interval_unit'), strtotime($start_date)));
+		    }
+		    return $this->display('endDate');
 		    break;
 		
 		case 'startDateM':
@@ -1093,12 +1109,24 @@ Best regards,
 		    {
 		        return date('Y-m-d', strtotime($web_invoice_subscription_start_year . "-" . $web_invoice_subscription_start_month . "-" . $web_invoice_subscription_start_day));
 		    } else {
-		        return date("Y-m-d", time()+1800);
+		        return date('Y-m-d', time()+1800);
 		    }
 		    break;
 		
 		case 'endDateM':
 		    return date('Y-m-d', strtotime("+".($this->display('interval_length')*$this->display('totalOccurrences'))." ".$this->display('interval_unit'), strtotime($this->display('startDateM'))));
+		    break;
+		
+		case 'nextDateM':
+		    if ($this->display('totalOccurrences') > $this->display('installment')) {
+			if ($this->display('installment') == 0 && strtotime($this->display('startDateM')) >= strtotime($this->display('due_dateM'))) {
+			    $start_date = $this->display('due_dateM');
+			} else {
+			    $start_date = $this->display('startDateM');
+			}
+			return date('Y-m-d', strtotime("+".($this->display('interval_length')*$this->display('installment'))." ".$this->display('interval_unit'), strtotime($start_date)));
+		    }
+		    return $this->display('endDate');
 		    break;
 		
 		case 'profileEndDate':
@@ -1209,6 +1237,17 @@ Best regards,
 			return date(get_option('date_format', __('Y-m-d', WEB_INVOICE_TRANS_DOMAIN)), strtotime("$web_invoice_due_date_year-$web_invoice_due_date_month-$web_invoice_due_date_day"));
 		    }
 		    return date(get_option('date_format', __('Y-m-d', WEB_INVOICE_TRANS_DOMAIN)));
+		    break;
+		
+		case 'due_dateM':
+		    $web_invoice_due_date_month = web_invoice_meta($this->id,'web_invoice_due_date_month');
+		    $web_invoice_due_date_year = web_invoice_meta($this->id,'web_invoice_due_date_year');
+		    $web_invoice_due_date_day = web_invoice_meta($this->id,'web_invoice_due_date_day');
+		    if (!empty($web_invoice_due_date_month) && !empty($web_invoice_due_date_year) && !empty($web_invoice_due_date_day))
+		    {
+			return date('Y-m-d', strtotime("$web_invoice_due_date_year-$web_invoice_due_date_month-$web_invoice_due_date_day"));
+		    }
+		    return date('Y-m-d');
 		    break;
 		
 		case 'invoice_date':
