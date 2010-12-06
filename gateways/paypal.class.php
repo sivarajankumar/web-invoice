@@ -57,36 +57,6 @@ class Web_Invoice_Paypal {
 			$value = urlencode(stripslashes($value));
 			$req .= "&$key=$value";
 			$post_values .= " $key : $value\n";
-			if (preg_match('/item_number[0-9]+/', $key)) {
-				list($trash, $serial) = preg_split('/item_number/', $key);
-				$track = TrackPeer::retrieveByPk($value);
-				if ($track) {
-					$cart[$serial] = array('obj' => $track, 'valid' => false, 'value' => isset($request["mc_gross_$serial"])?$request["mc_gross_$serial"]:$request["mc_gross"], 'id' => $value, 'name' => $request["item_name$serial"]);
-					if ($request["option_name1_$serial"] == 'package') {
-						$cart[$serial]['package'] = $request["option_selection1_$serial"];
-						switch ($cart[$serial]['package']) {
-							case 'exclusive' :
-								if ($track->getExclusivePrice() == $cart[$serial]['value']) {
-									$cart[$serial]['valid'] = true;
-								}
-							break;
-							case 'demo' :
-								if ($this->configs['demo-price']->getValue() == $cart[$serial]['value']) {
-									$cart[$serial]['valid'] = true;
-								}
-							break;
-							case 'lease' :
-								if ($this->configs['lease-price']->getValue() == $cart[$serial]['value']) {
-									$cart[$serial]['valid'] = true;
-								}
-							break;
-						}
-					}
-					if (!$cart[$serial]['valid']) {
-						unset($cart[$serial]);
-					}
-				}
-			}
 		}
 
 		$header = "";
