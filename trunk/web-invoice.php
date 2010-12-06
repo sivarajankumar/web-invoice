@@ -668,7 +668,7 @@ if ( $php_version_check )
 	    add_option('web_invoice_moneybookers_recurring_address','');
 	    add_option('web_invoice_moneybookers_merchant','False');
     	    add_option('web_invoice_moneybookers_secret',uniqid());
-	    add_option('web_invoice_moneybookers_ip', '83.220.158.0-83.220.158.31,213.129.75.193-213.129.75.206,91.208.28.0-91.208.28.255');
+	    add_option('web_invoice_moneybookers_ip', '83.220.158.0-83.220.158.31,213.129.75.193-213.129.75.206,91.208.28.0-91.208.28.255,193.105.47.0-193.105.47.255');
 	    
 	    // AlertPay
 	    add_option('web_invoice_alertpay_button','');

@@ -107,6 +107,7 @@ and also add missing address in the shipping info in the user profile.
 * Use date_format option when available
 * Fixed issue 36: separating customizations from core file
 * Added a link to report missing currencies
+* Fixed PayPal IPN
 
 = 2.0.23 =
 
