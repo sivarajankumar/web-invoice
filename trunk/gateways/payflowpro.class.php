@@ -442,7 +442,7 @@ class Web_Invoice_PayflowProRecurring extends Web_Invoice_PayflowPro {
 
 		if (get_option('web_invoice_pfp_authentication') == '3token' || get_option('web_invoice_pfp_authentication') == 'unipay') {
 			$this->params['DESC'] = $invoice->display('subscription_name');
-			$this->params['PROFILESTARTDATE'] = date('c', strtotime($invoice->display('startDate')));
+			$this->params['PROFILESTARTDATE'] = date('c', strtotime($invoice->display('startDateM')));
 			$this->params['TOTALBILLINGCYCLES'] = $invoice->display('totalOccurrences');
 			$this->params['NOTE']           = "Related invoice was updated";
 			$this->params['PROFILEID']      = web_invoice_meta($invoice_id, 'subscription_id');
@@ -471,7 +471,7 @@ class Web_Invoice_PayflowProRecurring extends Web_Invoice_PayflowPro {
 			$this->params['ORIGPROFILEID']  = web_invoice_meta($invoice_id, 'subscription_id');;
 			
 			$this->params['PROFILENAME'] = $invoice->display('subscription_name');
-			$this->params['START'] = date('mdY',  strtotime($invoice->display('startDate'))+3600*24);
+			$this->params['START'] = date('mdY',  strtotime($invoice->display('startDateM'))+3600*24);
 			$this->params['TERM'] = $invoice->display('totalOccurrences');
 			$this->params['PAYPERIOD'] = web_invoice_pfp_wpppe_convert_interval($invoice->display('interval_length'), $invoice->display('interval_unit'));
 			$this->params["COMMENT1"] = get_usermeta($user_id, 'first_name')." ".get_usermeta($user_id, 'last_name')." ".$invoice->display('subscription_name')." Recurring";
