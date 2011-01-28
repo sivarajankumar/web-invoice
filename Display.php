@@ -2647,8 +2647,9 @@ function web_invoice_show_billing_information($invoice_id) {
 
 <div id="billing_overview" class="clearfix noprint">
 <div id="payment_methods">
-<p><?php _e('Pay with:', WEB_INVOICE_TRANS_DOMAIN); ?> 
+<p>
 <?php if ($method_count > 1) { ?>
+<?php _e('Pay with:', WEB_INVOICE_TRANS_DOMAIN); ?>
 <br />
 	<?php if ($cc) { ?>
 <a href="<?php print $invoice->display('link'); ?>#cc_payment_form"
