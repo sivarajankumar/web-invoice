@@ -351,7 +351,7 @@ if ( $php_version_check )
 	    
 	    if (is_admin())
 	    {
-		if (is_multisite() && get_option('web_invoice_installed', false)) {
+		if (is_multisite() && !get_option('web_invoice_installed', false)) {
 		    $this->install();
 		}
 		
