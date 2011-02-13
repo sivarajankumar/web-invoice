@@ -105,10 +105,6 @@ if ( $php_version_check )
 	    register_activation_hook($_file, array(&$this, 'install'));
 	    register_deactivation_hook($_file, array(&$this, 'uninstall'));
 	    
-	    if (is_multisite() && get_option('web_invoice_installed', false)) {
-		$this->install();
-	    }
-	    
 	    add_action('init',  array($this, 'init'), 0);
 	    add_action('profile_update','web_invoice_profile_update');
 	    add_action('edit_user_profile', 'web_invoice_user_profile_fields');
@@ -355,6 +351,10 @@ if ( $php_version_check )
 	    
 	    if (is_admin())
 	    {
+		if (is_multisite() && get_option('web_invoice_installed', false)) {
+		    $this->install();
+		}
+		
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-tabs');
