@@ -94,7 +94,7 @@ or submit feature requests.
 
 == Upgrade Notice ==
 
-= 2.0.22 =
+= 2.1.0 =
 Important bug fixes; prevent checking archived invoices when check all is clicked
 and also add missing address in the shipping info in the user profile.
 
@@ -108,6 +108,7 @@ and also add missing address in the shipping info in the user profile.
 * Fixed issue 36: separating customizations from core file
 * Added a link to report missing currencies
 * Fixed PayPal IPN
+* Multi site network activate fix
 
 = 2.0.23 =
 
