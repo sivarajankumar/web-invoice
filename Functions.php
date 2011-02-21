@@ -731,7 +731,7 @@ function web_invoice_generate_pdf($invoice_id) {
 	</head>
 	<body>
 		<div id='invoice_page' class='clearfix'>
-			<img style='float: right;' src='".$web_invoice->the_path."/images/logo_small_padding.png' style='width:120px; height: 31px;' />
+			<img style='float: right;' src='".$web_invoice->the_path."/images/logo_small_padding.png' style='width:420px; height: 110px;' />
 			<h1>Invoice</h1>
 			%content
 		</div>

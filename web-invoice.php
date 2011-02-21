@@ -772,7 +772,7 @@ Best regards,
     </head>
     <body>
 	<div id='invoice_page' class='clearfix'>
-	    <img style='float: right;' src='".$this->the_path."/images/logo_small_padding.gif' style='width:120px; height: 31px;' />
+	    <img style='float: right;' src='".$this->the_path."/images/logo_small_padding.gif' style='width:420px; height: 110px;' />
 	    <h1>Invoice</h1>
 	    %content
 	</div>
