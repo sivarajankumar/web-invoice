@@ -63,6 +63,8 @@ Web Invoice is already translated to:
 
 If you like this plugin please give it a good rating, and consider saying thanks, sponsoring a feature or making a donation.
 
+Special thanks should go to [Tammie Lister](http://www.tammielister.com/) for creating the cool logo
+
 Plug-in uses [dompdf](http://www.digitaljunkies.ca/dompdf/) to generate PDF documents.
 
 This is a fork of [WP-Invoice](http://wordpress.org/extend/plugins/wp-invoice/), however now lot of things have changed since.
