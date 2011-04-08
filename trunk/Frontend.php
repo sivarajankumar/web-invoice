@@ -45,19 +45,21 @@ function web_invoice_the_content($content) {
 	} else return $content;
 }
 
+function web_invoice_curPageURL() {
+	$host_x = preg_split('/\//', get_option('siteurl'));
+	$host = $host_x[2];  
+						
+	$pageURL = "http://".$host.$_SERVER['REQUEST_URI'];
+			
+	if (get_option('web_invoice_force_https') == 'true' ) {  
+		$pageURL = preg_replace('/^http/', 'https', $pageURL); 
+	}
+
+	return $pageURL;
+}
+
 function web_invoice_frontend_js() {
 	if(get_option('web_invoice_web_invoice_page') != '' && is_page(get_option('web_invoice_web_invoice_page')))  {
-		function web_invoice_curPageURL() {
-			$host_x = preg_split('/\//', get_option('siteurl'));
-			$host = $host_x[2];  
-						
-			$pageURL = "http://".$host.$_SERVER['REQUEST_URI'];
-			
-			if(	get_option('web_invoice_force_https') == 'true' ) {  
-				$pageURL = preg_replace('/^http/', 'https', $pageURL); 
-			}
-			return $pageURL;
-		}
 		?>
 <script type="text/javascript">
 
