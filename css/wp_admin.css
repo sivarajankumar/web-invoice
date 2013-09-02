@@ -606,3 +606,13 @@ select#web_invoice_payment_method, select#web_invoice_user_level  {
         outline: none;
         padding:0.2em 1em;
 }
+
+.web_invoice_allowed_currencies {
+	width: 200px;
+	display: block;
+	float: left;
+}
+
+.web_invoice_allowed_currencies_uyi, .web_invoice_allowed_currencies_ang {
+	width: 400px;
+}

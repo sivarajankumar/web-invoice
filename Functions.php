@@ -513,11 +513,6 @@ function web_invoice_get_single_invoice_status($invoice_id)
 	return $status_update->value . " - " . web_invoice_Date::convert($status_update->time_stamp, 'Y-m-d H', __('M d Y'));
 }
 
-
-function web_invoice_currency_format($amount) {
-	return number_format($amount, 2, __('.', WEB_INVOICE_TRANS_DOMAIN), __(',', WEB_INVOICE_TRANS_DOMAIN));
-}
-
 function web_invoice_paid($invoice_id) {
 	global $wpdb;
 	//$wpdb->query("UPDATE  ".Web_Invoice::tablename('main')." SET status = 1 WHERE  invoice_num = '$invoice_id'");
@@ -839,7 +834,11 @@ function web_invoice_draw_select($name,$values,$current_value = '', $id=null) {
 	foreach($values as $key => $value) {
 		$output .=  "<option value='$key'";
 		if($key == $current_value) $output .= " selected='selected'";
-		$output .= ">$value</option>";
+		if (is_array($value)) {
+			$output .= ">{$value[0]}</option>";
+		} else {
+			$output .= ">$value</option>";
+		}
 	}
 	$output .= "</select>";
 
@@ -997,6 +996,9 @@ function web_invoice_complete_removal()
 	
 	// HTML
 	delete_option('web_invoice_html_content');
+	
+	// Currency
+	delete_option('web_invoice_allowed_currencies');
 
 	return "All settings and databased removed.";
 }
@@ -2075,89 +2077,6 @@ function web_invoice_process_cc_transaction($cc_data) {
 	echo $errors_msg;
 }
 
-function web_invoice_currency_array() {
-	$currency_list = array(
-		"AUD"=> __("Australian Dollars", WEB_INVOICE_TRANS_DOMAIN),
-		"CAD"=> __("Canadian Dollars", WEB_INVOICE_TRANS_DOMAIN),
-		"EUR"=> __("Euros", WEB_INVOICE_TRANS_DOMAIN),
-		"GBP"=> __("Pounds Sterling", WEB_INVOICE_TRANS_DOMAIN),
-		"JPY"=> __("Yen", WEB_INVOICE_TRANS_DOMAIN),
-		"USD"=> __("U.S. Dollars", WEB_INVOICE_TRANS_DOMAIN),
-		"NZD"=> __("New Zealand Dollar", WEB_INVOICE_TRANS_DOMAIN),
-		"CHF"=> __("Swiss Franc", WEB_INVOICE_TRANS_DOMAIN),
-		"HKD"=> __("Hong Kong Dollar", WEB_INVOICE_TRANS_DOMAIN),
-		"SGD"=> __("Singapore Dollar", WEB_INVOICE_TRANS_DOMAIN),
-		"SEK"=> __("Swedish Krona", WEB_INVOICE_TRANS_DOMAIN),
-		"DKK"=> __("Danish Krone", WEB_INVOICE_TRANS_DOMAIN),
-		"PLN"=> __("Polish Zloty", WEB_INVOICE_TRANS_DOMAIN),
-		"NOK"=> __("Norwegian Krone", WEB_INVOICE_TRANS_DOMAIN),
-		"HUF"=> __("Hungarian Forint", WEB_INVOICE_TRANS_DOMAIN),
-		"CZK"=> __("Czech Koruna", WEB_INVOICE_TRANS_DOMAIN),
-		"ILS"=> __("Israeli Shekel", WEB_INVOICE_TRANS_DOMAIN),
-		"MXN"=> __("Mexican Peso", WEB_INVOICE_TRANS_DOMAIN),
-		"BRL"=> __("Brazilian Real", WEB_INVOICE_TRANS_DOMAIN),
-		"MYR"=> __("Malaysian Ringgit", WEB_INVOICE_TRANS_DOMAIN),
-		"ZAR"=> __("South African Rand", WEB_INVOICE_TRANS_DOMAIN),
-		"COP"=> __("Colombian Pesos", WEB_INVOICE_TRANS_DOMAIN),
-		"RON"=> __("Romanian New Leu", WEB_INVOICE_TRANS_DOMAIN),
-		"PHP"=> __("Philippine Peso", WEB_INVOICE_TRANS_DOMAIN),
-		"IDR"=> __("Indonesian Rupiah", WEB_INVOICE_TRANS_DOMAIN),
-	);
-	
-	asort($currency_list);
-
-	return $currency_list;
-}
-
-function web_invoice_currency_symbol($currency = "USD" )
-{
-	$currency_list = array(
-		'CAD' => '$',
-		'EUR' => '&euro;',
-		'GBP' => '&pound;',
-		'JPY' => '&yen;',
-		'USD' => '$',
-		'BRL' => 'R$',
-		'MYR' => 'RM',
-		'AUD' => '$',
-		'ZAR' => 'R',
-		'COP' => '$',
-		'IDR' => 'Rp',
-		'CHF' => 'CHF',
-	);
-
-	foreach($currency_list as $value => $display)
-	{
-		if($currency == $value) { return $display; $success = true; break;}
-	}
-	if(!$success) return $currency;
-}
-
-function web_invoice_currency_symbol_format($currency = "USD" )
-{
-	$currency_list = array(
-		'CAD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'EUR' => __('&euro;%s', WEB_INVOICE_TRANS_DOMAIN),
-		'GBP' => __('&pound;%s', WEB_INVOICE_TRANS_DOMAIN),
-		'JPY' => __('&yen;%s', WEB_INVOICE_TRANS_DOMAIN),
-		'USD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'BRL' => __('R$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'ZAR' => __('R%s', WEB_INVOICE_TRANS_DOMAIN),
-		'AUD' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'COP' => __('$%s', WEB_INVOICE_TRANS_DOMAIN),
-		'IDR' => __('Rp %s', WEB_INVOICE_TRANS_DOMAIN),
-		'CHF' => __('CHF %s', WEB_INVOICE_TRANS_DOMAIN),
-	);
-
-	$success = false;
-	
-	foreach($currency_list as $value => $display)
-	{
-		if($currency == $value) { return $display; $success = true; break;}
-	}
-	if(!$success) return __("{$currency}%s", WEB_INVOICE_TRANS_DOMAIN);
-}
-
 function web_invoice_contextual_help_list($content, $screen_id) {
 	if (strstr($screen_id, 'web-invoice')) {
 		$content = '<h2>WordPress</h2>'.$content;
@@ -2547,6 +2466,12 @@ function web_invoice_process_settings() {
 	if(isset($_POST['web_invoice_sagepay_vendor_key'])) update_option('web_invoice_sagepay_vendor_key', $_POST['web_invoice_sagepay_vendor_key']);
 	if(isset($_POST['web_invoice_sagepay_shipping_details'])) update_option('web_invoice_sagepay_shipping_details', $_POST['web_invoice_sagepay_shipping_details']);
 	
+	// Currency
+	if(isset($_POST['web_invoice_allowed_currencies'])) {
+		update_option('web_invoice_allowed_currencies', $_POST['web_invoice_allowed_currencies']);
+		update_option('web_invoice_allowed_currencies_set', true);
+	}
+	
 	do_action('web_invoice_process_settings');
 }
 
@@ -2708,10 +2633,6 @@ function web_invoice_return_bytes_nice($bytes) {
 	$bytes /= pow(1000, $pow);
   
 	return round($bytes, 0) . $units[$pow]; 
-}
-
-function web_invoice_display_payment($currency, $amount) {
-	return sprintf(web_invoice_currency_symbol_format($currency), web_invoice_currency_format($amount));
 }
 
 if (!function_exists('sys_get_temp_dir')) {

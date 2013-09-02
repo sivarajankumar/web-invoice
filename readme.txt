@@ -102,6 +102,11 @@ and also add missing address in the shipping info in the user profile.
 
 == Changelog ==
 
+= 2.1.1 =
+
+* Added all available currencies
+* Now you can select currencies you want to use in invoice
+
 = 2.1.0 =
 
 * Currency CHF added (Issue 76)
