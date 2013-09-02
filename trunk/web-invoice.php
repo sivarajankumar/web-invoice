@@ -4,10 +4,10 @@
  Plugin URI: http://mohanjith.com/wordpress/web-invoice.html
  Description: Send itemized web invoices directly to your clients.  Credit card payments may be accepted via Authorize.net, MerchantPlus NaviGate, Moneybookers, AlertPay, Google Checkout or PayPal account. Recurring billing is also available via Authorize.net's ARB, Moneybookers, Google Checkout and PayPal. Visit <a href="admin.php?page=web_invoice_settings">Web Invoice Settings Page</a> to setup.
  Author: S H Mohanjith (Zinglix)
- Version: 2.1.0
+ Version: 2.1.1
  Author URI: http://mohanjith.com/
  Text Domain: web-invoice
- Stable tag: 2.1.0
+ Stable tag: 2.1.1
  License: GPL
 
  Copyright 2011  S H Mohanjith (email : moha@mohanjith.net)
@@ -37,11 +37,12 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-define("WEB_INVOICE_VERSION_NUM", "2.1.0");
+define("WEB_INVOICE_VERSION_NUM", "2.1.1");
 define("WEB_INVOICE_PHP_VERSION", "5.2");
 define("WEB_INVOICE_TRANS_DOMAIN", "web-invoice");
 
 require_once "Flow.php";
+require_once "Currency.php";
 require_once "Functions.php";
 require_once "Display.php";
 require_once "Frontend.php";
@@ -353,6 +354,14 @@ if ( $php_version_check )
 	    {
 		if (is_multisite() && !get_option('web_invoice_installed', false)) {
 		    $this->install();
+		}
+		
+		if (get_option('web_invoice_installed', false) != WEB_INVOICE_VERSION_NUM) {
+			$version = get_option('web_invoice_installed', false);
+			if ($version == true) {
+				$version = '2.1.0'; 
+			}
+			$this->upgrade($version);
 		}
 		
 		wp_enqueue_script('jquery');
@@ -785,7 +794,16 @@ Best regards,
 %content
 </div>');
 	    
-	    add_option('web_invoice_installed', true);
+		add_option('web_invoice_allowed_currencies', array('EUR','USD'));
+		
+	    add_option('web_invoice_installed', WEB_INVOICE_VERSION_NUM);
+	}
+	
+	function upgrade($version) {
+		if (version_compare('2.1.0', $version) > 0) {
+			add_option('web_invoice_allowed_currencies', array('EUR','USD'));
+		}
+		update_option('web_invoice_installed', WEB_INVOICE_VERSION_NUM);
 	}
     }
 
